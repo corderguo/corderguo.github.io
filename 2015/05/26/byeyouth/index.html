@@ -4,27 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Property、Attribute、点语法、KVC、KVO | 骚客</title>
+    <title>再见-百度空间 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="PropertyProperty属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。@property本质是方法，提供getter setter 方法的默认实现在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       
-Attri">
+    <meta name="description" content="&amp;#160; &amp;#160;&amp;#160; &amp;#160;头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！&amp;#160; &amp;#160;&amp;#160; &amp;#160;还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Property、Attribute、点语法、KVC、KVO">
-<meta property="og:url" content="http://yoursite.com/2013/10/15/ios-property/index.html">
+<meta property="og:title" content="再见-百度空间">
+<meta property="og:url" content="http://yoursite.com/2015/05/26/byeyouth/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="PropertyProperty属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。@property本质是方法，提供getter setter 方法的默认实现在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       
-Attri">
+<meta property="og:description" content="&amp;#160; &amp;#160;&amp;#160; &amp;#160;头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！&amp;#160; &amp;#160;&amp;#160; &amp;#160;还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早">
 <meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-06-24T08:55:57.000Z">
+<meta property="og:updated_time" content="2016-06-24T13:34:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Property、Attribute、点语法、KVC、KVO">
-<meta name="twitter:description" content="PropertyProperty属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。@property本质是方法，提供getter setter 方法的默认实现在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       
-Attri">
+<meta name="twitter:title" content="再见-百度空间">
+<meta name="twitter:description" content="&amp;#160; &amp;#160;&amp;#160; &amp;#160;头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！&amp;#160; &amp;#160;&amp;#160; &amp;#160;还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
 
     
@@ -76,14 +73,14 @@ Attri">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2013/10/15/ios-property/" title="Property、Attribute、点语法、KVC、KVO" itemprop="url">Property、Attribute、点语法、KVC、KVO</a>
+      <a href="/2015/05/26/byeyouth/" title="再见-百度空间" itemprop="url">再见-百度空间</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2013-10-15T01:16:20.000Z" itemprop="datePublished"> 发表于 2013-10-15</time>
+    <time datetime="2015-05-26T09:59:10.000Z" itemprop="datePublished"> 发表于 2015-05-26</time>
     
   </p>
 </header>
@@ -92,86 +89,13 @@ Attri">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Property"><span class="toc-number">1.</span> <span class="toc-text">Property</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Attribute"><span class="toc-number">2.</span> <span class="toc-text">Attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点语法"><span class="toc-number">3.</span> <span class="toc-text">点语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVC"><span class="toc-number">4.</span> <span class="toc-text">KVC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVO"><span class="toc-number">5.</span> <span class="toc-text">KVO</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h3 id="Property"><a href="#Property" class="headerlink" title="Property"></a>Property</h3><p>Property属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。<br>@property本质是方法，提供getter setter 方法的默认实现<br>在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       </p>
-<h3 id="Attribute"><a href="#Attribute" class="headerlink" title="Attribute"></a>Attribute</h3><p>Attribute：属性的属性，为属性提供了⼀些关键字⽤以控制setter、getter的实现细节，这些关键字我们称为属性的属性（attribute）；<br>一共3大类attribute：        </p>
-<ol>
-<li>读写性控制（readonly、readwrite、setter、getter）<ul>
-<li>readonly，告诉编译器，只声明getter⽅法（⽆setter⽅法）</li>
-<li>readwrite，告诉编译器，既声明setter⼜声明getter</li>
-<li>readwrite是读写性控制的默认设置</li>
-</ul>
-</li>
-<li>原子性控制（nonatomic、atomic）<ul>
-<li>atomic：setter、getter⽅法在多线程访问下是绝对安全的，即<br>setter、getter内部做了多线程访问处理。原⼦性控制的默认设置是<br>atomic </li>
-<li>nonatomic：setter、getter⽅法内部不会做多线程访问处理，仅仅是<br>普通的setter、getter⽅法</li>
-<li>注意：程序开发过程中，setter、getter处处都在⽤，如果使⽤atomic，需要不断<br>的对setter、getter加锁解锁以保证线程访问安全，会很占⽤系统资源，降低<br>系统性能。 通常设置为nonatomic，某些属性需要线程安全的时候，才定义为atomic。</li>
-</ul>
-</li>
-<li>语义设置（assign、retain、copy）<ul>
-<li>assign：setter、getter内部实现是直接赋值</li>
-<li><ul>
-<li>copy：setter、getter的内部实现会做内存优化。</li>
-</ul>
-</li>
-<li>retain：setter、getter的内部实现也会做内存优化。<br>例如：      </li>
-</ul>
-</li>
-</ol>
-<pre><code class="sh">@property(nonatomic,retain)NSString *name; 
-- (void)<span class="built_in">set</span>Name:(NSString *)name{
- <span class="keyword">if</span>(_name != name){
- [_name release];
- _name = [name retain]; // copy 同理
- }
-} 
-- (NSString *)name{
- <span class="built_in">return</span> [[_name retain]autorelease];
-}
-</code></pre>
-<blockquote>
-<p>如果属性是⾮对象类型（⽐如int，ﬂoat等）属性的语义设置使⽤assign，<br>如果属性是对象类型（⽐如NSStrng、NSArray等）属性的语义设置使⽤retain，<br>如果属性是对象类型并且想得到参数的copy，使⽤copy关键字。      </p>
-</blockquote>
-<h3 id="点语法"><a href="#点语法" class="headerlink" title="点语法"></a>点语法</h3><p>属性是⼀对getter、setter⽅法，点语法是属性的另⼀种调⽤格式。比较简单不做过多说明；  </p>
-<h3 id="KVC"><a href="#KVC" class="headerlink" title="KVC"></a>KVC</h3><p>KVC(Key-Value-Coding)键值编码，是一种间接访问实例变量的方法<br>修改值的方法：      </p>
-<ul>
-<li>setValue:forKey: </li>
-<li>setValue:forKeyPath: </li>
-<li>setValue:forUndeﬁnedKey: </li>
-<li>setValuesForKeysWithDictionary:       </li>
-</ul>
-<p>获取值的方法：</p>
-<ul>
-<li>valueForKey:      </li>
-<li>valueForKeyPath:      </li>
-<li>valueForUndeﬁnedKey:          </li>
-</ul>
-<p>当key不存在的时候,会执行setValue:forUndeﬁnedKey:往往在.m文件中重写该方法，避免程序崩溃；<br>上面部分的综合代码：        </p>
-<pre><code class="sh">Teacher *teacher=[[Teacher alloc]init];  
-teacher.name=@<span class="string">"lisi"</span>;  
-teacher.classs=12;  
-    teacher.level=@<span class="string">"A"</span>;  
-teacher.count=48;  
-NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher.name,teacher.classs,teacher.level,teacher.count);  
-[teacher <span class="built_in">set</span>Value:@<span class="string">"zhangsi"</span> <span class="keyword">for</span>Key:@<span class="string">"name"</span>];  
-NSLog(@<span class="string">"%@"</span>,teacher.name);  
-[teacher <span class="built_in">set</span>Value:@<span class="string">"B"</span> <span class="keyword">for</span>Key:@<span class="string">"level"</span>];  
-[teacher <span class="built_in">set</span>Value:@14 <span class="keyword">for</span>Key:@<span class="string">"classs"</span>];  
-[teacher <span class="built_in">set</span>Value:@49 <span class="keyword">for</span>Key:@<span class="string">"count"</span>];  
-NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher.name,teacher.classs,teacher.level,teacher.count);
-</code></pre>
-<h3 id="KVO"><a href="#KVO" class="headerlink" title="KVO"></a>KVO</h3><p>KVO(Key Value Observing) 键值监听<br>常用方法：      </p>
-<ul>
-<li>addObserver:forKeyPath:options:context:       </li>
-<li>removeObserver:forKeyPath:        </li>
-<li>removeObserver:forKeyPath:context:        </li>
-<li>observeValueForKeyPath:ofObject:change:context:       </li>
-</ul>
+		<p>&#160; &#160;&#160; &#160;头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！<br>&#160; &#160;&#160; &#160;还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早已被岁月磨平了棱角，一些年少轻狂的豪情壮志只能随着百度空间一样深深的埋在心里了！<br>&#160; &#160;&#160; &#160;有些时候自己就在想，很多事情就像是旅行一样，当你决定要出发的时候，最困难的那部分其实已经完成了。<br>&#160; &#160;&#160; &#160;我不能在这里变老。我要在变老之前，做一些到了80岁还会微笑的事情。<br>&#160; &#160;&#160; &#160;我想，一个人最好的样子就是平静一点，哪怕一个人生活，穿越一个又一个城市，走过一条又一条街道，仰望一片又一片星空，见证一次又一次别离。然后在别人质疑你的时候，你可以问心无愧的说，虽然每一步走的很慢，但是我不曾退缩过。<br>&#160; &#160;&#160; &#160;我们都是生活中的一粒尘埃，都在拼命的在风雨中奔跑，都在努力的要摆脱自己的平凡。为了自己，为了家人，更为了不让那些关心自己的人失望！<br>&#160; &#160;&#160; &#160;我们应该感谢平凡，因为平凡，所以才想要不平凡！<br>&#160; &#160;&#160; &#160;2014年是自己走弯路走的最远的一年，颓废，消极，漫无目的如行尸走肉一般，忘了本初！忘了家人寄托在自己身上的希望！忘了曾经许下的誓言！忘了一切一切……<br>&#160; &#160;&#160; &#160;人生正因为未知而精彩，正因为没有回退路，所以我们才不断的前行！我没有抱怨那一年颓废的自己，这是自己的选择。我为自己昂头走向2015而骄傲！<br>&#160; &#160;&#160; &#160;人的一生中，最光辉的一天并非是功成名就的那天，而是从悲叹与绝望中产生对人生的挑战，以勇敢迈向意志的那天！<br>&#160; &#160;&#160; &#160;很多事情，不是我们看到希望才去坚持，而是我们坚持了才会看到希望！<br>&#160; &#160;&#160; &#160;星竹林前学佛语，兰若花下埋古经！坚持你所选择的，即便遍体鳞伤，何言悔！<br>&#160; &#160;&#160; &#160;今朝高戰星空梦，我笑我哭亦自在。他日若遂凌云志，不笑不哭也不闹！<br>&#160; &#160;&#160; &#160;这便是大自在！<br>&#160; &#160;&#160; &#160;每当夜幕降临，走在灯红酒绿纸醉金迷的街道，你是否会被这个浮夸的社会所感染！天下攘攘，皆为利往！天下熙熙，皆为利来！保持本心，给自己留一点纯净的空间。<br>&#160; &#160;&#160; &#160;我抬头仰望星空，不是为了摘取流星，而是为了自己心中那个永不屈服的梦想！<br>&#160; &#160;&#160; &#160;不要抱怨生活对你的不公，尊严不是别人给的，而是靠自己争取的！今日低头做事，明日抬头相见，有梦想而又能为之奋斗的人永远是最幸福的！<br>&#160; &#160;&#160; &#160;忽然想起网络上的两篇文章《我奋斗了18年仅仅为了和你坐在一起喝杯咖啡》《我奋斗了18年不只是为了和你坐在一起喝杯咖啡》，写的很好，推荐大家去看看。<br>&#160; &#160;&#160; &#160;当手指碰到键盘，思绪便天马行空不可收拾，忽然有感而发便东拉西扯了一些闲话，谨以此文祭奠曾经的岁月！<br>&#160; &#160;&#160; &#160;再见，百度空间！<br>&#160; &#160;&#160; &#160;再见，年少轻狂的自己！<br>&#160; &#160;&#160; &#160;再见，青春！      </p>
 <hr>
-<p>扫描下面二维码，关注公众号，干货满满：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+<p>扫描下面二维码关注公众号，时不时的会有惊喜：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -179,13 +103,13 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/技术/">技术</a>
+  <a class="article-category-link" href="/categories/生活/">生活</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a>
+  <span></span> <a href="/tags/情感/">情感</a>
   </div>
 
 </div>
@@ -194,7 +118,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2013/10/15/ios-property/" data-title="Property、Attribute、点语法、KVC、KVO | 骚客" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/05/26/byeyouth/" data-title="再见-百度空间 | 骚客" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -208,18 +132,18 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/05/26/byeyouth/" title="再见-百度空间">
+ <a href="/2015/06/20/threeCharacter/" title="三字经">
   <strong>上一篇：</strong><br/>
   <span>
-  再见-百度空间</span>
+  三字经</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2012/03/29/pku2528/"  title="pku2528">
+<a href="/2013/10/15/ios-property/"  title="Property、Attribute、点语法、KVC、KVO">
  <strong>下一篇：</strong><br/> 
- <span>pku2528
+ <span>Property、Attribute、点语法、KVC、KVO
 </span>
 </a>
 </div>
@@ -228,7 +152,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2013/10/15/ios-property/" data-title="Property、Attribute、点语法、KVC、KVO" data-url="http://yoursite.com/2013/10/15/ios-property/"></div>
+	<div class="ds-thread" data-thread-key="2015/05/26/byeyouth/" data-title="再见-百度空间" data-url="http://yoursite.com/2015/05/26/byeyouth/"></div>
 </section>
 
 
@@ -238,7 +162,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Property"><span class="toc-number">1.</span> <span class="toc-text">Property</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Attribute"><span class="toc-number">2.</span> <span class="toc-text">Attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点语法"><span class="toc-number">3.</span> <span class="toc-text">点语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVC"><span class="toc-number">4.</span> <span class="toc-text">KVC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVO"><span class="toc-number">5.</span> <span class="toc-text">KVO</span></a></li></ol>
+ 
  
   </div>
 
