@@ -4,28 +4,38 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Property、Attribute、点语法、KVC、KVO | 骚客</title>
+    <title>三字经2 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="PropertyProperty属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。@property本质是方法，提供getter setter 方法的默认实现在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       
-Attri">
+    <meta name="description" content="人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　
+昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　
+养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　
+玉不琢，不成器，人不学，不知义。为人子，方少时，亲师友，习礼仪。 　　
+香九龄，能温席，孝于亲，所当执。融四岁，能让梨，弟于长，宜先知。 　　
+首孝悌，次见闻，知某数，识某文。一而十，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Property、Attribute、点语法、KVC、KVO">
-<meta property="og:url" content="http://yoursite.com/2013/10/15/ios-property/index.html">
+<meta property="og:title" content="三字经2">
+<meta property="og:url" content="http://yoursite.com/2015/07/20/threeCharacter2/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="PropertyProperty属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。@property本质是方法，提供getter setter 方法的默认实现在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       
-Attri">
-<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-06-24T08:55:57.000Z">
+<meta property="og:description" content="人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　
+昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　
+养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　
+玉不琢，不成器，人不学，不知义。为人子，方少时，亲师友，习礼仪。 　　
+香九龄，能温席，孝于亲，所当执。融四岁，能让梨，弟于长，宜先知。 　　
+首孝悌，次见闻，知某数，识某文。一而十，">
+<meta property="og:updated_time" content="2016-06-27T06:13:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Property、Attribute、点语法、KVC、KVO">
-<meta name="twitter:description" content="PropertyProperty属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。@property本质是方法，提供getter setter 方法的默认实现在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       
-Attri">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta name="twitter:title" content="三字经2">
+<meta name="twitter:description" content="人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　
+昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　
+养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　
+玉不琢，不成器，人不学，不知义。为人子，方少时，亲师友，习礼仪。 　　
+香九龄，能温席，孝于亲，所当执。融四岁，能让梨，弟于长，宜先知。 　　
+首孝悌，次见闻，知某数，识某文。一而十，">
 
     
     
@@ -74,14 +84,14 @@ Attri">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2013/10/15/ios-property/" title="Property、Attribute、点语法、KVC、KVO" itemprop="url">Property、Attribute、点语法、KVC、KVO</a>
+      <a href="/2015/07/20/threeCharacter2/" title="三字经2" itemprop="url">三字经2</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2013-10-15T01:16:20.000Z" itemprop="datePublished"> 发表于 2013-10-15</time>
+    <time datetime="2015-07-20T08:21:08.000Z" itemprop="datePublished"> 发表于 2015-07-20</time>
     
   </p>
 </header>
@@ -90,86 +100,71 @@ Attri">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Property"><span class="toc-number">1.</span> <span class="toc-text">Property</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Attribute"><span class="toc-number">2.</span> <span class="toc-text">Attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点语法"><span class="toc-number">3.</span> <span class="toc-text">点语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVC"><span class="toc-number">4.</span> <span class="toc-text">KVC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVO"><span class="toc-number">5.</span> <span class="toc-text">KVO</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h3 id="Property"><a href="#Property" class="headerlink" title="Property"></a>Property</h3><p>Property属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。<br>@property本质是方法，提供getter setter 方法的默认实现<br>在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       </p>
-<h3 id="Attribute"><a href="#Attribute" class="headerlink" title="Attribute"></a>Attribute</h3><p>Attribute：属性的属性，为属性提供了⼀些关键字⽤以控制setter、getter的实现细节，这些关键字我们称为属性的属性（attribute）；<br>一共3大类attribute：        </p>
-<ol>
-<li>读写性控制（readonly、readwrite、setter、getter）<ul>
-<li>readonly，告诉编译器，只声明getter⽅法（⽆setter⽅法）</li>
-<li>readwrite，告诉编译器，既声明setter⼜声明getter</li>
-<li>readwrite是读写性控制的默认设置</li>
-</ul>
-</li>
-<li>原子性控制（nonatomic、atomic）<ul>
-<li>atomic：setter、getter⽅法在多线程访问下是绝对安全的，即<br>setter、getter内部做了多线程访问处理。原⼦性控制的默认设置是<br>atomic </li>
-<li>nonatomic：setter、getter⽅法内部不会做多线程访问处理，仅仅是<br>普通的setter、getter⽅法</li>
-<li>注意：程序开发过程中，setter、getter处处都在⽤，如果使⽤atomic，需要不断<br>的对setter、getter加锁解锁以保证线程访问安全，会很占⽤系统资源，降低<br>系统性能。 通常设置为nonatomic，某些属性需要线程安全的时候，才定义为atomic。</li>
-</ul>
-</li>
-<li>语义设置（assign、retain、copy）<ul>
-<li>assign：setter、getter内部实现是直接赋值</li>
-<li><ul>
-<li>copy：setter、getter的内部实现会做内存优化。</li>
-</ul>
-</li>
-<li>retain：setter、getter的内部实现也会做内存优化。<br>例如：      </li>
-</ul>
-</li>
-</ol>
-<pre><code class="sh">@property(nonatomic,retain)NSString *name; 
-- (void)<span class="built_in">set</span>Name:(NSString *)name{
- <span class="keyword">if</span>(_name != name){
- [_name release];
- _name = [name retain]; // copy 同理
- }
-} 
-- (NSString *)name{
- <span class="built_in">return</span> [[_name retain]autorelease];
-}
-</code></pre>
-<blockquote>
-<p>如果属性是⾮对象类型（⽐如int，ﬂoat等）属性的语义设置使⽤assign，<br>如果属性是对象类型（⽐如NSStrng、NSArray等）属性的语义设置使⽤retain，<br>如果属性是对象类型并且想得到参数的copy，使⽤copy关键字。      </p>
-</blockquote>
-<h3 id="点语法"><a href="#点语法" class="headerlink" title="点语法"></a>点语法</h3><p>属性是⼀对getter、setter⽅法，点语法是属性的另⼀种调⽤格式。比较简单不做过多说明；  </p>
-<h3 id="KVC"><a href="#KVC" class="headerlink" title="KVC"></a>KVC</h3><p>KVC(Key-Value-Coding)键值编码，是一种间接访问实例变量的方法<br>修改值的方法：      </p>
-<ul>
-<li>setValue:forKey: </li>
-<li>setValue:forKeyPath: </li>
-<li>setValue:forUndeﬁnedKey: </li>
-<li>setValuesForKeysWithDictionary:       </li>
-</ul>
-<p>获取值的方法：</p>
-<ul>
-<li>valueForKey:      </li>
-<li>valueForKeyPath:      </li>
-<li>valueForUndeﬁnedKey:          </li>
-</ul>
-<p>当key不存在的时候,会执行setValue:forUndeﬁnedKey:往往在.m文件中重写该方法，避免程序崩溃；<br>上面部分的综合代码：        </p>
-<pre><code class="sh">Teacher *teacher=[[Teacher alloc]init];  
-teacher.name=@<span class="string">"lisi"</span>;  
-teacher.classs=12;  
-    teacher.level=@<span class="string">"A"</span>;  
-teacher.count=48;  
-NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher.name,teacher.classs,teacher.level,teacher.count);  
-[teacher <span class="built_in">set</span>Value:@<span class="string">"zhangsi"</span> <span class="keyword">for</span>Key:@<span class="string">"name"</span>];  
-NSLog(@<span class="string">"%@"</span>,teacher.name);  
-[teacher <span class="built_in">set</span>Value:@<span class="string">"B"</span> <span class="keyword">for</span>Key:@<span class="string">"level"</span>];  
-[teacher <span class="built_in">set</span>Value:@14 <span class="keyword">for</span>Key:@<span class="string">"classs"</span>];  
-[teacher <span class="built_in">set</span>Value:@49 <span class="keyword">for</span>Key:@<span class="string">"count"</span>];  
-NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher.name,teacher.classs,teacher.level,teacher.count);
-</code></pre>
-<h3 id="KVO"><a href="#KVO" class="headerlink" title="KVO"></a>KVO</h3><p>KVO(Key Value Observing) 键值监听<br>常用方法：      </p>
-<ul>
-<li>addObserver:forKeyPath:options:context:       </li>
-<li>removeObserver:forKeyPath:        </li>
-<li>removeObserver:forKeyPath:context:        </li>
-<li>observeValueForKeyPath:ofObject:change:context:       </li>
-</ul>
-<hr>
-<p>扫描下面二维码，关注公众号，干货满满：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+		<p>人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　</p>
+<p>昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　</p>
+<p>养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　</p>
+<p>玉不琢，不成器，人不学，不知义。为人子，方少时，亲师友，习礼仪。 　　</p>
+<p>香九龄，能温席，孝于亲，所当执。融四岁，能让梨，弟于长，宜先知。 　　</p>
+<p>首孝悌，次见闻，知某数，识某文。一而十，十而百，百而千，千而万。 　　</p>
+<p>三才者，天地人，三光者，日月星。三纲者，君臣义，父子亲，夫妇顺。 　　</p>
+<p>曰春夏，曰秋冬，此四时，运不穷。曰南北，曰西东，此四方，应乎中。 　　</p>
+<p>曰水火，木金土，此五行，本乎数。十干者，甲至癸。十二支，子至亥。 　　</p>
+<p>曰黄道，日所躔。曰赤道，当中权。赤道下，温暖极。我中华，在东北。 　　</p>
+<p>曰江河，曰淮济。此四渎，水之纪。曰岱华，嵩恒衡。此五岳，山之名。 　　</p>
+<p>曰士农，曰工商。此四民，国之良。曰仁义，礼智信，此五常，不容紊。 　　</p>
+<p>地所生，有草木。此植物，遍水陆。有虫鱼，有鸟兽。此动物，能飞走。 　　</p>
+<p>稻粱菽，麦黍稷。此六谷，人所食。马牛羊，鸡犬豕。此六畜，人所饲。 　　</p>
+<p>曰喜怒，曰哀惧，爱恶欲，七情具。青赤黄，及白黑，此五色，目所识。 　　</p>
+<p>酸苦甘，及辛咸，此五味，口所含。膻焦香，及腥朽，此五臭，鼻所嗅。 　　</p>
+<p>匏土革，木石金，丝与竹，乃八音。曰平上，曰去入，此四声，宜调协。 　　</p>
+<p>高曾祖，父而身，身而子，子而孙。自子孙，至玄曾，乃九族，人之伦。 　　</p>
+<p>父子恩，夫妇从，兄则友，弟则恭；长幼序，友与朋，君则敬，臣则忠。 　　</p>
+<p>此十义，人所同，当顺叙，勿违背。斩齐衰，大小幼。至缌麻，五服终。 　　</p>
+<p>礼乐射，御书数，古六艺，今不具。唯书学，人共遵，既识字，讲说文。 　　</p>
+<p>有古文，大小篆，隶草继，不可乱。 　　</p>
+<p>若广学，惧其繁，但略说，能知源。凡训蒙，须讲究，详训诂，明句读。 　　</p>
+<p>为学者，必有初，小学终，至四书。论语者，二十篇，群弟子，记善言。 　　</p>
+<p>孟子者，七篇止，讲道德，说仁义。作中庸，子思笔，中不偏，庸不易。 　　</p>
+<p>作大学，乃曾子，自修齐，至平治。孝经通，四书熟，如六经，始可读。 　　</p>
+<p>诗书易，礼春秋，号六经，当讲究。有连山，有归藏，有周易，三易详。 　　</p>
+<p>有典谟，有训诰，有誓命，书之奥。我周公，作周礼，著六官，存治体。 　　</p>
+<p>大小戴，注礼记，述圣言，礼乐备。曰国风，曰雅颂，号四诗，当讽咏。 　　</p>
+<p>诗既亡，春秋作，寓褒贬，别善恶。三传者，有公羊，有左氏，有谷梁。 　　</p>
+<p>经既明，方读子，撮其要，记其事。五子者，有荀扬，文中子，及老庄。 　　</p>
+<p>经子通，读诸史，考世系，知终始。自羲农，至黄帝，号三皇，居上世。 　　</p>
+<p>唐有虞，号二帝，相揖逊，称盛世。夏有禹，商有汤，周文武，称三王。 　　</p>
+<p>夏传子，家天下，四百载，迁夏社。汤伐夏，国号商，六百载，至纣亡。 　　</p>
+<p>周武王，始诛纣，八百载，最长久。周辙东，王纲坠，逞干戈，尚游说。 　　</p>
+<p>始春秋，终战国，五霸强，七雄出。蠃秦氏，始兼并，传二世，楚汉争。 　　</p>
+<p>高祖兴，汉业建，至孝平，王莽篡。光武兴，为东汉，四百年，终于献。 　　</p>
+<p>魏蜀吴，争汉鼎，号三国，迄两晋。宋齐继，梁陈承，为南朝，都金陵。 　　</p>
+<p>北元魏，分东西，宇文周，与高齐。迨至隋，一土宇，不再传，失统绪。 　　</p>
+<p>唐高祖，起义师，除隋乱，创国基。二十传，三百载，梁灭之，国乃改。 　　</p>
+<p>梁唐晋，及汉周，称五代，皆有由。炎宋兴，受周禅。十八传，南北混。 　　</p>
+<p>辽与金，皆称帝，元灭金，绝宋世。舆图广，超前代，九十载，国祚废。 　　</p>
+<p>太祖兴，国大明，号洪武，都金陵。迨成祖，迁燕京，十六世，至崇祯。 　</p>
+<p>权阉肆，寇如林，李闯出，神器焚。清世祖，膺景命，靖四方，克大定。 　　</p>
+<p>由康雍，历乾嘉。民安富，治绩夸。道咸间，变乱起。始英法，扰都鄙。 　　</p>
+<p>同光后，宣统弱。传九帝，满清殁。革命兴，废帝制。立宪法，建民国。 　　</p>
+<p>古今史，全在兹。载治乱，知兴衰。史虽繁，读有次。史记一，汉书二。 　　</p>
+<p>后汉三，国志四。兼证经，参通鉴。读史者，考实录，通古今，若亲目。 　　</p>
+<p>口而诵，心而惟，朝于斯，夕于斯。昔仲尼，师项橐，古圣贤，尚勤学。 　　</p>
+<p>赵中令，读鲁论，彼既仕，学且勤。彼蒲编，削竹简，彼无书，且知勉。 　　</p>
+<p>头悬梁，锥刺股，彼不教，自勤苦。如囊萤，如映雪，家虽贫，学不辍。 　　</p>
+<p>如负薪，如挂角，身虽劳，犹苦卓。苏老泉，二十七，始发愤，读书籍。 　　</p>
+<p>彼既老，犹悔迟，尔小生，宜早思。若梁灏，八十二，对大廷，魁多士。 　　</p>
+<p>彼既成，众称异，尔小生，宜立志。莹八岁，能咏诗，泌七岁，能赋棋。 　　</p>
+<p>彼颖悟，人称奇，尔幼学，当效之。蔡文姬，能辨琴，谢道韫，能咏吟。 　　</p>
+<p>彼女子，且聪敏，尔男子，当自警。唐刘晏，方七岁，举神童，作正字。 　　</p>
+<p>彼虽幼，身已仕，尔幼学，勉而致。有为者，亦若是。 　　</p>
+<p>犬守夜，鸡司晨，苟不学，曷为人？蚕吐丝，蜂酿蜜，人不学，不如物。 　　</p>
+<p>幼而学，壮而行，上致君，下泽民。扬名声，显父母，光于前，裕于后。 　　</p>
+<p>人遗子，金满籯，我教子，惟一经。勤有功，戏无益，戒之哉，宜勉力。</p>
+<p>=====================<br>不知为何突然想看看三字经了，却惭愧的发现自己以前居然没看过完整版~~~</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -177,13 +172,13 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/技术/">技术</a>
+  <a class="article-category-link" href="/categories/生活/">生活</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a>
+  <span></span> <a href="/tags/人文/">人文</a>
   </div>
 
 </div>
@@ -192,7 +187,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2013/10/15/ios-property/" data-title="Property、Attribute、点语法、KVC、KVO | 骚客" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2015/07/20/threeCharacter2/" data-title="三字经2 | 骚客" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -205,19 +200,11 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/05/26/byeyouth/" title="再见-百度空间">
-  <strong>上一篇：</strong><br/>
-  <span>
-  再见-百度空间</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2012/03/29/pku2528/"  title="pku2528">
+<a href="/2015/06/20/threeCharacter/"  title="三字经">
  <strong>下一篇：</strong><br/> 
- <span>pku2528
+ <span>三字经
 </span>
 </a>
 </div>
@@ -226,7 +213,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2013/10/15/ios-property/" data-title="Property、Attribute、点语法、KVC、KVO" data-url="http://yoursite.com/2013/10/15/ios-property/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/20/threeCharacter2/" data-title="三字经2" data-url="http://yoursite.com/2015/07/20/threeCharacter2/"></div>
 </section>
 
 
@@ -236,7 +223,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Property"><span class="toc-number">1.</span> <span class="toc-text">Property</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Attribute"><span class="toc-number">2.</span> <span class="toc-text">Attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#点语法"><span class="toc-number">3.</span> <span class="toc-text">点语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVC"><span class="toc-number">4.</span> <span class="toc-text">KVC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KVO"><span class="toc-number">5.</span> <span class="toc-text">KVO</span></a></li></ol>
+ 
  
   </div>
 
