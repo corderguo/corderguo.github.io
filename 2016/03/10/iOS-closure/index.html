@@ -11,26 +11,23 @@
     
 
     
-    <meta name="description" content="github地址: https://github.com/corderguo本文地址: coderperson.com欢迎转载，请注明出处，谢谢。
+    <meta name="description" content="github地址: https://github.com/corderguo本文地址: http://coderperson.com/2016/03/10/iOS-closure/欢迎转载，请注明出处，谢谢。
 
-闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         
-闭包与Blo">
+闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Swift中闭包详解">
 <meta property="og:url" content="http://yoursite.com/2016/03/10/iOS-closure/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="github地址: https://github.com/corderguo本文地址: coderperson.com欢迎转载，请注明出处，谢谢。
+<meta property="og:description" content="github地址: https://github.com/corderguo本文地址: http://coderperson.com/2016/03/10/iOS-closure/欢迎转载，请注明出处，谢谢。
 
-闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         
-闭包与Blo">
+闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中">
 <meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-07-02T04:31:24.000Z">
+<meta property="og:updated_time" content="2016-07-02T04:41:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Swift中闭包详解">
-<meta name="twitter:description" content="github地址: https://github.com/corderguo本文地址: coderperson.com欢迎转载，请注明出处，谢谢。
+<meta name="twitter:description" content="github地址: https://github.com/corderguo本文地址: http://coderperson.com/2016/03/10/iOS-closure/欢迎转载，请注明出处，谢谢。
 
-闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         
-闭包与Blo">
+闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
 
     
@@ -101,7 +98,7 @@
 		</div>
 		
 		<blockquote>
-<p>github地址: <a href="https://github.com/corderguo" target="_blank" rel="external">https://github.com/corderguo</a><br>本文地址: <a href="coderperson.com">coderperson.com</a><br>欢迎转载，请注明出处，谢谢。</p>
+<p>github地址: <a href="https://github.com/corderguo" target="_blank" rel="external">https://github.com/corderguo</a><br>本文地址: <a href="http://coderperson.com/2016/03/10/iOS-closure/" target="_blank" rel="external">http://coderperson.com/2016/03/10/iOS-closure/</a><br>欢迎转载，请注明出处，谢谢。</p>
 </blockquote>
 <h1 id="闭包的概念"><a href="#闭包的概念" class="headerlink" title="闭包的概念"></a>闭包的概念</h1><p>Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         </p>
 <h3 id="闭包与Block的对比"><a href="#闭包与Block的对比" class="headerlink" title="闭包与Block的对比"></a>闭包与Block的对比</h3><p>作用：</p>
@@ -110,7 +107,8 @@
 <li>闭包也是用来保存一段代码，在需要的时候执行</li>
 <li>一般都是用来做耗时操作；</li>
 </ul>
-<p>风格：<br>我们首先回顾一下OC中的Block写法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 定义block</span><br><span class="line">@property (nonatomic, copy) void(^myBlock)();</span><br><span class="line">// 定义block</span><br><span class="line">self.myBlock = ^&#123;</span><br><span class="line">// 具体的回调操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用block</span><br><span class="line">self.myBlock();</span><br></pre></td></tr></table></figure></p>
+<p>风格：      </p>
+<p>我们首先回顾一下OC中的Block写法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 定义block</span><br><span class="line">@property (nonatomic, copy) void(^myBlock)();</span><br><span class="line">// 定义block</span><br><span class="line">self.myBlock = ^&#123;</span><br><span class="line">// 具体的回调操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用block</span><br><span class="line">self.myBlock();</span><br></pre></td></tr></table></figure></p>
 <p>通过回顾，我们可以想起来Block的定义格式为：     </p>
 <p>Block格式：返回值类型(^block名称)(参数列表) </p>
 <p>有的时候我们忘记了Block的书写格式，或者嫌这样写麻烦，我们可以直接在Xcode中敲inlineBlock<br>然后回车，系统会直接提醒你Block的样式；     </p>
@@ -266,19 +264,19 @@
 			
 		
 			
-				<li><a href="/tags/情感/" title="情感">情感<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/读书/" title="读书">读书<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/人文/" title="人文">人文<sup>1</sup></a></li>
+				<li><a href="/tags/情感/" title="情感">情感<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/人文/" title="人文">人文<sup>1</sup></a></li>
 			
 		
 			
