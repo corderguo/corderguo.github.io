@@ -1,0 +1,566 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Swift中闭包详解 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="github地址: https://github.com/corderguo本文地址: coderperson.com欢迎转载，请注明出处，谢谢。
+
+闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         
+闭包与Blo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift中闭包详解">
+<meta property="og:url" content="http://yoursite.com/2016/03/10/iOS-closure/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="github地址: https://github.com/corderguo本文地址: coderperson.com欢迎转载，请注明出处，谢谢。
+
+闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         
+闭包与Blo">
+<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta property="og:updated_time" content="2016-07-02T04:31:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift中闭包详解">
+<meta name="twitter:description" content="github地址: https://github.com/corderguo本文地址: coderperson.com欢迎转载，请注明出处，谢谢。
+
+闭包的概念Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         
+闭包与Blo">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/10/iOS-closure/" title="Swift中闭包详解" itemprop="url">Swift中闭包详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-10T11:12:50.000Z" itemprop="datePublished"> 发表于 2016-03-10</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#闭包的概念"><span class="toc-number">1.</span> <span class="toc-text">闭包的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包与Block的对比"><span class="toc-number">1.0.1.</span> <span class="toc-text">闭包与Block的对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#闭包的几种格式"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">闭包的几种格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包的循环引用问题"><span class="toc-number">1.0.2.</span> <span class="toc-text">闭包的循环引用问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其它"><span class="toc-number">1.0.3.</span> <span class="toc-text">其它</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>github地址: <a href="https://github.com/corderguo" target="_blank" rel="external">https://github.com/corderguo</a><br>本文地址: <a href="coderperson.com">coderperson.com</a><br>欢迎转载，请注明出处，谢谢。</p>
+</blockquote>
+<h1 id="闭包的概念"><a href="#闭包的概念" class="headerlink" title="闭包的概念"></a>闭包的概念</h1><p>Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         </p>
+<h3 id="闭包与Block的对比"><a href="#闭包与Block的对比" class="headerlink" title="闭包与Block的对比"></a>闭包与Block的对比</h3><p>作用：</p>
+<ul>
+<li>Block是用来保存一段代码，在需要的时候执行 </li>
+<li>闭包也是用来保存一段代码，在需要的时候执行</li>
+<li>一般都是用来做耗时操作；</li>
+</ul>
+<p>风格：<br>我们首先回顾一下OC中的Block写法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 定义block</span><br><span class="line">@property (nonatomic, copy) void(^myBlock)();</span><br><span class="line">// 定义block</span><br><span class="line">self.myBlock = ^&#123;</span><br><span class="line">// 具体的回调操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用block</span><br><span class="line">self.myBlock();</span><br></pre></td></tr></table></figure></p>
+<p>通过回顾，我们可以想起来Block的定义格式为：     </p>
+<p>Block格式：返回值类型(^block名称)(参数列表) </p>
+<p>有的时候我们忘记了Block的书写格式，或者嫌这样写麻烦，我们可以直接在Xcode中敲inlineBlock<br>然后回车，系统会直接提醒你Block的样式；     </p>
+<p>Swift中闭包的基本格式：         </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    (形参列表) -&gt; (返回值)</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">    需要执行的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实这些格式我们都没必要专门去记忆，我们可以直接敲系统的带有闭包或者Block的函数，然后就一目了然了；      </p>
+<h4 id="闭包的几种格式"><a href="#闭包的几种格式" class="headerlink" title="闭包的几种格式"></a>闭包的几种格式</h4><p>第一种情况：        </p>
+<ul>
+<li>将闭包通过实参传递给函数</li>
+<li>如果闭包是函数的最后一个参数，那么闭包可以写到函数{}的后面</li>
+<li>如果函数只接受一个参数，并且这个参数是闭包，那么()可以省略</li>
+</ul>
+<p>例如下面这三种写法是一样的：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 定义函数，参数为闭包</span><br><span class="line">func loadData(finished: () -&gt; ()) &#123;</span><br><span class="line">    //  操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用（这是默认写法）</span><br><span class="line">loadData &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">// 或者写成</span><br><span class="line">loadData (&#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">// 还可以写成</span><br><span class="line"><span class="function"><span class="title">loadData</span></span>() &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>第二种情况：闭包的简写  </p>
+<ul>
+<li>如果闭包没有参数也没有返回值，那么 in 之前的东西可以删除，包括 in</li>
+</ul>
+<p>例如上面闭包，还可以写成下面的形式：    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loadData &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>其实这些格式，你在开发中只需要掌握一种即可，或者你只需要记住闭包的定义，然后敲回车，系统会为你补齐格式；</p>
+<h3 id="闭包的循环引用问题"><a href="#闭包的循环引用问题" class="headerlink" title="闭包的循环引用问题"></a>闭包的循环引用问题</h3><blockquote>
+<p>关于闭包中的 self 问题 </p>
+</blockquote>
+<p>在Swift开发中，有一个原则就是能不写self就不写self，但是在闭包中必须写上self；   </p>
+<p>这是因为闭包是用来保存一段代码，而且系统也不知道这段代码具体的调用时间，所以为了保证闭包中的对象不被释放，需要 self 进行一次强引用；这其实和Block中的原理差不多。   </p>
+<p>所以以后看到self基本上都和闭包有关系。（这也是闭包中循环引用来源的原因）</p>
+<p>下面我举一个简单的关于闭包循环引用的例子：      </p>
+<p>你定义了两个控制器：OneController和TwoController，OneController只是负责push出TwoController,我们在TwoController中进行一些关于闭包的操作，然后在pop返回的时候查看该控制器是否被销毁了，来验证闭包是否发生了循环引用问题；<br>在TwoController中我们只需要简单写一些代码即可：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 定义一个闭包的属性 </span><br><span class="line">var finished: (() -&gt; ())?</span><br><span class="line">// 定义一个函数，参数为闭包</span><br><span class="line"> func loadData(finished: () -&gt; ()) &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"调用了"</span>)</span><br><span class="line">        self.finished = finished</span><br><span class="line">        finished();</span><br><span class="line">    &#125;</span><br><span class="line">// 函数调用</span><br><span class="line">loadData &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">            // 这句又强引用self，导致循环引用</span><br><span class="line">            self.view.backgroundColor = UIColor.redColor()</span><br><span class="line">        &#125;</span><br><span class="line">// 判断是否被销毁了</span><br><span class="line">deinit &#123;</span><br><span class="line">       <span class="built_in">print</span>(<span class="string">"控制器被销毁了"</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>当我们执行以上代码，并且从TwoController返回到OneController时，TwoController的deinit方法没有被调用，表明TwoController没有被销毁，闭包存在了循环引用的问题；     </p>
+<p>这是因为：控制器通过闭包属性引用闭包，而闭包中又强引用着self(控制器),所以导致了循环引用的问题；        </p>
+<blockquote>
+<p>OC中关于循环引用的解决方案</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__weak typeof(self) weakSelf = self;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Swift中关于循环引用的解决方案</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weak var weakSelf = self</span><br></pre></td></tr></table></figure>
+<p>那么原先代码中只需要把self改成weakSelf即可</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 由于weakSelf为可选类型，这里必须保证有值，所以加上！号</span><br><span class="line">weakSelf!.view.backgroundColor = UIColor.redColor()</span><br></pre></td></tr></table></figure>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><blockquote>
+<p>关于定义闭包属性的问题      </p>
+</blockquote>
+<p>在Swift中，如果在某个类中定义一个属性，那么这个属性必须要初始化，否者会报错，如果暂时不想初始化，那么可以在后面写上一个 ? 号       </p>
+<p>但是在定义闭包的属性时，一定要注意，以下这种写法是最常见的一种错误写法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/** 当前写法代表闭包的返回值可以是nil，而不是初始化的闭包 */</span><br><span class="line">var finished: () -&gt; ()?</span><br><span class="line"></span><br><span class="line">/** 正确写法：需要在整个闭包的后面加问号 */</span><br><span class="line">var finished: (() -&gt; ())?</span><br></pre></td></tr></table></figure>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：      </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/03/10/iOS-closure/" data-title="Swift中闭包详解 | 骚客" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/15/iOS-staticPage/" title="三行代码搞定静态页面">
+  <strong>上一篇：</strong><br/>
+  <span>
+  三行代码搞定静态页面</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/06/20/threeCharacter/"  title="三字经">
+ <strong>下一篇：</strong><br/> 
+ <span>三字经
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/03/10/iOS-closure/" data-title="Swift中闭包详解" data-url="http://yoursite.com/2016/03/10/iOS-closure/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#闭包的概念"><span class="toc-number">1.</span> <span class="toc-text">闭包的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包与Block的对比"><span class="toc-number">1.0.1.</span> <span class="toc-text">闭包与Block的对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#闭包的几种格式"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">闭包的几种格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包的循环引用问题"><span class="toc-number">1.0.2.</span> <span class="toc-text">闭包的循环引用问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其它"><span class="toc-number">1.0.3.</span> <span class="toc-text">其它</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/情感/" title="情感">情感<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书/" title="读书">读书<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/人文/" title="人文">人文<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方...... <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"guozai"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
