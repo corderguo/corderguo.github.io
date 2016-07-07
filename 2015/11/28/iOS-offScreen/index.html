@@ -1,0 +1,601 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>离屏渲染探究 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="本文地址: http://coderperson.com/2016/04/12/iOS-ChangeNavImg/欢迎转载，请注明出处，谢谢。    
+
+概念学习
+OpenGL中，GPU屏幕渲染有以下两种方式：
+
+On-Screen Rendering    
+
+意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。
+
+Off-Screen Rendering">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离屏渲染探究">
+<meta property="og:url" content="http://yoursite.com/2015/11/28/iOS-offScreen/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="本文地址: http://coderperson.com/2016/04/12/iOS-ChangeNavImg/欢迎转载，请注明出处，谢谢。    
+
+概念学习
+OpenGL中，GPU屏幕渲染有以下两种方式：
+
+On-Screen Rendering    
+
+意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。
+
+Off-Screen Rendering">
+<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta property="og:updated_time" content="2016-07-07T02:53:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="离屏渲染探究">
+<meta name="twitter:description" content="本文地址: http://coderperson.com/2016/04/12/iOS-ChangeNavImg/欢迎转载，请注明出处，谢谢。    
+
+概念学习
+OpenGL中，GPU屏幕渲染有以下两种方式：
+
+On-Screen Rendering    
+
+意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。
+
+Off-Screen Rendering">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/11/28/iOS-offScreen/" title="离屏渲染探究" itemprop="url">离屏渲染探究</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-28T02:02:04.000Z" itemprop="datePublished"> 发表于 2015-11-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念学习"><span class="toc-number">1.</span> <span class="toc-text">概念学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#机制"><span class="toc-number">2.</span> <span class="toc-text">机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">3.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能优劣"><span class="toc-number">4.</span> <span class="toc-text">性能优劣</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#另一种特殊的“离屏渲染”"><span class="toc-number">5.</span> <span class="toc-text">另一种特殊的“离屏渲染”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#离屏渲染的触发机制"><span class="toc-number">6.</span> <span class="toc-text">离屏渲染的触发机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#官方优化"><span class="toc-number">7.</span> <span class="toc-text">官方优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">8.</span> <span class="toc-text">其它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何提高性能"><span class="toc-number">9.</span> <span class="toc-text">如何提高性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">10.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>本文地址: <a href="http://coderperson.com/2016/04/12/iOS-ChangeNavImg/" target="_blank" rel="external">http://coderperson.com/2016/04/12/iOS-ChangeNavImg/</a><br>欢迎转载，请注明出处，谢谢。    </p>
+</blockquote>
+<h2 id="概念学习"><a href="#概念学习" class="headerlink" title="概念学习"></a>概念学习</h2><hr>
+<p>OpenGL中，GPU屏幕渲染有以下两种方式：</p>
+<ul>
+<li>On-Screen Rendering    </li>
+</ul>
+<p>意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。</p>
+<ul>
+<li>Off-Screen Rendering        </li>
+</ul>
+<p>意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。</p>
+<h2 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h2><hr>
+<p>GPU渲染机制：</p>
+<p>CPU 计算好显示内容提交到 GPU，GPU<br>渲染完成后将渲染结果放入帧缓冲区，随后视频控制器会按照 VSync<br>信号逐行读取帧缓冲区的数据，经过可能的数模转换传递给显示器显示。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><hr>
+<p>当使用圆角，阴影，遮罩的时候，图层属性的混合体被指定为在未预合成之前不能直接在屏幕中绘制，所以就需要屏幕外渲染被唤起。</p>
+<p>屏幕外渲染并不意味着软件绘制，但是它意味着图层必须在被显示之前在一个屏幕外上下文中被渲染（不论CPU还是GPU）。</p>
+<h2 id="性能优劣"><a href="#性能优劣" class="headerlink" title="性能优劣"></a>性能优劣</h2><hr>
+<p>相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：</p>
+<ul>
+<li><p>创建新缓冲区<br>要想进行离屏渲染，首先要创建一个新的缓冲区。</p>
+</li>
+<li><p>上下文切换<br>离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。</p>
+</li>
+</ul>
+<p>注意：触发离屏渲染后，上面两步会发生在每一帧，如果在界面的滚动过程中有大量的离屏渲染发生时会严重影响帧率。</p>
+<h2 id="另一种特殊的“离屏渲染”"><a href="#另一种特殊的“离屏渲染”" class="headerlink" title="另一种特殊的“离屏渲染”"></a>另一种特殊的“离屏渲染”</h2><hr>
+<p>按照之前的说法，如果将不在GPU的当前屏幕缓冲区中进行的渲染都称为离屏渲染，那么就还有另一种特殊的“离屏渲染”方式：CPU渲染。</p>
+<p>如果我们重写了drawRect方法，并且使用任何Core Graphics的技术进行了绘制操作，就涉及到了CPU渲染。整个渲染过程由CPU在App内同步地完成，渲染得到的bitmap最后再交由GPU用于显示。</p>
+<h2 id="离屏渲染的触发机制"><a href="#离屏渲染的触发机制" class="headerlink" title="离屏渲染的触发机制"></a>离屏渲染的触发机制</h2><hr>
+<ul>
+<li>shouldRasterize（光栅化）</li>
+<li>masks（遮罩）</li>
+<li>shadows（阴影）</li>
+<li>edge antialiasing（抗锯齿）</li>
+<li>group opacity（不透明）</li>
+<li>复杂形状设置圆角等</li>
+<li>渐变</li>
+</ul>
+<p>其中shouldRasterize（光栅化）是比较特别的一种：<br>光栅化概念：将图转化为一个个栅格组成的图象。<br>光栅化特点：每个元素对应帧缓冲区中的一像素。</p>
+<p>shouldRasterize = YES在其他属性触发离屏渲染的同时，会将光栅化后的内容缓存起来，如果对应的layer及其sublayers没有发生改变，在下一帧的时候可以直接复用。shouldRasterize = YES，这将隐式的创建一个位图，各种阴影遮罩等效果也会保存到位图中并缓存起来，从而减少渲染的频度（不是矢量图）。</p>
+<p>相当于光栅化是把GPU的操作转到CPU上了，生成位图缓存，直接读取复用。</p>
+<p>当你使用光栅化时，你可以开启“Color Hits Green and Misses Red”来检查该场景下光栅化操作是否是一个好的选择。绿色表示缓存被复用，红色表示缓存在被重复创建。</p>
+<p>如果光栅化的层变红得太频繁那么光栅化对优化可能没有多少用处。位图缓存从内存中删除又重新创建得太过频繁，红色表明缓存重建得太迟。可以针对性的选择某个较小而较深的层结构进行光栅化，来尝试减少渲染时间。</p>
+<blockquote>
+<p>注意：   </p>
+</blockquote>
+<p>对于经常变动的内容,这个时候不要开启,否则会造成性能的浪费</p>
+<p>例如我们日程经常打交道的TableViewCell,因为TableViewCell的重绘是很频繁的（因为Cell的复用）,如果Cell的内容不断变化,则Cell需要不断重绘,如果此时设置了cell.layer可光栅化。则会造成大量的离屏渲染,降低图形性能。</p>
+<h2 id="官方优化"><a href="#官方优化" class="headerlink" title="官方优化"></a>官方优化</h2><hr>
+<p>iOS 9.0 之前UIimageView跟UIButton设置圆角都会触发离屏渲染</p>
+<p>iOS 9.0 之后UIButton设置圆角会触发离屏渲染，而UIImageView里png图片设置圆角不会触发离屏渲染了，如果设置其他阴影效果之类的还是会触发离屏渲染的。</p>
+<p>这可能是苹果也意识到离屏渲染会产生性能问题，所以能不产生离屏渲染的地方苹果也就不用离屏渲染了。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><hr>
+<p>UIImage加载图片方式一般有两种:</p>
+<p>A：imagedNamed初始化</p>
+<p>B：imageWithContentsOfFile初始化<br>二者不同之处在于,imageNamed默认加载图片成功后会内存中缓存图片,这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象.如果缓存中没有找到相应的图片对象,则从指定地方加载图片然后缓存对象，并返回这个图片对象.</p>
+<p>而imageWithContentsOfFile则仅只加载图片,不缓存.</p>
+<p>大量使用imageNamed方式会在不需要缓存的地方额外增加开销CPU的时间来做这件事.当应用程序需要加载一张比较大的图片并且使用一次性，那么其实是没有必要去缓存这个图片的，用imageWithContentsOfFile是最为经济的方式,这样不会因为UIImage元素较多情况下，CPU会被逐个分散在不必要缓存上浪费过多时间.</p>
+<p>使用场景需要编程时，应该根据实际应用场景加以区分，UIimage虽小，但使用元素较多问题会有所凸显.</p>
+<h2 id="如何提高性能"><a href="#如何提高性能" class="headerlink" title="如何提高性能"></a>如何提高性能</h2><hr>
+<ol>
+<li>当我们需要圆角效果时，可以使用一张中间透明图片蒙上去</li>
+<li>使用ShadowPath指定layer阴影效果路径</li>
+<li>使用异步进行layer渲染（Facebook开源的异步绘制框架AsyncDisplayKit）</li>
+<li>设置layer的opaque值为YES，减少复杂图层合成</li>
+<li>尽量使用不包含透明（alpha）通道的图片资源</li>
+<li>尽量设置layer的大小值为整形值</li>
+<li>直接让美工把图片切成圆角进行显示，这是效率最高的一种方案</li>
+<li>很多情况下用户上传图片进行显示，可以让服务端处理圆角</li>
+<li>使用代码手动生成圆角Image设置到要显示的View上，利用UIBezierPath（CoreGraphics框架）画出来圆角图片</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
+<p>当项目中需要离屏渲染的地方不多时，性能的影响并不是很大，基本也能保持在60fps左右，但<br>是一旦超过一定数目的圆角，滑动起来就会有明显的卡顿现象。所以，没必要为了不影响体验的情况下强行进行优化，这样做效果并不是很明显。只有当需要优化的时候采取一定的优化方案，才能得到最大的收益。</p>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：              </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/11/28/iOS-offScreen/" data-title="离屏渲染探究 | 骚客" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/10/iOS-closure/" title="Swift中闭包详解">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Swift中闭包详解</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/07/26/book-mood/"  title="读书系列-《别让情绪失控害了你》">
+ <strong>下一篇：</strong><br/> 
+ <span>读书系列-《别让情绪失控害了你》
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/11/28/iOS-offScreen/" data-title="离屏渲染探究" data-url="http://yoursite.com/2015/11/28/iOS-offScreen/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念学习"><span class="toc-number">1.</span> <span class="toc-text">概念学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#机制"><span class="toc-number">2.</span> <span class="toc-text">机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">3.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能优劣"><span class="toc-number">4.</span> <span class="toc-text">性能优劣</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#另一种特殊的“离屏渲染”"><span class="toc-number">5.</span> <span class="toc-text">另一种特殊的“离屏渲染”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#离屏渲染的触发机制"><span class="toc-number">6.</span> <span class="toc-text">离屏渲染的触发机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#官方优化"><span class="toc-number">7.</span> <span class="toc-text">官方优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">8.</span> <span class="toc-text">其它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何提高性能"><span class="toc-number">9.</span> <span class="toc-text">如何提高性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">10.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书/" title="读书">读书<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/情感/" title="情感">情感<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/人文/" title="人文">人文<sup>1</sup></a></li>
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方...... <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"guozai"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
