@@ -24,7 +24,7 @@
 1gem install cocoapods
 升级后用”pod –version”查">
 <meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-07-11T10:26:46.000Z">
+<meta property="og:updated_time" content="2016-07-11T10:30:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CocoaPods更新遇redefinition问题及其它问题汇总">
 <meta name="twitter:description" content="最近下载了网上的一份开源代码，pod更新时出错，根据网上别人的解答是项目太新用了Xcode7与iOS9 SDK，需要对CocoaPods进行了升级，没想到这一升级造成了一系列的问题，费了老鼻子劲才把这些问题都一一解决，就在这里记录一下吧，希望对需要的人有所帮助。
@@ -107,12 +107,12 @@
 <h2 id="2、Redefinition问题"><a href="#2、Redefinition问题" class="headerlink" title="2、Redefinition问题"></a>2、Redefinition问题</h2><p>升级后遇到的最大的问题就是这个Redefinition问题了，具体情况是我的工作项目中需要增加一个新的pod引用，pod update后编译报出一大堆Redefinition问题，涉及到AFNetworking，SDWebImage等常用库，而以前都好好的，百思不得其解。        </p>
 <p><a href="&quot;Redefinition of module X&quot; errors in 0.38.1 · Issue #3886 · CocoaPods/CocoaPods 这个Github issue">“Redefinition of module X” errors in 0.38.1 · Issue #3886 · CocoaPods/CocoaPods 这个Github issue</a>提到了这个问题，但我并不得要领。        </p>
 <p>为了这个问题我把Pods文件夹、Podfild.lock文件删除重新更新，甚至把CocoaPods降级到0.38.2以及0.37.2版本都没有解决，然后这个过程中又遇到了其它的问题，问题怎么解决的后面再说。</p>
-<p>静下心来再查看这个问题，发现错误日志里还是提供了一些关键要素，能显示重复定义在哪里。因为我一般情况下都是看默认显示在Xcode左侧栏里的错误日志列表就解决，很少展开日志详细信息。这次的关键要素就是在日志详细信息中，然后就发现了一些规律：以AFNetworking为例，我在pch文件中是这样引用的：#import \<afnetworking\ afnetworking.h\="">，然后在其它文件也做了这样的引用：#import “AFNetworking.h”。这两个引用同时存在就造成了Redefinition，去掉后者的引用方式就可以解决AFNetworking的Redefinition问题了。        </afnetworking\></p>
+<p>静下心来再查看这个问题，发现错误日志里还是提供了一些关键要素，能显示重复定义在哪里。因为我一般情况下都是看默认显示在Xcode左侧栏里的错误日志列表就解决，很少展开日志详细信息。这次的关键要素就是在日志详细信息中，然后就发现了一些规律：以AFNetworking为例，我在pch文件中是这样引用的：#import \&lt; AFNetworking\/AFNetworking.h &gt;，然后在其它文件也做了这样的引用：#import “AFNetworking.h”。这两个引用同时存在就造成了Redefinition，去掉后者的引用方式就可以解决AFNetworking的Redefinition问题了。        </p>
 <p>正常情况下肯定是用尖括号那种引用方式，但是由于历史原因，项目中使用后者那种引用方式也有不少，以前也从来没出问题，不知道现在为什么一下子就全部暴露出来了。这一改就要改不少，没办法就只能一个一个改了。        </p>
 <blockquote>
-<p>后记：根据最新回复，是必须得使用#import \<afnetworking\ afnetworking.h\="">这种形式的头文件引用了，应该是检查更严格了。            </afnetworking\></p>
+<p>后记：根据最新回复，是必须得使用#import \&lt; AFNetworking\/AFNetworking.h >这种形式的头文件引用了，应该是检查更严格了。            </p>
 </blockquote>
-<p><em>我在这里遇到的问题是SDWebImage的Redefinition问题，是在pch中导入了#import \<sdwebimage\ uiimageview+webcache.h\="">，但是在其他的类中又导入了#import “UIImageView+WebCache.h”，从而引起了Redefinition问题</sdwebimage\></em>        </p>
+<p><em>我在这里遇到的问题是SDWebImage的Redefinition问题，是在pch中导入了#import \&lt; SDWebImage\/UIImageView+WebCache.h >，但是在其他的类中又导入了#import “UIImageView+WebCache.h”，从而引起了Redefinition问题</em>        </p>
 <h2 id="3、undefined-method-project’-for-lt-Pod-Installer问题"><a href="#3、undefined-method-project’-for-lt-Pod-Installer问题" class="headerlink" title="3、undefined method `project’ for #&lt;Pod::Installer问题"></a>3、undefined method `project’ for #&lt;Pod::Installer问题</h2><p>旧版本的Podfile在升级Cocoapods后pod install就会遇到这个问题，根据这篇文章，是因为Cocoapods升级到0.38或0.39版本后installer_representation.project.targets.each中的project改名了，变成了pods_project，好在给了一个0.37——0.39都通用的办法，比如原来的Podfile是：        </p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">platform :ios, <span class="string">'7.0'</span></span><br><span class="line">pod <span class="string">'Reveal-iOS-SDK'</span>, :configurations =&gt; [<span class="string">'Debug'</span>]</span><br><span class="line">post_install <span class="keyword">do</span> |installer_representation|</span><br><span class="line">    installer_representation.project.targets.each <span class="keyword">do</span> |target|</span><br><span class="line">        target.build_configurations.each <span class="keyword">do</span> |config|</span><br><span class="line">            config.build_settings[<span class="string">'ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">            config.build_settings[<span class="string">'VALID_ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">            config.build_settings[<span class="string">'ONLY_ACTIVE_ARCH'</span>] = <span class="string">'NO'</span></span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>升级后就要改成：        </p>
