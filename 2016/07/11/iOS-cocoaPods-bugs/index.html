@@ -1,0 +1,549 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>CocoaPods更新遇redefinition问题及其它问题汇总 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="最近下载了网上的一份开源代码，pod更新时出错，根据网上别人的解答是项目太新用了Xcode7与iOS9 SDK，需要对CocoaPods进行了升级，没想到这一升级造成了一系列的问题，费了老鼻子劲才把这些问题都一一解决，就在这里记录一下吧，希望对需要的人有所帮助。
+1、问题环境
+升级时所使用的命令为：        
+1gem install cocoapods
+升级后用”pod –version”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CocoaPods更新遇redefinition问题及其它问题汇总">
+<meta property="og:url" content="http://yoursite.com/2016/07/11/iOS-cocoaPods-bugs/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="最近下载了网上的一份开源代码，pod更新时出错，根据网上别人的解答是项目太新用了Xcode7与iOS9 SDK，需要对CocoaPods进行了升级，没想到这一升级造成了一系列的问题，费了老鼻子劲才把这些问题都一一解决，就在这里记录一下吧，希望对需要的人有所帮助。
+1、问题环境
+升级时所使用的命令为：        
+1gem install cocoapods
+升级后用”pod –version”">
+<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta property="og:updated_time" content="2016-07-11T09:00:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CocoaPods更新遇redefinition问题及其它问题汇总">
+<meta name="twitter:description" content="最近下载了网上的一份开源代码，pod更新时出错，根据网上别人的解答是项目太新用了Xcode7与iOS9 SDK，需要对CocoaPods进行了升级，没想到这一升级造成了一系列的问题，费了老鼻子劲才把这些问题都一一解决，就在这里记录一下吧，希望对需要的人有所帮助。
+1、问题环境
+升级时所使用的命令为：        
+1gem install cocoapods
+升级后用”pod –version”">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/11/iOS-cocoaPods-bugs/" title="CocoaPods更新遇redefinition问题及其它问题汇总" itemprop="url">CocoaPods更新遇redefinition问题及其它问题汇总</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2016-07-11T08:20:30.000Z" itemprop="datePublished"> 发表于 2016-07-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、问题环境"><span class="toc-number">1.</span> <span class="toc-text">1、问题环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、Redefinition问题"><span class="toc-number">2.</span> <span class="toc-text">2、Redefinition问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、undefined-method-project’-for-lt-Pod-Installer问题"><span class="toc-number">3.</span> <span class="toc-text">3、undefined method `project’ for #<Pod::Installer问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、DVTAssertions-ASSERTION-FAILURE问题"><span class="toc-number">4.</span> <span class="toc-text">4、DVTAssertions: ASSERTION FAILURE问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、CocoaPods多版本共存问题"><span class="toc-number">5.</span> <span class="toc-text">5、CocoaPods多版本共存问题</span></a></li></ol>
+		
+		</div>
+		
+		<p>最近下载了网上的一份开源代码，pod更新时出错，根据网上别人的解答是项目太新用了Xcode7与iOS9 SDK，需要对CocoaPods进行了升级，没想到这一升级造成了一系列的问题，费了老鼻子劲才把这些问题都一一解决，就在这里记录一下吧，希望对需要的人有所帮助。</p>
+<h2 id="1、问题环境"><a href="#1、问题环境" class="headerlink" title="1、问题环境"></a>1、问题环境</h2><hr>
+<p>升级时所使用的命令为：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install cocoapods</span><br></pre></td></tr></table></figure>
+<p>升级后用”pod –version”查看版本号是0.39.0，升级前的版本我没记错的话应该是0.37.2.</p>
+<h2 id="2、Redefinition问题"><a href="#2、Redefinition问题" class="headerlink" title="2、Redefinition问题"></a>2、Redefinition问题</h2><hr>
+<p>升级后遇到的最大的问题就是这个Redefinition问题了，具体情况是我的工作项目中需要增加一个新的pod引用，pod update后编译报出一大堆Redefinition问题，涉及到AFNetworking，SDWebImage等常用库，而以前都好好的，百思不得其解。        </p>
+<p><a href="&quot;Redefinition of module X&quot; errors in 0.38.1 · Issue #3886 · CocoaPods/CocoaPods 这个Github issue">“Redefinition of module X” errors in 0.38.1 · Issue #3886 · CocoaPods/CocoaPods 这个Github issue</a>提到了这个问题，但我并不得要领。        </p>
+<p>为了这个问题我把Pods文件夹、Podfild.lock文件删除重新更新，甚至把CocoaPods降级到0.38.2以及0.37.2版本都没有解决，然后这个过程中又遇到了其它的问题，问题怎么解决的后面再说。</p>
+<p>静下心来再查看这个问题，发现错误日志里还是提供了一些关键要素，能显示重复定义在哪里。因为我一般情况下都是看默认显示在Xcode左侧栏里的错误日志列表就解决，很少展开日志详细信息。这次的关键要素就是在日志详细信息中，然后就发现了一些规律：以AFNetworking为例，我在pch文件中是这样引用的：#import \<afnetworking afnetworking.h\="">，然后在其它文件也做了这样的引用：#import “AFNetworking.h”。这两个引用同时存在就造成了Redefinition，去掉后者的引用方式就可以解决AFNetworking的Redefinition问题了。        </afnetworking></p>
+<p>正常情况下肯定是用尖括号那种引用方式，但是由于历史原因，项目中使用后者那种引用方式也有不少，以前也从来没出问题，不知道现在为什么一下子就全部暴露出来了。这一改就要改不少，没办法就只能一个一个改了。        </p>
+<blockquote>
+<p>后记：根据最新回复，是必须得使用#import <afnetworking afnetworking.h="">这种形式的头文件引用了，应该是检查更严格了。            </afnetworking></p>
+</blockquote>
+<p><em>我在这里遇到的问题是SDWebImage的Redefinition问题，是在pch中导入了#import <sdwebimage uiimageview+webcache.h="">，但是在其他的类中又导入了#import “UIImageView+WebCache.h”，从而引起了Redefinition问题</sdwebimage></em>        </p>
+<h2 id="3、undefined-method-project’-for-lt-Pod-Installer问题"><a href="#3、undefined-method-project’-for-lt-Pod-Installer问题" class="headerlink" title="3、undefined method `project’ for #&lt;Pod::Installer问题"></a>3、undefined method `project’ for #&lt;Pod::Installer问题</h2><hr>
+<p>旧版本的Podfile在升级Cocoapods后pod install就会遇到这个问题，根据这篇文章，是因为Cocoapods升级到0.38或0.39版本后installer_representation.project.targets.each中的project改名了，变成了pods_project，好在给了一个0.37——0.39都通用的办法，比如原来的Podfile是：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">platform :ios, <span class="string">'7.0'</span></span><br><span class="line">pod <span class="string">'Reveal-iOS-SDK'</span>, :configurations =&gt; [<span class="string">'Debug'</span>]</span><br><span class="line">post_install <span class="keyword">do</span> |installer_representation|</span><br><span class="line">    installer_representation.project.targets.each <span class="keyword">do</span> |target|</span><br><span class="line">        target.build_configurations.each <span class="keyword">do</span> |config|</span><br><span class="line">            config.build_settings[<span class="string">'ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">            config.build_settings[<span class="string">'VALID_ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">            config.build_settings[<span class="string">'ONLY_ACTIVE_ARCH'</span>] = <span class="string">'NO'</span></span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>升级后就要改成：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">platform :ios, <span class="string">'7.0'</span></span><br><span class="line">pod <span class="string">'Reveal-iOS-SDK'</span>, :configurations =&gt; [<span class="string">'Debug'</span>]</span><br><span class="line"><span class="keyword">if</span> defined? installer_representation.project</span><br><span class="line">    post_install <span class="keyword">do</span> |installer_representation|</span><br><span class="line">        installer_representation.project.targets.each <span class="keyword">do</span> |target|</span><br><span class="line">            target.build_configurations.each <span class="keyword">do</span> |config|</span><br><span class="line">                config.build_settings[<span class="string">'ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'VALID_ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'ONLY_ACTIVE_ARCH'</span>] = <span class="string">'NO'</span></span><br><span class="line">            end</span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br><span class="line"><span class="keyword">if</span> defined? installer_representation.pods_project</span><br><span class="line">    post_install <span class="keyword">do</span> |installer_representation|</span><br><span class="line">        installer_representation.pods_project.targets.each <span class="keyword">do</span> |target|</span><br><span class="line">            target.build_configurations.each <span class="keyword">do</span> |config|</span><br><span class="line">                config.build_settings[<span class="string">'ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'VALID_ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'ONLY_ACTIVE_ARCH'</span>] = <span class="string">'NO'</span></span><br><span class="line">            end</span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<h2 id="4、DVTAssertions-ASSERTION-FAILURE问题"><a href="#4、DVTAssertions-ASSERTION-FAILURE问题" class="headerlink" title="4、DVTAssertions: ASSERTION FAILURE问题"></a>4、DVTAssertions: ASSERTION FAILURE问题</h2><hr>
+<p>这是CocoaPods降级到0.37.2后pod install遇到的问题，记忆中当初好像就是因为这个问题而升级到0.39.0版本的。        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[MT] DVTAssertions: ASSERTION FAILURE <span class="keyword">in</span> /Library/Caches/com.apple.xbs/Sources/IDEFrameworks/IDEFrameworks-8227/IDEFoundation/Initialization/IDEInitialization.m:590</span><br><span class="line">Details: Assertion failed: _initializationCompletedSuccessfully</span><br><span class="line">Function: BOOL IDEIsInitializedForUserInteraction()</span><br><span class="line">Thread: &#123;number = 1, name = main&#125;</span><br><span class="line">Hints: None</span><br><span class="line">Backtrace:</span><br><span class="line">0 0x000000010462aa5c -DVTAssertionHandler handleFailureInFunction:fileName:lineNumber:assertionSignature:messageFormat:arguments:</span><br><span class="line">1 0x000000010462a1e9 _DVTAssertionHandler (<span class="keyword">in</span> DVTFoundation)</span><br><span class="line">2 0x000000010462a455 _DVTAssertionFailureHandler (<span class="keyword">in</span> DVTFoundation)</span><br><span class="line">3 0x000000010462a3b7 _DVTAssertionFailureHandler (<span class="keyword">in</span> DVTFoundation)</span><br><span class="line">4 0x0000000107191f5c IDEIsInitializedForUserInteraction (<span class="keyword">in</span> IDEFoundation)</span><br><span class="line">5 0x0000000109da8eb9 +PBXProject projectWithFile:errorHandler:<span class="built_in">read</span>Only:</span><br><span class="line">6 0x0000000109daaa3e +PBXProject projectWithFile:errorHandler:</span><br><span class="line">7 0x00007fff8bc68f44 ffi_call_unix64 (<span class="keyword">in</span> libffi.dylib)</span><br><span class="line">Abort <span class="built_in">trap</span>: 6</span><br></pre></td></tr></table></figure>
+<p>网上大部分的帖子都说升级CocoaPods，比如这个<a href="https://github.com/CocoaPods/CocoaPods/issues/4209" target="_blank" rel="external">帖子</a>，然而具体问题具体分析好不好，我这个是降级时遇到的问题。</p>
+<p>这个问题应该就是与Xcode版本有关了，实际就是与Developer的路径有关。我的Mac上同时存在有Xcode6.1.1版本与Xcode7.0版本，后者是默认的Xcode版本。</p>
+<p>当CocoaPods为0.37.2版本时，对应的Developer路径应该是Xcode6.1.1版本的路径，因为这个之前一直都配合使用好好的。那么，就需要用到xcode-select问题了。通过xcode-select -p命令可以查看当前Developer路径，用xcode-select -s可以指定新的Developer路径。</p>
+<p>我是这样指定的：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-select <span class="_">-s</span> /Applications/Xcode6.1.1.app/Contents/Developer</span><br></pre></td></tr></table></figure>
+<p>然后这个问题就不复存在了。注意当有必要使用CocoaPods 0.39.0版本时，必须得切换回来，要不然还是会遇到这个问题        </p>
+<h2 id="5、CocoaPods多版本共存问题"><a href="#5、CocoaPods多版本共存问题" class="headerlink" title="5、CocoaPods多版本共存问题"></a>5、CocoaPods多版本共存问题</h2><hr>
+<p>本来我是想降级的，结果CocoaPods好像默认就是多版本共存了，比如我原来本来是0.37.2版本，用了本文开头的升级命令升级后，虽然用pod –version看是0.39.0版本，但是0.37.2版本并没有删除。这个可以用下面的命令查看：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem list --local | grep cocoapods</span><br></pre></td></tr></table></figure>
+<p>如果你的只有一个版本，你可以再安装一个CocoaPods 0.38.2版本或者其它版本试试。比如安装0.38.2版本的命令就是：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install cocoapods -v 0.38.2</span><br></pre></td></tr></table></figure>
+<p>说是共存了，但到底是怎么共存使用呢？就比如说我的CocoaPods默认版本是0.39.0，有一个项目要用0.37.2版本的CocoaPods该怎么用呢？        </p>
+<p><a href="http://stackoverflow.com/questions/28130938/how-to-switch-cocoapods-or-other-gem-version-on-command-line/28140522#28140522" target="_blank" rel="external">这里</a>有人提供了这样的一个方法，但我没有细研究，也没实践，需要用到rbenv：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rbenv global 2.1.0</span><br><span class="line">gem install cocoapods -v 0.34.4</span><br><span class="line">rbenv global 2.0.0-p0</span><br><span class="line">gem install cocoapods -v 0.33.1</span><br></pre></td></tr></table></figure>
+<p>步骤:        </p>
+<ul>
+<li>在项目根目录下创建Gemfile，指定CocoaPods版本    </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem <span class="string">'cocoapods'</span>, <span class="string">'~&gt; 0.37.2'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行bundle install命令</li>
+</ul>
+<p>****************这是华丽丽的分割线o(╯□╰)o******************</p>
+<p>我是在原<a href="http://www.jianshu.com/p/ee32eef74ba9" target="_blank" rel="external">文章</a>的基础上做了些许改动,总结了自己遇到的一些问题。</p>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：              </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS/">iOS</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/07/11/iOS-cocoaPods-bugs/" data-title="CocoaPods更新遇redefinition问题及其它问题汇总 | 骚客" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/04/12/iOS-ChangeNavImg/"  title="Swift实现导航栏头像大小渐变和导航栏颜色渐变">
+ <strong>下一篇：</strong><br/> 
+ <span>Swift实现导航栏头像大小渐变和导航栏颜色渐变
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/07/11/iOS-cocoaPods-bugs/" data-title="CocoaPods更新遇redefinition问题及其它问题汇总" data-url="http://yoursite.com/2016/07/11/iOS-cocoaPods-bugs/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、问题环境"><span class="toc-number">1.</span> <span class="toc-text">1、问题环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、Redefinition问题"><span class="toc-number">2.</span> <span class="toc-text">2、Redefinition问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、undefined-method-project’-for-lt-Pod-Installer问题"><span class="toc-number">3.</span> <span class="toc-text">3、undefined method `project’ for #<Pod::Installer问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、DVTAssertions-ASSERTION-FAILURE问题"><span class="toc-number">4.</span> <span class="toc-text">4、DVTAssertions: ASSERTION FAILURE问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、CocoaPods多版本共存问题"><span class="toc-number">5.</span> <span class="toc-text">5、CocoaPods多版本共存问题</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/iOS/" title="iOS">iOS<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书/" title="读书">读书<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/情感/" title="情感">情感<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/人文/" title="人文">人文<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方...... <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"guozai"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
