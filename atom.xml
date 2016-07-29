@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>骚客</title>
+  <subtitle>菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2016-07-11T10:40:15.000Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Mr.Guo</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CocoaPods更新遇redefinition问题及其它问题汇总</title>
+    <link href="http://yoursite.com/2016/07/11/iOS-cocoaPods-bugs/"/>
+    <id>http://yoursite.com/2016/07/11/iOS-cocoaPods-bugs/</id>
+    <published>2016-07-11T08:20:30.000Z</published>
+    <updated>2016-07-11T10:40:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近下载了网上的一份开源代码，pod更新时出错，根据网上别人的解答是项目太新用了Xcode7与iOS9 SDK，需要对CocoaPods进行了升级，没想到这一升级造成了一系列的问题，费了老鼻子劲才把这些问题都一一解决，就在这里记录一下吧，希望对需要的人有所帮助。</p>
+<h2 id="1、问题环境"><a href="#1、问题环境" class="headerlink" title="1、问题环境"></a>1、问题环境</h2><p>升级时所使用的命令为：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install cocoapods</span><br></pre></td></tr></table></figure>
+<p>升级后用”pod –version”查看版本号是0.39.0，升级前的版本我没记错的话应该是0.37.2.</p>
+<h2 id="2、Redefinition问题"><a href="#2、Redefinition问题" class="headerlink" title="2、Redefinition问题"></a>2、Redefinition问题</h2><p>升级后遇到的最大的问题就是这个Redefinition问题了，具体情况是我的工作项目中需要增加一个新的pod引用，pod update后编译报出一大堆Redefinition问题，涉及到AFNetworking，SDWebImage等常用库，而以前都好好的，百思不得其解。        </p>
+<p><a href="&quot;Redefinition of module X&quot; errors in 0.38.1 · Issue #3886 · CocoaPods/CocoaPods 这个Github issue">“Redefinition of module X” errors in 0.38.1 · Issue #3886 · CocoaPods/CocoaPods 这个Github issue</a>提到了这个问题，但我并不得要领。        </p>
+<p>为了这个问题我把Pods文件夹、Podfild.lock文件删除重新更新，甚至把CocoaPods降级到0.38.2以及0.37.2版本都没有解决，然后这个过程中又遇到了其它的问题，问题怎么解决的后面再说。</p>
+<p>静下心来再查看这个问题，发现错误日志里还是提供了一些关键要素，能显示重复定义在哪里。因为我一般情况下都是看默认显示在Xcode左侧栏里的错误日志列表就解决，很少展开日志详细信息。这次的关键要素就是在日志详细信息中，然后就发现了一些规律：以AFNetworking为例，我在pch文件中是这样引用的：#import &lt;AFNetworking/AFNetworking.h&gt;，然后在其它文件也做了这样的引用：#import “AFNetworking.h”。这两个引用同时存在就造成了Redefinition，去掉后者的引用方式就可以解决AFNetworking的Redefinition问题了。        </p>
+<p>正常情况下肯定是用尖括号那种引用方式，但是由于历史原因，项目中使用后者那种引用方式也有不少，以前也从来没出问题，不知道现在为什么一下子就全部暴露出来了。这一改就要改不少，没办法就只能一个一个改了。        </p>
+<blockquote>
+<p>后记：根据最新回复，是必须得使用#import &lt; AFNetworking\/AFNetworking.h &gt;这种形式的头文件引用了，应该是检查更严格了。            </p>
+</blockquote>
+<p><em>我在这里遇到的问题是SDWebImage的Redefinition问题，是在pch中导入了#import &lt; SDWebImage\/UIImageView+WebCache.h &gt;，但是在其他的类中又导入了#import “UIImageView+WebCache.h”，从而引起了Redefinition问题</em>        </p>
+<h2 id="3、undefined-method-project’-for-lt-Pod-Installer问题"><a href="#3、undefined-method-project’-for-lt-Pod-Installer问题" class="headerlink" title="3、undefined method `project’ for #&lt;Pod::Installer问题"></a>3、undefined method `project’ for #&lt;Pod::Installer问题</h2><p>旧版本的Podfile在升级Cocoapods后pod install就会遇到这个问题，根据这篇文章，是因为Cocoapods升级到0.38或0.39版本后installer_representation.project.targets.each中的project改名了，变成了pods_project，好在给了一个0.37——0.39都通用的办法，比如原来的Podfile是：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">platform :ios, <span class="string">'7.0'</span></span><br><span class="line">pod <span class="string">'Reveal-iOS-SDK'</span>, :configurations =&gt; [<span class="string">'Debug'</span>]</span><br><span class="line">post_install <span class="keyword">do</span> |installer_representation|</span><br><span class="line">    installer_representation.project.targets.each <span class="keyword">do</span> |target|</span><br><span class="line">        target.build_configurations.each <span class="keyword">do</span> |config|</span><br><span class="line">            config.build_settings[<span class="string">'ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">            config.build_settings[<span class="string">'VALID_ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">            config.build_settings[<span class="string">'ONLY_ACTIVE_ARCH'</span>] = <span class="string">'NO'</span></span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>升级后就要改成：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">platform :ios, <span class="string">'7.0'</span></span><br><span class="line">pod <span class="string">'Reveal-iOS-SDK'</span>, :configurations =&gt; [<span class="string">'Debug'</span>]</span><br><span class="line"><span class="keyword">if</span> defined? installer_representation.project</span><br><span class="line">    post_install <span class="keyword">do</span> |installer_representation|</span><br><span class="line">        installer_representation.project.targets.each <span class="keyword">do</span> |target|</span><br><span class="line">            target.build_configurations.each <span class="keyword">do</span> |config|</span><br><span class="line">                config.build_settings[<span class="string">'ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'VALID_ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'ONLY_ACTIVE_ARCH'</span>] = <span class="string">'NO'</span></span><br><span class="line">            end</span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br><span class="line"><span class="keyword">if</span> defined? installer_representation.pods_project</span><br><span class="line">    post_install <span class="keyword">do</span> |installer_representation|</span><br><span class="line">        installer_representation.pods_project.targets.each <span class="keyword">do</span> |target|</span><br><span class="line">            target.build_configurations.each <span class="keyword">do</span> |config|</span><br><span class="line">                config.build_settings[<span class="string">'ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'VALID_ARCHS'</span>] = <span class="string">'armv7 arm64'</span></span><br><span class="line">                config.build_settings[<span class="string">'ONLY_ACTIVE_ARCH'</span>] = <span class="string">'NO'</span></span><br><span class="line">            end</span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<h2 id="4、DVTAssertions-ASSERTION-FAILURE问题"><a href="#4、DVTAssertions-ASSERTION-FAILURE问题" class="headerlink" title="4、DVTAssertions: ASSERTION FAILURE问题"></a>4、DVTAssertions: ASSERTION FAILURE问题</h2><p>这是CocoaPods降级到0.37.2后pod install遇到的问题，记忆中当初好像就是因为这个问题而升级到0.39.0版本的。        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[MT] DVTAssertions: ASSERTION FAILURE <span class="keyword">in</span> /Library/Caches/com.apple.xbs/Sources/IDEFrameworks/IDEFrameworks-8227/IDEFoundation/Initialization/IDEInitialization.m:590</span><br><span class="line">Details: Assertion failed: _initializationCompletedSuccessfully</span><br><span class="line">Function: BOOL IDEIsInitializedForUserInteraction()</span><br><span class="line">Thread: &#123;number = 1, name = main&#125;</span><br><span class="line">Hints: None</span><br><span class="line">Backtrace:</span><br><span class="line">0 0x000000010462aa5c -DVTAssertionHandler handleFailureInFunction:fileName:lineNumber:assertionSignature:messageFormat:arguments:</span><br><span class="line">1 0x000000010462a1e9 _DVTAssertionHandler (<span class="keyword">in</span> DVTFoundation)</span><br><span class="line">2 0x000000010462a455 _DVTAssertionFailureHandler (<span class="keyword">in</span> DVTFoundation)</span><br><span class="line">3 0x000000010462a3b7 _DVTAssertionFailureHandler (<span class="keyword">in</span> DVTFoundation)</span><br><span class="line">4 0x0000000107191f5c IDEIsInitializedForUserInteraction (<span class="keyword">in</span> IDEFoundation)</span><br><span class="line">5 0x0000000109da8eb9 +PBXProject projectWithFile:errorHandler:<span class="built_in">read</span>Only:</span><br><span class="line">6 0x0000000109daaa3e +PBXProject projectWithFile:errorHandler:</span><br><span class="line">7 0x00007fff8bc68f44 ffi_call_unix64 (<span class="keyword">in</span> libffi.dylib)</span><br><span class="line">Abort <span class="built_in">trap</span>: 6</span><br></pre></td></tr></table></figure>
+<p>网上大部分的帖子都说升级CocoaPods，比如这个<a href="https://github.com/CocoaPods/CocoaPods/issues/4209" target="_blank" rel="external">帖子</a>，然而具体问题具体分析好不好，我这个是降级时遇到的问题。</p>
+<p>这个问题应该就是与Xcode版本有关了，实际就是与Developer的路径有关。我的Mac上同时存在有Xcode6.1.1版本与Xcode7.0版本，后者是默认的Xcode版本。</p>
+<p>当CocoaPods为0.37.2版本时，对应的Developer路径应该是Xcode6.1.1版本的路径，因为这个之前一直都配合使用好好的。那么，就需要用到xcode-select问题了。通过xcode-select -p命令可以查看当前Developer路径，用xcode-select -s可以指定新的Developer路径。</p>
+<p>我是这样指定的：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-select <span class="_">-s</span> /Applications/Xcode6.1.1.app/Contents/Developer</span><br></pre></td></tr></table></figure>
+<p>然后这个问题就不复存在了。注意当有必要使用CocoaPods 0.39.0版本时，必须得切换回来，要不然还是会遇到这个问题        </p>
+<h2 id="5、CocoaPods多版本共存问题"><a href="#5、CocoaPods多版本共存问题" class="headerlink" title="5、CocoaPods多版本共存问题"></a>5、CocoaPods多版本共存问题</h2><p>本来我是想降级的，结果CocoaPods好像默认就是多版本共存了，比如我原来本来是0.37.2版本，用了本文开头的升级命令升级后，虽然用pod –version看是0.39.0版本，但是0.37.2版本并没有删除。这个可以用下面的命令查看：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem list --local | grep cocoapods</span><br></pre></td></tr></table></figure>
+<p>如果你的只有一个版本，你可以再安装一个CocoaPods 0.38.2版本或者其它版本试试。比如安装0.38.2版本的命令就是：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install cocoapods -v 0.38.2</span><br></pre></td></tr></table></figure>
+<p>说是共存了，但到底是怎么共存使用呢？就比如说我的CocoaPods默认版本是0.39.0，有一个项目要用0.37.2版本的CocoaPods该怎么用呢？        </p>
+<p><a href="http://stackoverflow.com/questions/28130938/how-to-switch-cocoapods-or-other-gem-version-on-command-line/28140522#28140522" target="_blank" rel="external">这里</a>有人提供了这样的一个方法，但我没有细研究，也没实践，需要用到rbenv：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rbenv global 2.1.0</span><br><span class="line">gem install cocoapods -v 0.34.4</span><br><span class="line">rbenv global 2.0.0-p0</span><br><span class="line">gem install cocoapods -v 0.33.1</span><br></pre></td></tr></table></figure>
+<p>步骤:        </p>
+<ul>
+<li>在项目根目录下创建Gemfile，指定CocoaPods版本    </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem <span class="string">'cocoapods'</span>, <span class="string">'~&gt; 0.37.2'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行bundle install命令</li>
+</ul>
+<p>****************这是华丽丽的分割线o(╯□╰)o******************</p>
+<p>我是在原<a href="http://www.jianshu.com/p/ee32eef74ba9" target="_blank" rel="external">文章</a>的基础上做了些许改动,总结了自己遇到的一些问题。</p>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：              </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近下载了网上的一份开源代码，pod更新时出错，根据网上别人的解答是项目太新用了Xcode7与iOS9 SDK，需要对CocoaPods进行了升级，没想到这一升级造成了一系列的问题，费了老鼻子劲才把这些问题都一一解决，就在这里记录一下吧，希望对需要的人有所帮助。&lt;/p&gt;
+&lt;
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Swift实现导航栏头像大小渐变和导航栏颜色渐变</title>
+    <link href="http://yoursite.com/2016/04/12/iOS-ChangeNavImg/"/>
+    <id>http://yoursite.com/2016/04/12/iOS-ChangeNavImg/</id>
+    <published>2016-04-12T11:12:50.000Z</published>
+    <updated>2016-07-02T11:45:31.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>github地址: <a href="https://github.com/corderguo/ChangeNavTitleImage" target="_blank" rel="external">https://github.com/corderguo/ChangeNavTitleImage</a><br>本文地址: <a href="http://coderperson.com/2016/04/12/iOS-ChangeNavImg/" target="_blank" rel="external">http://coderperson.com/2016/04/12/iOS-ChangeNavImg/</a><br>欢迎转载，请注明出处，谢谢。</p>
+</blockquote>
+<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="http://img.blog.csdn.net/20160702190808768" alt=""></p>
+<h3 id="创建tableView"><a href="#创建tableView" class="headerlink" title="创建tableView"></a>创建tableView</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 我是以懒加载的形式创建</span><br><span class="line">private lazy var tableView: UITableView = &#123;</span><br><span class="line">        <span class="built_in">let</span> tableView = UITableView(frame: self.view.bounds)</span><br><span class="line">        tableView.dataSource = self</span><br><span class="line">        tableView.delegate   = self</span><br><span class="line">        <span class="built_in">return</span> tableView</span><br><span class="line">    &#125;()</span><br><span class="line">// 以extension的形式遵循代理 并在其中实现代理方法</span><br><span class="line">extension ViewController : UITableViewDataSource,UITableViewDelegate &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意:</p>
+<ul>
+<li>协议的写法，不需要写&lt;&gt;        </li>
+<li>刚遵循完协议的时候会报错，不用担心，那是因为还没实现代理方法</li>
+<li>Swift中的懒加载和OC中的懒加载区别还是挺大的</li>
+</ul>
+<p>这里要注意，我是在viewDidLoad方法中注册cell的</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tableView.registerClass(UITableViewCell.self, <span class="keyword">for</span>CellReuseIdentifier: ID)</span><br></pre></td></tr></table></figure>
+<h3 id="实现代理方法"><a href="#实现代理方法" class="headerlink" title="实现代理方法"></a>实现代理方法</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">return</span> 30</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&gt; UITableViewCell</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">let</span> cell = tableView.dequeueReusableCellWithIdentifier(ID, <span class="keyword">for</span>IndexPath: indexPath)</span><br><span class="line">        cell.textLabel?.text = <span class="string">"骚客--\(indexPath.row):http://coderperson.com"</span></span><br><span class="line">        <span class="built_in">return</span> cell</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>到此为止我们的基本界面搭建完成了，下面就是关键部分了。</p>
+<h3 id="自定义titleView"><a href="#自定义titleView" class="headerlink" title="自定义titleView"></a>自定义titleView</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 首先定义imageView的属性，用来操控图片的大小改变</span><br><span class="line">var imageV : UIImageView?</span><br><span class="line">// 创建</span><br><span class="line"><span class="built_in">let</span> titleV : UIView = UIView()</span><br><span class="line">navigationItem.titleView = titleV</span><br><span class="line">imageV = UIImageView(frame: CGRectMake(0, 0, 70, 70))</span><br><span class="line">imageV?.image = UIImage(named: <span class="string">"100.jpg"</span>)</span><br><span class="line">imageV?.layer.cornerRadius = 35</span><br><span class="line">imageV?.layer.masksToBounds = <span class="literal">true</span></span><br><span class="line">imageV?.center = CGPointMake(titleV.center.x, 0)</span><br><span class="line">titleV.addSubview(imageV!)</span><br></pre></td></tr></table></figure>
+<p>这里不要自己单独向navigationBar上添加子控件，只需要修改titleView即可</p>
+<h3 id="监听偏移量"><a href="#监听偏移量" class="headerlink" title="监听偏移量"></a>监听偏移量</h3><p>这里通过监听偏移量，实现的大小缩放动画<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">func scrollViewDidScroll(scrollView: UIScrollView) &#123;</span><br><span class="line">        </span><br><span class="line">        // 偏移量，相对于contentView，你也可以不加scrollView.contentInset.top，即相对scrollView，然后适当调整即可</span><br><span class="line">        <span class="built_in">let</span> offsetY = scrollView.contentOffset.y + scrollView.contentInset.top</span><br><span class="line">        var scale:CGFloat = 1.0</span><br><span class="line">        <span class="keyword">if</span> offsetY &lt; 0  // 下拉</span><br><span class="line">        &#123;</span><br><span class="line">            scale = min(1.5, 1.0 - offsetY / 300.0) // 300值可以自己调整</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> offsetY &gt; 0</span><br><span class="line">        &#123;</span><br><span class="line">            // 为了防止缩小过度，给一个最小值为0.45，其中0.45 = 31.5 / 70.0，表示</span><br><span class="line">            // 头像最小是31.5像素</span><br><span class="line">            scale = max(0.45, 1 - offsetY / 300);</span><br><span class="line">        &#125;</span><br><span class="line">        // 保证缩放后y的坐标不会改变</span><br><span class="line">        imageV?.transform = CGAffineTransformMakeScale(scale, scale)</span><br><span class="line">        var frame = imageV?.frame</span><br><span class="line">        frame?.origin.y = -(imageV?.layer.cornerRadius)! / 2.0</span><br><span class="line">        imageV?.frame = frame!</span><br><span class="line">        </span><br><span class="line">        // 导航栏颜色渐变</span><br><span class="line">        changeNavColor(offsetY)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>单独抽出来的颜色渐变的方法<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private func changeNavColor(offsetY:CGFloat) &#123;</span><br><span class="line">       </span><br><span class="line">       <span class="keyword">if</span> offsetY &gt;= 0</span><br><span class="line">       &#123;</span><br><span class="line">           self.navigationController?.navigationBar.alpha = 1.0</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">else</span> <span class="keyword">if</span> offsetY &lt; 0</span><br><span class="line">       &#123;</span><br><span class="line">           self.navigationController?.navigationBar.alpha = 1.0 - -offsetY / 300.0</span><br><span class="line">       &#125;</span><br><span class="line">       </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>到此为止你已经可以看到自己想要的效果了。        </p>
+<p>Done！</p>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：      </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;github地址: &lt;a href=&quot;https://github.com/corderguo/ChangeNavTitleImage&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/corde
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>三行代码搞定静态页面</title>
+    <link href="http://yoursite.com/2016/03/15/iOS-staticPage/"/>
+    <id>http://yoursite.com/2016/03/15/iOS-staticPage/</id>
+    <published>2016-03-15T04:13:48.000Z</published>
+    <updated>2016-06-29T08:56:22.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="StaticPage"><a href="#StaticPage" class="headerlink" title="StaticPage"></a>StaticPage</h1><ul>
+<li>静态页面大杀器，利用该库三行代码就能搞定通用静态页面</li>
+<li>github地址：<a href="https://github.com/corderguo/StaticPage" target="_blank" rel="external">https://github.com/corderguo/StaticPage</a>             </li>
+</ul>
+<h1 id="如何使用StaticPage"><a href="#如何使用StaticPage" class="headerlink" title="如何使用StaticPage"></a>如何使用StaticPage</h1><p>首先先把你控制器中tableview的类型设置为UITableViewStyleGrouped类型      </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];</span><br></pre></td></tr></table></figure>
+<p>只需要导入ICCommonItemCell.h头文件    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import <span class="string">"ICCommonItemCell.h"</span></span><br></pre></td></tr></table></figure>
+<p>然后在你的数据源中根据分组来设置响应的数据，例如demo中的代码:    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">-(NSMutableArray *)dataArray</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (nil == _dataArray) &#123;</span><br><span class="line">        _dataArray = [NSMutableArray array];</span><br><span class="line">        </span><br><span class="line">        ICCommonItem *friendItem  = [ICSettingArrowItem itemWithIcon:@<span class="string">"ff_IconShowAlbum"</span> title:@<span class="string">"朋友圈"</span> destVcClass:[ICTestViewController class] parameter:@<span class="string">"朋友圈"</span>]; // 根据要跳转的控制器需要的参数类型，具体填写，我这里需要的是字符串类型，就传递的字符串</span><br><span class="line">        ICCommonGroup *friendGroup = [[ICCommonGroup alloc] init];</span><br><span class="line">        friendGroup.items          = @[friendItem];</span><br><span class="line">        </span><br><span class="line">        ICCommonItem *sweepItem    = [ICSettingArrowItem itemWithIcon:@<span class="string">"ff_IconQRCode"</span> title:@<span class="string">"扫一扫"</span> destVcClass:[ICTestViewController class] parameter:@<span class="string">"扫一扫"</span>];</span><br><span class="line">        ICCommonItem *waveItem     = [ICSettingArrowItem itemWithIcon:@<span class="string">"ff_IconShake"</span> title:@<span class="string">"摇一摇"</span> destVcClass:[ICTestViewController class] parameter:@<span class="string">"摇一摇"</span>];</span><br><span class="line">        ICCommonGroup *sewaGroup   = [[ICCommonGroup alloc] init];</span><br><span class="line">        sewaGroup.items            = @[sweepItem,waveItem];</span><br><span class="line">        </span><br><span class="line">        ICCommonItem *nearItem     = [ICSettingArrowItem itemWithIcon:@<span class="string">"ff_IconLocationService"</span> title:@<span class="string">"附近的人"</span> destVcClass:[ICTestViewController class] parameter:@<span class="string">"附近的人"</span>];</span><br><span class="line">        ICCommonItem *driftItem    = [ICSettingArrowItem itemWithIcon:@<span class="string">"ff_IconBottle"</span> title:@<span class="string">"漂流瓶"</span> destVcClass:[ICTestViewController class] parameter:@<span class="string">"漂流瓶"</span>];</span><br><span class="line">        ICCommonGroup *nedrGroup   = [[ICCommonGroup alloc] init];</span><br><span class="line">        nedrGroup.items            = @[nearItem,driftItem];</span><br><span class="line">        </span><br><span class="line">        ICCommonItem *shopItem     = [ICSettingArrowItem itemWithIcon:@<span class="string">"ff_IconQRCode"</span> title:@<span class="string">"购物"</span> destVcClass:[ICTestViewController class] parameter:@<span class="string">"购物"</span>];</span><br><span class="line">        ICCommonItem *gameItem     = [ICSettingArrowItem itemWithIcon:@<span class="string">"MoreGame"</span> title:@<span class="string">"游戏"</span> destVcClass:[ICTestViewController class] parameter:@<span class="string">"游戏"</span>];</span><br><span class="line">        ICCommonGroup *shgaGroup   = [[ICCommonGroup alloc] init];</span><br><span class="line">        shgaGroup.items            = @[shopItem,gameItem];</span><br><span class="line">        </span><br><span class="line">        [_dataArray addObject:friendGroup];</span><br><span class="line">        [_dataArray addObject:sewaGroup];</span><br><span class="line">        [_dataArray addObject:nedrGroup];</span><br><span class="line">        [_dataArray addObject:shgaGroup];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> _dataArray;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中ICCommonGroup对应一组，而ICCommonItem又对应组中的每一个Item，每个Item有两种类型<br>，分别为ICSettingArrowItem和ICSettingSwitchItem；</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (instancetype)itemWithIcon:(NSString *)icon title:(NSString *)title destVcClass:(Class)destVcClass parameter:(id)parameter;</span><br></pre></td></tr></table></figure>
+<p>这个方法中的参数含义：        </p>
+<ul>
+<li>icon：cell中左边图片的图片名        </li>
+<li>title：cell的title显示的字符串内容        </li>
+<li>destVcClass：点击cell时要跳转的控制器类型            </li>
+<li>parameter：点击cell时要跳转时需要传递过去的参数               </li>
+</ul>
+<p>如果ICCommonItem中存在ICSettingSwitchItem，为了扑捉到UISwitch的开关事件，你需要遵守ICCommonItemCellDelegate，实现其中的代理方法：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- (void)commonItemCell:(ICCommonItemCell *)cell</span><br><span class="line">                 swith:(UISwitch *)swith;</span><br></pre></td></tr></table></figure>
+<p>如果想要改变每个组之间的间距（是组不是每个Item）你可以重写tableview的两个代理方法，返回自己想要的间距即可：    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section</span><br><span class="line">&#123;&#125;</span><br><span class="line">- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section</span><br><span class="line">&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>每个Item还可以在其对应的block中响应对应的事件，这样只需在tableview的didSelected方法中调用option这个block即可；         </p>
+<p>如果你需要显示区头或者区尾，只需要在数据源中给对应的group设置header或footer即可：     </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> ICCommonItem * discover    = [ICSettingSwitchItem itemWithIcon:nil title:@<span class="string">"置顶会话"</span> destVcClass:nil parameter:nil];</span><br><span class="line"> ICCommonItem *companyDoc   = [ICSettingSwitchItem itemWithIcon:nil title:@<span class="string">"消息免打扰"</span> destVcClass:nil parameter:nil];</span><br><span class="line">ICCommonGroup * mesGroup   = [[ICCommonGroup alloc] init];</span><br><span class="line">mesGroup.header            = @<span class="string">"来个区头玩玩"</span>;</span><br><span class="line">mesGroup.items = @[discover,companyDoc];</span><br></pre></td></tr></table></figure>
+<p>然后在tableview的代理方法中调用即可：       </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section</span><br><span class="line">&#123;</span><br><span class="line">    ICCommonGroup *group = self.dataArray[section];</span><br><span class="line">    <span class="built_in">return</span> group.header;</span><br><span class="line">&#125;</span><br><span class="line">- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section</span><br><span class="line">&#123;</span><br><span class="line">    ICCommonGroup *group = self.dataArray[section];</span><br><span class="line">    <span class="built_in">return</span> group.footer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果你在使用过程中遇到什么问题您可以issues提问，如果你想贡献代码请pull Reques；</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;StaticPage&quot;&gt;&lt;a href=&quot;#StaticPage&quot; class=&quot;headerlink&quot; title=&quot;StaticPage&quot;&gt;&lt;/a&gt;StaticPage&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;静态页面大杀器，利用该库三行代码就能搞定通用静态页面&lt;/li&gt;
+
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Swift中闭包详解</title>
+    <link href="http://yoursite.com/2016/03/10/iOS-closure/"/>
+    <id>http://yoursite.com/2016/03/10/iOS-closure/</id>
+    <published>2016-03-10T11:12:50.000Z</published>
+    <updated>2016-07-02T04:41:26.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>github地址: <a href="https://github.com/corderguo" target="_blank" rel="external">https://github.com/corderguo</a><br>本文地址: <a href="http://coderperson.com/2016/03/10/iOS-closure/" target="_blank" rel="external">http://coderperson.com/2016/03/10/iOS-closure/</a><br>欢迎转载，请注明出处，谢谢。</p>
+</blockquote>
+<h1 id="闭包的概念"><a href="#闭包的概念" class="headerlink" title="闭包的概念"></a>闭包的概念</h1><p>Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         </p>
+<h3 id="闭包与Block的对比"><a href="#闭包与Block的对比" class="headerlink" title="闭包与Block的对比"></a>闭包与Block的对比</h3><p>作用：</p>
+<ul>
+<li>Block是用来保存一段代码，在需要的时候执行 </li>
+<li>闭包也是用来保存一段代码，在需要的时候执行</li>
+<li>一般都是用来做耗时操作；</li>
+</ul>
+<p>风格：      </p>
+<p>我们首先回顾一下OC中的Block写法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 定义block</span><br><span class="line">@property (nonatomic, copy) void(^myBlock)();</span><br><span class="line">// 定义block</span><br><span class="line">self.myBlock = ^&#123;</span><br><span class="line">// 具体的回调操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用block</span><br><span class="line">self.myBlock();</span><br></pre></td></tr></table></figure></p>
+<p>通过回顾，我们可以想起来Block的定义格式为：     </p>
+<p>Block格式：返回值类型(^block名称)(参数列表) </p>
+<p>有的时候我们忘记了Block的书写格式，或者嫌这样写麻烦，我们可以直接在Xcode中敲inlineBlock<br>然后回车，系统会直接提醒你Block的样式；     </p>
+<p>Swift中闭包的基本格式：         </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    (形参列表) -&gt; (返回值)</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">    需要执行的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实这些格式我们都没必要专门去记忆，我们可以直接敲系统的带有闭包或者Block的函数，然后就一目了然了；      </p>
+<h4 id="闭包的几种格式"><a href="#闭包的几种格式" class="headerlink" title="闭包的几种格式"></a>闭包的几种格式</h4><p>第一种情况：        </p>
+<ul>
+<li>将闭包通过实参传递给函数</li>
+<li>如果闭包是函数的最后一个参数，那么闭包可以写到函数{}的后面</li>
+<li>如果函数只接受一个参数，并且这个参数是闭包，那么()可以省略</li>
+</ul>
+<p>例如下面这三种写法是一样的：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 定义函数，参数为闭包</span><br><span class="line">func loadData(finished: () -&gt; ()) &#123;</span><br><span class="line">    //  操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用（这是默认写法）</span><br><span class="line">loadData &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">// 或者写成</span><br><span class="line">loadData (&#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">// 还可以写成</span><br><span class="line"><span class="function"><span class="title">loadData</span></span>() &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>第二种情况：闭包的简写  </p>
+<ul>
+<li>如果闭包没有参数也没有返回值，那么 in 之前的东西可以删除，包括 in</li>
+</ul>
+<p>例如上面闭包，还可以写成下面的形式：    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loadData &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>其实这些格式，你在开发中只需要掌握一种即可，或者你只需要记住闭包的定义，然后敲回车，系统会为你补齐格式；</p>
+<h3 id="闭包的循环引用问题"><a href="#闭包的循环引用问题" class="headerlink" title="闭包的循环引用问题"></a>闭包的循环引用问题</h3><blockquote>
+<p>关于闭包中的 self 问题 </p>
+</blockquote>
+<p>在Swift开发中，有一个原则就是能不写self就不写self，但是在闭包中必须写上self；   </p>
+<p>这是因为闭包是用来保存一段代码，而且系统也不知道这段代码具体的调用时间，所以为了保证闭包中的对象不被释放，需要 self 进行一次强引用；这其实和Block中的原理差不多。   </p>
+<p>所以以后看到self基本上都和闭包有关系。（这也是闭包中循环引用来源的原因）</p>
+<p>下面我举一个简单的关于闭包循环引用的例子：      </p>
+<p>你定义了两个控制器：OneController和TwoController，OneController只是负责push出TwoController,我们在TwoController中进行一些关于闭包的操作，然后在pop返回的时候查看该控制器是否被销毁了，来验证闭包是否发生了循环引用问题；<br>在TwoController中我们只需要简单写一些代码即可：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 定义一个闭包的属性 </span><br><span class="line">var finished: (() -&gt; ())?</span><br><span class="line">// 定义一个函数，参数为闭包</span><br><span class="line"> func loadData(finished: () -&gt; ()) &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"调用了"</span>)</span><br><span class="line">        self.finished = finished</span><br><span class="line">        finished();</span><br><span class="line">    &#125;</span><br><span class="line">// 函数调用</span><br><span class="line">loadData &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">            // 这句又强引用self，导致循环引用</span><br><span class="line">            self.view.backgroundColor = UIColor.redColor()</span><br><span class="line">        &#125;</span><br><span class="line">// 判断是否被销毁了</span><br><span class="line">deinit &#123;</span><br><span class="line">       <span class="built_in">print</span>(<span class="string">"控制器被销毁了"</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>当我们执行以上代码，并且从TwoController返回到OneController时，TwoController的deinit方法没有被调用，表明TwoController没有被销毁，闭包存在了循环引用的问题；     </p>
+<p>这是因为：控制器通过闭包属性引用闭包，而闭包中又强引用着self(控制器),所以导致了循环引用的问题；        </p>
+<blockquote>
+<p>OC中关于循环引用的解决方案</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__weak typeof(self) weakSelf = self;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Swift中关于循环引用的解决方案</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weak var weakSelf = self</span><br></pre></td></tr></table></figure>
+<p>那么原先代码中只需要把self改成weakSelf即可</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 由于weakSelf为可选类型，这里必须保证有值，所以加上！号</span><br><span class="line">weakSelf!.view.backgroundColor = UIColor.redColor()</span><br></pre></td></tr></table></figure>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><blockquote>
+<p>关于定义闭包属性的问题      </p>
+</blockquote>
+<p>在Swift中，如果在某个类中定义一个属性，那么这个属性必须要初始化，否者会报错，如果暂时不想初始化，那么可以在后面写上一个 ? 号       </p>
+<p>但是在定义闭包的属性时，一定要注意，以下这种写法是最常见的一种错误写法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/** 当前写法代表闭包的返回值可以是nil，而不是初始化的闭包 */</span><br><span class="line">var finished: () -&gt; ()?</span><br><span class="line"></span><br><span class="line">/** 正确写法：需要在整个闭包的后面加问号 */</span><br><span class="line">var finished: (() -&gt; ())?</span><br></pre></td></tr></table></figure>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：      </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;github地址: &lt;a href=&quot;https://github.com/corderguo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/corderguo&lt;/a&gt;&lt;br&gt;本文地址: &lt;a
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>离屏渲染探究</title>
+    <link href="http://yoursite.com/2015/11/28/iOS-offScreen/"/>
+    <id>http://yoursite.com/2015/11/28/iOS-offScreen/</id>
+    <published>2015-11-28T02:02:04.000Z</published>
+    <updated>2016-07-11T10:11:28.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>本文地址: <a href="http://coderperson.com/2015/11/28/iOS-offScreen/" target="_blank" rel="external">http://coderperson.com/2015/11/28/iOS-offScreen/</a><br>欢迎转载，请注明出处，谢谢。    </p>
+</blockquote>
+<h2 id="概念学习"><a href="#概念学习" class="headerlink" title="概念学习"></a>概念学习</h2><p>OpenGL中，GPU屏幕渲染有以下两种方式：</p>
+<ul>
+<li>On-Screen Rendering    </li>
+</ul>
+<p>意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。</p>
+<ul>
+<li>Off-Screen Rendering        </li>
+</ul>
+<p>意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。</p>
+<h2 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h2><p>GPU渲染机制：</p>
+<p>CPU 计算好显示内容提交到 GPU，GPU<br>渲染完成后将渲染结果放入帧缓冲区，随后视频控制器会按照 VSync<br>信号逐行读取帧缓冲区的数据，经过可能的数模转换传递给显示器显示。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>当使用圆角，阴影，遮罩的时候，图层属性的混合体被指定为在未预合成之前不能直接在屏幕中绘制，所以就需要屏幕外渲染被唤起。</p>
+<p>屏幕外渲染并不意味着软件绘制，但是它意味着图层必须在被显示之前在一个屏幕外上下文中被渲染（不论CPU还是GPU）。</p>
+<h2 id="性能优劣"><a href="#性能优劣" class="headerlink" title="性能优劣"></a>性能优劣</h2><p>相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：</p>
+<ul>
+<li><p>创建新缓冲区<br>要想进行离屏渲染，首先要创建一个新的缓冲区。</p>
+</li>
+<li><p>上下文切换<br>离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。</p>
+</li>
+</ul>
+<p>注意：触发离屏渲染后，上面两步会发生在每一帧，如果在界面的滚动过程中有大量的离屏渲染发生时会严重影响帧率。</p>
+<h2 id="另一种特殊的“离屏渲染”"><a href="#另一种特殊的“离屏渲染”" class="headerlink" title="另一种特殊的“离屏渲染”"></a>另一种特殊的“离屏渲染”</h2><p>按照之前的说法，如果将不在GPU的当前屏幕缓冲区中进行的渲染都称为离屏渲染，那么就还有另一种特殊的“离屏渲染”方式：CPU渲染。</p>
+<p>如果我们重写了drawRect方法，并且使用任何Core Graphics的技术进行了绘制操作，就涉及到了CPU渲染。整个渲染过程由CPU在App内同步地完成，渲染得到的bitmap最后再交由GPU用于显示。</p>
+<h2 id="离屏渲染的触发机制"><a href="#离屏渲染的触发机制" class="headerlink" title="离屏渲染的触发机制"></a>离屏渲染的触发机制</h2><ul>
+<li>shouldRasterize（光栅化）</li>
+<li>masks（遮罩）</li>
+<li>shadows（阴影）</li>
+<li>edge antialiasing（抗锯齿）</li>
+<li>group opacity（不透明）</li>
+<li>复杂形状设置圆角等</li>
+<li>渐变</li>
+</ul>
+<p>其中shouldRasterize（光栅化）是比较特别的一种：<br>光栅化概念：将图转化为一个个栅格组成的图象。<br>光栅化特点：每个元素对应帧缓冲区中的一像素。</p>
+<p>shouldRasterize = YES在其他属性触发离屏渲染的同时，会将光栅化后的内容缓存起来，如果对应的layer及其sublayers没有发生改变，在下一帧的时候可以直接复用。shouldRasterize = YES，这将隐式的创建一个位图，各种阴影遮罩等效果也会保存到位图中并缓存起来，从而减少渲染的频度（不是矢量图）。</p>
+<p>相当于光栅化是把GPU的操作转到CPU上了，生成位图缓存，直接读取复用。</p>
+<p>当你使用光栅化时，你可以开启“Color Hits Green and Misses Red”来检查该场景下光栅化操作是否是一个好的选择。绿色表示缓存被复用，红色表示缓存在被重复创建。</p>
+<p>如果光栅化的层变红得太频繁那么光栅化对优化可能没有多少用处。位图缓存从内存中删除又重新创建得太过频繁，红色表明缓存重建得太迟。可以针对性的选择某个较小而较深的层结构进行光栅化，来尝试减少渲染时间。</p>
+<blockquote>
+<p>注意：   </p>
+</blockquote>
+<p>对于经常变动的内容,这个时候不要开启,否则会造成性能的浪费</p>
+<p>例如我们日程经常打交道的TableViewCell,因为TableViewCell的重绘是很频繁的（因为Cell的复用）,如果Cell的内容不断变化,则Cell需要不断重绘,如果此时设置了cell.layer可光栅化。则会造成大量的离屏渲染,降低图形性能。</p>
+<h2 id="官方优化"><a href="#官方优化" class="headerlink" title="官方优化"></a>官方优化</h2><p>iOS 9.0 之前UIimageView跟UIButton设置圆角都会触发离屏渲染</p>
+<p>iOS 9.0 之后UIButton设置圆角会触发离屏渲染，而UIImageView里png图片设置圆角不会触发离屏渲染了，如果设置其他阴影效果之类的还是会触发离屏渲染的。</p>
+<p>这可能是苹果也意识到离屏渲染会产生性能问题，所以能不产生离屏渲染的地方苹果也就不用离屏渲染了。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>UIImage加载图片方式一般有两种:</p>
+<p>A：imagedNamed初始化</p>
+<p>B：imageWithContentsOfFile初始化<br>二者不同之处在于,imageNamed默认加载图片成功后会内存中缓存图片,这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象.如果缓存中没有找到相应的图片对象,则从指定地方加载图片然后缓存对象，并返回这个图片对象.</p>
+<p>而imageWithContentsOfFile则仅只加载图片,不缓存.</p>
+<p>大量使用imageNamed方式会在不需要缓存的地方额外增加开销CPU的时间来做这件事.当应用程序需要加载一张比较大的图片并且使用一次性，那么其实是没有必要去缓存这个图片的，用imageWithContentsOfFile是最为经济的方式,这样不会因为UIImage元素较多情况下，CPU会被逐个分散在不必要缓存上浪费过多时间.</p>
+<p>使用场景需要编程时，应该根据实际应用场景加以区分，UIimage虽小，但使用元素较多问题会有所凸显.</p>
+<h2 id="如何提高性能"><a href="#如何提高性能" class="headerlink" title="如何提高性能"></a>如何提高性能</h2><ol>
+<li>当我们需要圆角效果时，可以使用一张中间透明图片蒙上去</li>
+<li>使用ShadowPath指定layer阴影效果路径</li>
+<li>使用异步进行layer渲染（Facebook开源的异步绘制框架AsyncDisplayKit）</li>
+<li>设置layer的opaque值为YES，减少复杂图层合成</li>
+<li>尽量使用不包含透明（alpha）通道的图片资源</li>
+<li>尽量设置layer的大小值为整形值</li>
+<li>直接让美工把图片切成圆角进行显示，这是效率最高的一种方案</li>
+<li>很多情况下用户上传图片进行显示，可以让服务端处理圆角</li>
+<li>使用代码手动生成圆角Image设置到要显示的View上，利用UIBezierPath（CoreGraphics框架）画出来圆角图片</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当项目中需要离屏渲染的地方不多时，性能的影响并不是很大，基本也能保持在60fps左右，但<br>是一旦超过一定数目的圆角，滑动起来就会有明显的卡顿现象。所以，没必要为了不影响体验的情况下强行进行优化，这样做效果并不是很明显。只有当需要优化的时候采取一定的优化方案，才能得到最大的收益。            </p>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：              </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;本文地址: &lt;a href=&quot;http://coderperson.com/2015/11/28/iOS-offScreen/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://coderperson.com/2015/
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>读书系列-《别让情绪失控害了你》</title>
+    <link href="http://yoursite.com/2015/07/26/book-mood/"/>
+    <id>http://yoursite.com/2015/07/26/book-mood/</id>
+    <published>2015-07-26T09:59:12.000Z</published>
+    <updated>2016-07-02T12:27:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>沙场点兵，卧品书香！        </p>
+<p>昨天在公司看到这本书《别让情绪失控害了你》，感觉不错，今天上午躺在床上读了几章，获益匪浅！虽然有些大道理我们都懂，但是当我们在生活中真正遇到事情的时候，真正做到坐怀不乱的又有几人？！静下心来好好读书，想想发生在自己身上的一些事情，当时的做法和看法现在想来多半是不正确甚至是不理智的。        </p>
+<p>人非圣贤，孰能无过！我们都是在经历和错误中逐渐提高的，控制自己的情绪，修炼自己的素养，无需山崩于眼前我自岿然不动，但却要有长坂坡前一声吼的气势！      </p>
+<p>幸福是自找的，麻烦也是自找的。运气不会青睐悲观失意的人，当我们认为生活很不幸，那么我们就真的陷入了不幸之中。事实上，我们最大的敌人就是错误的发挥自己的想象力，我们总是觉得自己不幸福、不快乐，被忽视了，被议论了，被生活抛弃了，这些错觉，正是导致我们陷入无边无际的痛苦原因。        </p>
+<p>积极的行动可以带动观念的转变。只要将一个人的心态由恐惧转化为昂扬向上，就能克服任何障碍。只要一个的动作和表情表现出勇敢而非恐惧，他就能勇敢奋进起来。      </p>
+<p>保持心境平和，内心才会充满喜悦。在这个追名逐利浮躁的当下，能保持一个平常心，实属难能可贵！        </p>
+<p>入睡前花点时间想一下自己这一天都干了什么，这种习惯可以帮助我们更好地与人与己相处。但是入睡前盯着手机麻醉自己仿佛成了我们生活的规律。      </p>
+<p>学会正面思维，你可以反败为胜。人具有反败为胜的力量。同一个窗口，一个人看到泥泞满地，一个人看到的是星辰漫天，这便值得我们思考。        </p>
+<p>好事多磨！     </p>
+<p>学会乐观，多数担忧都是多余的！      </p>
+<p>不应该抱怨生活，你所寻求的安慰话语中，很少包含着你需要的东西。      </p>
+<p>从不浪费时间的人，没有功夫抱怨时间的不够！      </p>
+<p>世界并无好坏之分，只是我们如何去想！改变认知，就能管住情绪不失控。    </p>
+<blockquote>
+<p>好脑袋不如一个烂笔头，记录下此时此刻的感想感知，不断的鞭策自己，也希望对大家有所帮助。                    </p>
+</blockquote>
+<hr>
+<p>扫描下面二维码关注公众号，时不时的会有惊喜：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;沙场点兵，卧品书香！        &lt;/p&gt;
+&lt;p&gt;昨天在公司看到这本书《别让情绪失控害了你》，感觉不错，今天上午躺在床上读了几章，获益匪浅！虽然有些大道理我们都懂，但是当我们在生活中真正遇到事情的时候，真正做到坐怀不乱的又有几人？！静下心来好好读书，想想发生在自己身上的一
+    
+    </summary>
+    
+      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+      <category term="读书" scheme="http://yoursite.com/tags/%E8%AF%BB%E4%B9%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>三字经</title>
+    <link href="http://yoursite.com/2015/06/20/threeCharacter/"/>
+    <id>http://yoursite.com/2015/06/20/threeCharacter/</id>
+    <published>2015-06-20T08:21:08.000Z</published>
+    <updated>2016-06-24T03:36:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　</p>
+<p>昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　</p>
+<p>养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　</p>
+<p>玉不琢，不成器，人不学，不知义。为人子，方少时，亲师友，习礼仪。 　　</p>
+<p>香九龄，能温席，孝于亲，所当执。融四岁，能让梨，弟于长，宜先知。 　　</p>
+<p>首孝悌，次见闻，知某数，识某文。一而十，十而百，百而千，千而万。 　　</p>
+<p>三才者，天地人，三光者，日月星。三纲者，君臣义，父子亲，夫妇顺。 　　</p>
+<p>曰春夏，曰秋冬，此四时，运不穷。曰南北，曰西东，此四方，应乎中。 　　</p>
+<p>曰水火，木金土，此五行，本乎数。十干者，甲至癸。十二支，子至亥。 　　</p>
+<p>曰黄道，日所躔。曰赤道，当中权。赤道下，温暖极。我中华，在东北。 　　</p>
+<p>曰江河，曰淮济。此四渎，水之纪。曰岱华，嵩恒衡。此五岳，山之名。 　　</p>
+<p>曰士农，曰工商。此四民，国之良。曰仁义，礼智信，此五常，不容紊。 　　</p>
+<p>地所生，有草木。此植物，遍水陆。有虫鱼，有鸟兽。此动物，能飞走。 　　</p>
+<p>稻粱菽，麦黍稷。此六谷，人所食。马牛羊，鸡犬豕。此六畜，人所饲。 　　</p>
+<p>曰喜怒，曰哀惧，爱恶欲，七情具。青赤黄，及白黑，此五色，目所识。 　　</p>
+<p>酸苦甘，及辛咸，此五味，口所含。膻焦香，及腥朽，此五臭，鼻所嗅。 　　</p>
+<p>匏土革，木石金，丝与竹，乃八音。曰平上，曰去入，此四声，宜调协。 　　</p>
+<p>高曾祖，父而身，身而子，子而孙。自子孙，至玄曾，乃九族，人之伦。 　　</p>
+<p>父子恩，夫妇从，兄则友，弟则恭；长幼序，友与朋，君则敬，臣则忠。 　　</p>
+<p>此十义，人所同，当顺叙，勿违背。斩齐衰，大小幼。至缌麻，五服终。 　　</p>
+<p>礼乐射，御书数，古六艺，今不具。唯书学，人共遵，既识字，讲说文。 　　</p>
+<p>有古文，大小篆，隶草继，不可乱。 　　</p>
+<p>若广学，惧其繁，但略说，能知源。凡训蒙，须讲究，详训诂，明句读。 　　</p>
+<p>为学者，必有初，小学终，至四书。论语者，二十篇，群弟子，记善言。 　　</p>
+<p>孟子者，七篇止，讲道德，说仁义。作中庸，子思笔，中不偏，庸不易。 　　</p>
+<p>作大学，乃曾子，自修齐，至平治。孝经通，四书熟，如六经，始可读。 　　</p>
+<p>诗书易，礼春秋，号六经，当讲究。有连山，有归藏，有周易，三易详。 　　</p>
+<p>有典谟，有训诰，有誓命，书之奥。我周公，作周礼，著六官，存治体。 　　</p>
+<p>大小戴，注礼记，述圣言，礼乐备。曰国风，曰雅颂，号四诗，当讽咏。 　　</p>
+<p>诗既亡，春秋作，寓褒贬，别善恶。三传者，有公羊，有左氏，有谷梁。 　　</p>
+<p>经既明，方读子，撮其要，记其事。五子者，有荀扬，文中子，及老庄。 　　</p>
+<p>经子通，读诸史，考世系，知终始。自羲农，至黄帝，号三皇，居上世。 　　</p>
+<p>唐有虞，号二帝，相揖逊，称盛世。夏有禹，商有汤，周文武，称三王。 　　</p>
+<p>夏传子，家天下，四百载，迁夏社。汤伐夏，国号商，六百载，至纣亡。 　　</p>
+<p>周武王，始诛纣，八百载，最长久。周辙东，王纲坠，逞干戈，尚游说。 　　</p>
+<p>始春秋，终战国，五霸强，七雄出。蠃秦氏，始兼并，传二世，楚汉争。 　　</p>
+<p>高祖兴，汉业建，至孝平，王莽篡。光武兴，为东汉，四百年，终于献。 　　</p>
+<p>魏蜀吴，争汉鼎，号三国，迄两晋。宋齐继，梁陈承，为南朝，都金陵。 　　</p>
+<p>北元魏，分东西，宇文周，与高齐。迨至隋，一土宇，不再传，失统绪。 　　</p>
+<p>唐高祖，起义师，除隋乱，创国基。二十传，三百载，梁灭之，国乃改。 　　</p>
+<p>梁唐晋，及汉周，称五代，皆有由。炎宋兴，受周禅。十八传，南北混。 　　</p>
+<p>辽与金，皆称帝，元灭金，绝宋世。舆图广，超前代，九十载，国祚废。 　　</p>
+<p>太祖兴，国大明，号洪武，都金陵。迨成祖，迁燕京，十六世，至崇祯。 　</p>
+<p>权阉肆，寇如林，李闯出，神器焚。清世祖，膺景命，靖四方，克大定。 　　</p>
+<p>由康雍，历乾嘉。民安富，治绩夸。道咸间，变乱起。始英法，扰都鄙。 　　</p>
+<p>同光后，宣统弱。传九帝，满清殁。革命兴，废帝制。立宪法，建民国。 　　</p>
+<p>古今史，全在兹。载治乱，知兴衰。史虽繁，读有次。史记一，汉书二。 　　</p>
+<p>后汉三，国志四。兼证经，参通鉴。读史者，考实录，通古今，若亲目。 　　</p>
+<p>口而诵，心而惟，朝于斯，夕于斯。昔仲尼，师项橐，古圣贤，尚勤学。 　　</p>
+<p>赵中令，读鲁论，彼既仕，学且勤。彼蒲编，削竹简，彼无书，且知勉。 　　</p>
+<p>头悬梁，锥刺股，彼不教，自勤苦。如囊萤，如映雪，家虽贫，学不辍。 　　</p>
+<p>如负薪，如挂角，身虽劳，犹苦卓。苏老泉，二十七，始发愤，读书籍。 　　</p>
+<p>彼既老，犹悔迟，尔小生，宜早思。若梁灏，八十二，对大廷，魁多士。 　　</p>
+<p>彼既成，众称异，尔小生，宜立志。莹八岁，能咏诗，泌七岁，能赋棋。 　　</p>
+<p>彼颖悟，人称奇，尔幼学，当效之。蔡文姬，能辨琴，谢道韫，能咏吟。 　　</p>
+<p>彼女子，且聪敏，尔男子，当自警。唐刘晏，方七岁，举神童，作正字。 　　</p>
+<p>彼虽幼，身已仕，尔幼学，勉而致。有为者，亦若是。 　　</p>
+<p>犬守夜，鸡司晨，苟不学，曷为人？蚕吐丝，蜂酿蜜，人不学，不如物。 　　</p>
+<p>幼而学，壮而行，上致君，下泽民。扬名声，显父母，光于前，裕于后。 　　</p>
+<p>人遗子，金满籯，我教子，惟一经。勤有功，戏无益，戒之哉，宜勉力。</p>
+<p>=====================<br>不知为何突然想看看三字经了，却惭愧的发现自己以前居然没看过完整版~~~</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　&lt;/p&gt;
+&lt;p&gt;昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　&lt;/p&gt;
+&lt;p&gt;养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　&lt;/p&gt;
+&lt;p&gt;玉不琢，不成器，
+    
+    </summary>
+    
+      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+      <category term="人文" scheme="http://yoursite.com/tags/%E4%BA%BA%E6%96%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>再见-百度空间</title>
+    <link href="http://yoursite.com/2015/05/26/byeyouth/"/>
+    <id>http://yoursite.com/2015/05/26/byeyouth/</id>
+    <published>2015-05-26T09:59:10.000Z</published>
+    <updated>2016-06-24T16:24:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！    </p>
+<p>还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早已被岁月磨平了棱角，一些年少轻狂的豪情壮志只能随着百度空间一样深深的埋在心里了！    </p>
+<p>有些时候自己就在想，很多事情就像是旅行一样，当你决定要出发的时候，最困难的那部分其实已经完成了。        </p>
+<p>我不能在这里变老。我要在变老之前，做一些到了80岁还会微笑的事情。        </p>
+<p>我想，一个人最好的样子就是平静一点，哪怕一个人生活，穿越一个又一个城市，走过一条又一条街道，仰望一片又一片星空，见证一次又一次别离。然后在别人质疑你的时候，你可以问心无愧的说，虽然每一步走的很慢，但是我不曾退缩过。        </p>
+<p>我们都是生活中的一粒尘埃，都在拼命的在风雨中奔跑，都在努力的要摆脱自己的平凡。为了自己，为了家人，更为了不让那些关心自己的人失望！        </p>
+<p>我们应该感谢平凡，因为平凡，所以才想要不平凡！     </p>
+<p>2014年是自己走弯路走的最远的一年，颓废，消极，漫无目的如行尸走肉一般，忘了本初！忘了家人寄托在自己身上的希望！忘了曾经许下的誓言！忘了一切一切……        </p>
+<p>人生正因为未知而精彩，正因为没有回退路，所以我们才不断的前行！我没有抱怨那一年颓废的自己，这是自己的选择。我为自己昂头走向2015而骄傲！    </p>
+<p>人的一生中，最光辉的一天并非是功成名就的那天，而是从悲叹与绝望中产生对人生的挑战，以勇敢迈向意志的那天！        </p>
+<p>很多事情，不是我们看到希望才去坚持，而是我们坚持了才会看到希望！        </p>
+<p>星竹林前学佛语，兰若花下埋古经！坚持你所选择的，即便遍体鳞伤，何言悔！    </p>
+<p>今朝高戰星空梦，我笑我哭亦自在。他日若遂凌云志，不笑不哭也不闹！    </p>
+<p>这便是大自在！        </p>
+<p>每当夜幕降临，走在灯红酒绿纸醉金迷的街道，你是否会被这个浮夸的社会所感染！天下攘攘，皆为利往！天下熙熙，皆为利来！保持本心，给自己留一点纯净的空间。        </p>
+<p>我抬头仰望星空，不是为了摘取流星，而是为了自己心中那个永不屈服的梦想！        </p>
+<p>不要抱怨生活对你的不公，尊严不是别人给的，而是靠自己争取的！今日低头做事，明日抬头相见，有梦想而又能为之奋斗的人永远是最幸福的！        </p>
+<p>忽然想起网络上的两篇文章《我奋斗了18年仅仅为了和你坐在一起喝杯咖啡》《我奋斗了18年不只是为了和你坐在一起喝杯咖啡》，写的很好，推荐大家去看看。    </p>
+<p>当手指碰到键盘，思绪便天马行空不可收拾，忽然有感而发便东拉西扯了一些闲话，谨以此文祭奠曾经的岁月！    </p>
+<p>再见，百度空间！    </p>
+<p>再见，年少轻狂的自己！        </p>
+<p>再见，青春！           </p>
+<hr>
+<p>扫描下面二维码关注公众号，时不时的会有惊喜：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！    &lt;/p&gt;
+&lt;p&gt;还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，
+    
+    </summary>
+    
+      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+      <category term="情感" scheme="http://yoursite.com/tags/%E6%83%85%E6%84%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MIME TYPE 详解</title>
+    <link href="http://yoursite.com/2014/10/24/MIME/"/>
+    <id>http://yoursite.com/2014/10/24/MIME/</id>
+    <published>2014-10-24T12:14:10.000Z</published>
+    <updated>2016-07-25T03:27:01.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>MIME(Multipurpose Internet Mail Extensions)多用途互联网邮件扩展类型。是设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。多用于指定一些客户端自定义的文件名，以及一些媒体文件打开方式（主要是浏览器通过MIME获得具体的文件类型，采用不同的方式进行下载查看）。      </p>
+<p>通俗一点来说：我们要了解浏览器是如何处理内容的。在浏览器中显示的内容有 HTML、有 XML、有 GIF、还有 Flash ……那么，浏览器是如何区分它们，决定什么内容用什么形式来显示呢？答案是 MIME Type，也就是该资源的媒体类型。      </p>
+<p>媒体类型通常是通过 HTTP 协议，由 Web 服务器告知浏览器的，更准确地说，是通过 Content-Type 来表示的，例如:</p>
+<p>Content-Type: text/HTML</p>
+<p>表示内容是 text/HTML 类型，也就是超文本文件。为什么是“text/HTML”而不是“HTML/text”或者别的什么？MIME Type 不是个人指定的，是经过 ietf 组织协商，以 RFC 的形式作为建议的标准发布在网上的，大多数的 Web 服务器和用户代理都会支持这个规范 (顺便说一句，Email 附件的类型也是通过 MIME Type 指定的)。       </p>
+<p>通常只有一些在互联网上获得广泛应用的格式才会获得一个 MIME Type，如果是某个客户端自己定义的格式，一般只能以 application/x- 开头。      </p>
+<p>当然，处理本地的文件，在没有人告诉浏览器某个文件的 MIME Type 的情况下，浏览器也会做一些默认的处理，这可能和你在操作系统中给文件配置的 MIME Type 有关。比如在 Windows 下，打开注册表的“HKEY_LOCAL_MACHINESOFTWAREClassesMIMEDatabaseContent Type”主键，你可以看到所有 MIME Type 的配置信息。      </p>
+<p><em>一些背景介绍</em>： MIME多用途互联网邮件扩展，它是一个互联网标准，在1992年最早应用于电子邮件系统，但后来也应用到浏览器。服务器会将它们发送的多媒体数据的类型告诉浏览器，而通知手段就是说明该多媒体数据的MIME类型，从而让浏览器知道接收到的信息哪些是MP3文件，哪些是Shockwave文件等等。服务器将MIME标志符放入传送的数据中来告诉浏览器使用哪种插件读取相关文件。        </p>
+<p>浏览器接收到文件后，会进入插件系统进行查找，查找出哪种插件可以识别读取接收到的文件。如果浏览器不清楚调用哪种插件系统，它可能会告诉用户缺少某插件，或者直接选择某现有插件来试图读取接收到的文件，或者可能会导致系统的崩溃。传输的信息中缺少MIME标识可能导致的情况很难估计，因为某些计算机系统可能不会出现什么故障，但某些计算机可能就会因此而崩溃。      </p>
+<p>例如，架设你要传送一个Microsoft Excel文件到客户端。那么这时的MIME类型就是“application/vnd.ms-excel”。在大多数实际情况中，这个文件然后将传送给Execl来处理（假设我们设定Execl为处理特殊MIME类型的应用程序）。在ASP中，设定MIME类型的方法是通过Response对象的ContentType属性。       </p>
+<p>每个MIME类型由两部分组成，前面是数据的大类别，例如声音audio、图象image等，后面定义具体的种类。</p>
+<p>常见的MIME类型:</p>
+<ul>
+<li>超文本标记语言文本 .html,.html text/html </li>
+<li>普通文本 .txt text/plain </li>
+<li>RTF文本 .rtf application/rtf </li>
+<li>GIF图形 .gif image/gif </li>
+<li>JPEG图形 .ipeg,.jpg image/jpeg </li>
+<li>au声音文件 .au audio/basic </li>
+<li>MIDI音乐文件 mid,.midi audio/midi,audio/x-midi </li>
+<li>RealAudio音乐文件 .ra, .ram audio/x-pn-realaudio </li>
+<li>MPEG文件 .mpg,.mpeg video/mpeg </li>
+<li>AVI文件 .avi video/x-msvideo </li>
+<li>GZIP文件 .gz application/x-gzip </li>
+<li>TAR文件 .tar application/x-tar </li>
+</ul>
+<p>具体很多详细类型可以在这里查看：<a href="http://www.w3school.com.cn/media/media_mimeref.asp" target="_blank" rel="external">http://www.w3school.com.cn/media/media_mimeref.asp</a></p>
+<p>Internet中有一个专门组织IANA来确认标准的MIME类型，但Internet发展的太快，很多应用程序等不及IANA来确认他们使用的MIME类型为标准类型。因此他们使用在类别中以x-开头的方法标识这个类别还没有成为标准，例如：x-gzip，x-tar等。事实上这些类型运用的很广泛，已经成为了事实标准。只要客户机和服务器共同承认这个MIME类型，即使它是不标准的类型也没有关系，客户程序就能根据MIME类型，采用具体的处理手段来处理数据。而Web服务器和浏览器（包括操作系统）中，缺省都设置了标准的和常见的MIME类型，只有对于不常见的 MIME类型，才需要同时设置服务器和客户浏览器，以进行识别。</p>
+<p>由于MIME类型与文档的后缀相关，因此服务器使用文档的后缀来区分不同文件的MIME类型，服务器中必须定义文档后缀和MIME类型之间的对应关系。而客户程序从服务器上接收数据的时候，它只是从服务器接受数据流，并不了解文档的名字，因此服务器必须使用附加信息来告诉客户程序数据的MIME类型。服务器在发送真正的数据之前，就要先发送标志数据的MIME类型的信息，这个信息使用Content-type关键字进行定义，例如对于HTML文档，服务器将首先发送以下两行MIME标识信息,这个标识并不是真正的数据文件的一部分。</p>
+<p>Content-type: text/html</p>
+<p>注意，第二行为一个空行，这是必须的，使用这个空行的目的是将MIME信息与真正的数据内容分隔开。</p>
+<p>结尾：      </p>
+<p>其实我在做iOS客户端开发的时候没有用到Content-type来指定MIME的类型，因为后台服务器读取到我上传得文件内容，识别出文件类型，然后自己分配MIME类型，即便客户端指定了MIME类型，服务器也不读取，这样比较安全可靠；服务器设置了MIME类型主要是传递给WEB前端，让WEB页面进行识别。我们客户端下载文件是以二进制流的形式，然后根据不同的消息类型来进行存储不同的后缀名，比如我们的视频语音，我们定义的视频为MP4格式语音为amr格式，视频类型为2，语音类型为3，这样我们就可以准确的为下载下来的二进制流分配具体的类型了。        </p>
+<hr>
+<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：      </p>
+<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;MIME(Multipurpose Internet Mail Extensions)多用途互联网邮件扩展类型。是设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。多用于指定一些客户端自定义的文件名，以及一些
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="网络" scheme="http://yoursite.com/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Property、Attribute、点语法、KVC、KVO</title>
+    <link href="http://yoursite.com/2013/10/15/ios-property/"/>
+    <id>http://yoursite.com/2013/10/15/ios-property/</id>
+    <published>2013-10-15T01:16:20.000Z</published>
+    <updated>2016-06-24T08:55:57.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Property"><a href="#Property" class="headerlink" title="Property"></a>Property</h3><p>Property属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成员变量也不用再单独声明了。<br>@property本质是方法，提供getter setter 方法的默认实现<br>在声明属性时，如果属性对应的实例变量已经在.h文件中声明，则直接生成对应实例变量的getter,setter方法，如果没有声明实例变量，会在该类中添加私有成员变量。       </p>
+<h3 id="Attribute"><a href="#Attribute" class="headerlink" title="Attribute"></a>Attribute</h3><p>Attribute：属性的属性，为属性提供了⼀些关键字⽤以控制setter、getter的实现细节，这些关键字我们称为属性的属性（attribute）；<br>一共3大类attribute：        </p>
+<ol>
+<li>读写性控制（readonly、readwrite、setter、getter）<ul>
+<li>readonly，告诉编译器，只声明getter⽅法（⽆setter⽅法）</li>
+<li>readwrite，告诉编译器，既声明setter⼜声明getter</li>
+<li>readwrite是读写性控制的默认设置</li>
+</ul>
+</li>
+<li>原子性控制（nonatomic、atomic）<ul>
+<li>atomic：setter、getter⽅法在多线程访问下是绝对安全的，即<br>setter、getter内部做了多线程访问处理。原⼦性控制的默认设置是<br>atomic </li>
+<li>nonatomic：setter、getter⽅法内部不会做多线程访问处理，仅仅是<br>普通的setter、getter⽅法</li>
+<li>注意：程序开发过程中，setter、getter处处都在⽤，如果使⽤atomic，需要不断<br>的对setter、getter加锁解锁以保证线程访问安全，会很占⽤系统资源，降低<br>系统性能。 通常设置为nonatomic，某些属性需要线程安全的时候，才定义为atomic。</li>
+</ul>
+</li>
+<li>语义设置（assign、retain、copy）<ul>
+<li>assign：setter、getter内部实现是直接赋值</li>
+<li><ul>
+<li>copy：setter、getter的内部实现会做内存优化。</li>
+</ul>
+</li>
+<li>retain：setter、getter的内部实现也会做内存优化。<br>例如：      </li>
+</ul>
+</li>
+</ol>
+<pre><code class="sh">@property(nonatomic,retain)NSString *name; 
+- (void)<span class="built_in">set</span>Name:(NSString *)name{
+ <span class="keyword">if</span>(_name != name){
+ [_name release];
+ _name = [name retain]; // copy 同理
+ }
+} 
+- (NSString *)name{
+ <span class="built_in">return</span> [[_name retain]autorelease];
+}
+</code></pre>
+<blockquote>
+<p>如果属性是⾮对象类型（⽐如int，ﬂoat等）属性的语义设置使⽤assign，<br>如果属性是对象类型（⽐如NSStrng、NSArray等）属性的语义设置使⽤retain，<br>如果属性是对象类型并且想得到参数的copy，使⽤copy关键字。      </p>
+</blockquote>
+<h3 id="点语法"><a href="#点语法" class="headerlink" title="点语法"></a>点语法</h3><p>属性是⼀对getter、setter⽅法，点语法是属性的另⼀种调⽤格式。比较简单不做过多说明；  </p>
+<h3 id="KVC"><a href="#KVC" class="headerlink" title="KVC"></a>KVC</h3><p>KVC(Key-Value-Coding)键值编码，是一种间接访问实例变量的方法<br>修改值的方法：      </p>
+<ul>
+<li>setValue:forKey: </li>
+<li>setValue:forKeyPath: </li>
+<li>setValue:forUndeﬁnedKey: </li>
+<li>setValuesForKeysWithDictionary:       </li>
+</ul>
+<p>获取值的方法：</p>
+<ul>
+<li>valueForKey:      </li>
+<li>valueForKeyPath:      </li>
+<li>valueForUndeﬁnedKey:          </li>
+</ul>
+<p>当key不存在的时候,会执行setValue:forUndeﬁnedKey:往往在.m文件中重写该方法，避免程序崩溃；<br>上面部分的综合代码：        </p>
+<pre><code class="sh">Teacher *teacher=[[Teacher alloc]init];  
+teacher.name=@<span class="string">"lisi"</span>;  
+teacher.classs=12;  
+    teacher.level=@<span class="string">"A"</span>;  
+teacher.count=48;  
+NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher.name,teacher.classs,teacher.level,teacher.count);  
+[teacher <span class="built_in">set</span>Value:@<span class="string">"zhangsi"</span> <span class="keyword">for</span>Key:@<span class="string">"name"</span>];  
+NSLog(@<span class="string">"%@"</span>,teacher.name);  
+[teacher <span class="built_in">set</span>Value:@<span class="string">"B"</span> <span class="keyword">for</span>Key:@<span class="string">"level"</span>];  
+[teacher <span class="built_in">set</span>Value:@14 <span class="keyword">for</span>Key:@<span class="string">"classs"</span>];  
+[teacher <span class="built_in">set</span>Value:@49 <span class="keyword">for</span>Key:@<span class="string">"count"</span>];  
+NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher.name,teacher.classs,teacher.level,teacher.count);
+</code></pre>
+<h3 id="KVO"><a href="#KVO" class="headerlink" title="KVO"></a>KVO</h3><p>KVO(Key Value Observing) 键值监听<br>常用方法：      </p>
+<ul>
+<li>addObserver:forKeyPath:options:context:       </li>
+<li>removeObserver:forKeyPath:        </li>
+<li>removeObserver:forKeyPath:context:        </li>
+<li>observeValueForKeyPath:ofObject:change:context:       </li>
+</ul>
+<hr>
+<p>扫描下面二维码，关注公众号，干货满满：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Property&quot;&gt;&lt;a href=&quot;#Property&quot; class=&quot;headerlink&quot; title=&quot;Property&quot;&gt;&lt;/a&gt;Property&lt;/h3&gt;&lt;p&gt;Property属性：简化代码，为实例变量提供了setter、getter方法的默认实现，成
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>pku2528</title>
+    <link href="http://yoursite.com/2012/03/29/pku2528/"/>
+    <id>http://yoursite.com/2012/03/29/pku2528/</id>
+    <published>2012-03-29T02:16:59.000Z</published>
+    <updated>2016-06-24T08:00:33.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>The citizens of Bytetown, AB, could not stand that the candidates in the mayoral election campaign have been placing their electoral posters at all places at their whim. The city council has finally decided to build an electoral wall for placing the posters and introduce the following rules: </p>
+<ul>
+<li>Every candidate can place exactly one poster on the wall.</li>
+<li>All posters are of the same height equal to the height of the wall; the width of a poster can be any integer number of bytes (byte is the unit of length in Bytetown).</li>
+<li>The wall is divided into segments and the width of each segment is one byte. </li>
+<li>Each poster must completely cover a contiguous number of wall segments.   </li>
+</ul>
+<p>They have built a wall 10000000 bytes long (such that there is enough place for all candidates). When the electoral campaign was restarted, the candidates were placing their posters on the wall and their posters differed widely in width. Moreover, the candidates started placing their posters on wall segments already occupied by other posters. Everyone in Bytetown was curious whose posters will be visible (entirely or in part) on the last day before elections.<br>Your task is to find the number of visible posters when all the posters are placed given the information about posters’ size, their place and order of placement on the electoral wall.</p>
+<h3 id="Input"><a href="#Input" class="headerlink" title="Input"></a>Input</h3><p>The first line of input contains a number c giving the number of cases that follow. The first line of data for a single case contains number 1 &lt;= n &lt;= 10000. The subsequent n lines describe the posters in the order in which they were placed. The i-th line among the n lines contains two integer numbers li and ri which are the number of the wall segment occupied by the left end and the right end of the i-th poster, respectively. We know that for each 1 &lt;= i &lt;= n, 1 &lt;= li &lt;= ri &lt;= 10000000. After the i-th poster is placed, it entirely covers all wall segments numbered li, li+1 ,… , ri.</p>
+<h3 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h3><p>For each input data set print the number of visible posters after all the posters are placed. </p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>区间染色的变形，不过比区间染色问题要难一些~<br>用到区间染色成段更新，hash，离散化<br>题意:在墙上贴海报,海报可以互相覆盖,问最后可以看见几张海报<br>思路:这题数据范围很大,直接搞超时+超内存,需要离散化:<br>离散化简单的来说就是只取我们需要的值来用,比如说区间[1000,2000],[1990,2012] 我们用不到[-∞,999][1001,1989][1991,1999][2001,2011][2013,+∞]这些值,所以我只需要1000,1990,2000,2012就够了,将其分别映射到0,1,2,3,在于复杂度就大大的降下来了<br>所以离散化要保存所有需要用到的值,排序后,分别映射到1~n,这样复杂度就会小很多很多<br>而这题的难点在于每个数字其实表示的是一个单位长度(并且一个点),这样普通的离散化会造成许多错误poj这题数据奇弱)<br>给出下面两个简单的例子应该能体现普通离散化的缺陷:<br>1-10 1-4 5-10<br>1-10 1-4 6-10<br>为了解决这种缺陷,我们可以在排序后的数组上加些处理,比如说[1,2,6,10]，          如果相邻数字间距大于1的话,在其中加上任意一个数字,比如加成[1,2,3,6,7,10],然后再做线段树就好了.<br>假设给定的区间是[1,3],[6,1000],我们可以如下离散<br>离散前坐标：1 3 6 1000<br>离散后坐标：1 2 3 4<br>于是我们就减少了没必要的搜索过程和内存空间。有个建树时的小技巧，因为我建树的每个节点是开区间到闭区间，即[a,b)。于是在读入数据的时候我就可以把b的值加一，这样就很好的处理了题目中可能出现的[a,a]相等值的区间（也就是对一个点的处理）。<br>根据这一点可以更改下面的程序的cout，不用加1，而在输入值时区间右边界加1就行<br>现在做个小小的总结：<br>1.线段树不会有固定的模板，只是种思想，一般可能都需要离散化。<br>2.分成建树，染色，判断统计3个步骤，可能其他大致也就3个类似的步骤。<br>3.如果有单个点的情况，建区间时可以把右端点+1处理。<br>/<em>线段树</em>/<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#include &lt;iostream&gt;</span></span><br><span class="line"><span class="comment">#include &lt;algorithm&gt;</span></span><br><span class="line">using namespace std;</span><br><span class="line">const int Max=20010;</span><br><span class="line">struct point//记录n个区间</span><br><span class="line">&#123;</span><br><span class="line"> int l;</span><br><span class="line"> int r;</span><br><span class="line">&#125;a[Max];</span><br><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line"> int l;</span><br><span class="line"> int r;</span><br><span class="line"> int mid;</span><br><span class="line"> int color;</span><br><span class="line">&#125;tree[Max*4];</span><br><span class="line">int t,n;</span><br><span class="line">int <span class="built_in">hash</span>[Max*2];//哈希是种态度  = = </span><br><span class="line">bool used[Max];//最后统计单颜色的区间</span><br><span class="line">void make(int l,int r,int num)//构建线段树</span><br><span class="line">&#123;</span><br><span class="line"> tree[num].l = l;</span><br><span class="line"> tree[num].r = r;</span><br><span class="line"> tree[num].mid=(l+r)/2;</span><br><span class="line"> tree[num].color=0;</span><br><span class="line"> <span class="keyword">if</span>(l+1!=r)//不是叶区间</span><br><span class="line"> &#123;</span><br><span class="line">  make(l,tree[num].mid,num*2);</span><br><span class="line">  make(tree[num].mid,r,num*2+1);</span><br><span class="line">  <span class="built_in">return</span>;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>/<em>染色函数</em>/<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void insert(int num,int l,int r,int c)//节点编号num. 要染色的区间</span><br><span class="line">&#123;                                     //的左右端点l,r和颜色c</span><br><span class="line"> <span class="keyword">if</span>(tree[num].color!=c)//区间的颜色不是所要染得色c</span><br><span class="line"> &#123;                     //如果是c,说明已经上满了c</span><br><span class="line">  <span class="keyword">if</span>(tree[num].l==l&amp;&amp;tree[num].r==r)//区间完全覆盖，给该区间染上c</span><br><span class="line">  &#123;</span><br><span class="line">   tree[num].color=c;</span><br><span class="line">   <span class="built_in">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  //以下是区间未被完全覆盖的情况</span><br><span class="line">  <span class="keyword">if</span>(tree[num].color&gt;=0)//区间未被上色或者之上一种色(这个颜色是上满的) </span><br><span class="line">  &#123;                   //那么其子节点 也是这个颜色</span><br><span class="line">   tree[2*num].color=tree[num].color;</span><br><span class="line">   tree[2*num+1].color=tree[num].color;</span><br><span class="line">   tree[num].color=-1;//由于一开始有颜色（或者没有）</span><br><span class="line">   //上色的c只占区间的一部分，所以是杂色</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(r&lt;=tree[num].mid)//染色区间在该区间的左子区间</span><br><span class="line">   insert(2*num,l,r,c);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(l&gt;=tree[num].mid)//染色区间在该区间的右子区间</span><br><span class="line">   insert(2*num+1,l,r,c);</span><br><span class="line">  <span class="keyword">else</span>//染色区间横跨区间的左右区间</span><br><span class="line">  &#123;</span><br><span class="line">   insert(num*2,l,tree[num].mid,c);</span><br><span class="line">   insert(num*2+1,tree[num].mid,r,c);</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>/<em>统计函数:统计最后的颜色区间</em>/<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void count(int num)</span><br><span class="line">&#123;</span><br><span class="line"> <span class="keyword">if</span>(tree[num].color&gt;0)</span><br><span class="line"> &#123;</span><br><span class="line">  used[tree[num].color]=<span class="literal">true</span>;</span><br><span class="line">  <span class="built_in">return</span> ;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">if</span>(tree[num].l+1!=tree[num].r)</span><br><span class="line"> &#123;</span><br><span class="line">  count(2*num);</span><br><span class="line">  count(2*num+1);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>/<em>查找函数：val是未离散化前面的值。函数返回的是其在离散化后的区间的编号</em>/<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">int b_search(int l,int r,int val)</span><br><span class="line">&#123;</span><br><span class="line"> <span class="keyword">while</span>(l&lt;=r)</span><br><span class="line"> &#123;</span><br><span class="line">  int mid=(l+r)/2;</span><br><span class="line">  <span class="keyword">if</span>(<span class="built_in">hash</span>[mid]==val)</span><br><span class="line">   <span class="built_in">return</span> mid;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">hash</span>[mid]&gt;val)</span><br><span class="line">   r=mid-1;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">   l=mid+1;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">return</span> -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>/<em>main函数</em>/<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">main</span></span>()</span><br><span class="line">&#123;</span><br><span class="line"> scanf(<span class="string">"%d"</span>,&amp;t);</span><br><span class="line"> <span class="keyword">for</span>(int i=1;i&lt;=t;i++)</span><br><span class="line"> &#123;</span><br><span class="line">  scanf(<span class="string">"%d"</span>,&amp;n);</span><br><span class="line">  memset(used,<span class="literal">false</span>,sizeof(used));</span><br><span class="line">  <span class="keyword">for</span>(int j=1;j&lt;=n;j++)</span><br><span class="line">  &#123;</span><br><span class="line">   scanf(<span class="string">"%d %d"</span>,&amp;a[j].l,&amp;a[j].r);</span><br><span class="line">   ++a[j].r;</span><br><span class="line">   <span class="built_in">hash</span>[2*j-1]=a[j].l;</span><br><span class="line">   <span class="built_in">hash</span>[2*j]=a[j].r;</span><br><span class="line">  &#125;</span><br><span class="line">  sort(<span class="built_in">hash</span>+1,<span class="built_in">hash</span>+1+2*n);</span><br><span class="line">  int index=2;</span><br><span class="line">  <span class="keyword">for</span>(int j=1;j&lt;2*n;j++)</span><br><span class="line">   <span class="keyword">if</span>(<span class="built_in">hash</span>[j]!=<span class="built_in">hash</span>[j+1])</span><br><span class="line">    <span class="built_in">hash</span>[index++]=<span class="built_in">hash</span>[j+1];</span><br><span class="line">  make(1,index-1,1);</span><br><span class="line">  <span class="keyword">for</span>(int j=1;j&lt;=n;j++)</span><br><span class="line">  &#123;</span><br><span class="line">   int lset=b_search(1,index-1,a[j].l);</span><br><span class="line">   int rset=b_search(1,index-1,a[j].r);</span><br><span class="line">   insert(1,lset,rset,j);</span><br><span class="line">  &#125;</span><br><span class="line">  count(1);</span><br><span class="line">  int ans=0;</span><br><span class="line">  <span class="keyword">for</span>(int j=0;j&lt;Max;j++)</span><br><span class="line">   <span class="keyword">if</span>(used[j])</span><br><span class="line">    ans++;</span><br><span class="line">  cout&lt;&lt;ans&lt;&lt;endl;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>扫码关注下面二维码，干货不断：<br><img src="http://img.blog.csdn.net/20160623095054012" alt="二维码"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;题目描述&quot;&gt;&lt;a href=&quot;#题目描述&quot; class=&quot;headerlink&quot; title=&quot;题目描述&quot;&gt;&lt;/a&gt;题目描述&lt;/h1&gt;&lt;p&gt;The citizens of Bytetown, AB, could not stand that the candida
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="ACM" scheme="http://yoursite.com/tags/ACM/"/>
+    
+  </entry>
+  
+</feed>
