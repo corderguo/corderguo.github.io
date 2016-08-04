@@ -639,7 +639,7 @@
     <link href="http://yoursite.com/2014/05/25/iOS-ifdefDEBUG/"/>
     <id>http://yoursite.com/2014/05/25/iOS-ifdefDEBUG/</id>
     <published>2014-05-25T01:26:05.000Z</published>
-    <updated>2016-08-04T02:49:34.000Z</updated>
+    <updated>2016-08-04T02:53:39.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="ifdef-DEBUG宏定义理解"><a href="#ifdef-DEBUG宏定义理解" class="headerlink" title="#ifdef DEBUG宏定义理解"></a>#ifdef DEBUG宏定义理解</h3><hr>
 <p>在工程设置里有一些设置会对该工程自动产生一系列的宏，用以控制程序的编译和运行。如果你把代码夹在#ifdef DEBUG 和对应的 #endif 中间，那么这段代码只有在调试（DEBUG）下才会被编译。也就是说，如果你在RELEASE模式下，这些代码根本就不会存在于你的最终代码里头。        </p>
