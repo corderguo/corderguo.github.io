@@ -975,7 +975,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
     <link href="http://yoursite.com/2012/03/29/pku2528/"/>
     <id>http://yoursite.com/2012/03/29/pku2528/</id>
     <published>2012-03-29T02:16:59.000Z</published>
-    <updated>2016-06-24T08:00:33.000Z</updated>
+    <updated>2016-08-05T08:38:23.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h1><p>The citizens of Bytetown, AB, could not stand that the candidates in the mayoral election campaign have been placing their electoral posters at all places at their whim. The city council has finally decided to build an electoral wall for placing the posters and introduce the following rules: </p>
 <ul>
@@ -1002,7 +1002,7 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
     
     </summary>
     
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
     
     
       <category term="ACM" scheme="http://yoursite.com/tags/ACM/"/>
