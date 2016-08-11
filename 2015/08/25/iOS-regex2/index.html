@@ -25,7 +25,7 @@
 方法一：谓词（NSPredicate）创建正则表达式
 使用它来判断用户输入的字符串是否为合法的：    
 12345678910// 编写正则表达式：只能是数字或英文，或两者都存在NSString *regex = @&quot;^[a-z0－9A-Z]*$&quot;">
-<meta property="og:updated_time" content="2016-08-11T15:51:11.000Z">
+<meta property="og:updated_time" content="2016-08-11T15:59:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS中使用正则表达式">
 <meta name="twitter:description" content="开篇
@@ -134,6 +134,17 @@
    NSRegularExpressionUseUnicodeWordBoundaries    = 1 &lt;&lt; 6 //使用Unicode TR<span class="comment">#29标准作为词的边界，否则所有传统正则表达式的词边界都有效</span>
 };
 </code></pre>
+<p>关于匹配过程有<font color="green"><strong>四</strong></font>种方法：    </p>
+<pre><code class="sh">// 返回所有匹配结果的集合
+- (NSArray *)matchesInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;  
+// 返回正确匹配的个数
+- (NSUInteger)numberOfMatchesInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;  
+// 返回第一个匹配的结果。注意，匹配的结果保存在  NSTextCheckingResult 类型中
+- (NSTextCheckingResult *)firstMatchInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;  
+// 返回第一个正确匹配结果字符串的NSRange
+- (NSRange)rangeOfFirstMatchInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;
+</code></pre>
+<p>我们可根据具体要求选择合适的方法。</p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
 <p>一般来说，判断用户输入的字符是否合法，只需要使用方法一就可以了。如果是需要捕获用户输入的特定内容，可以用方法二或方法三，如果是可能有多个捕获结果，那么可以使用方法四，否则使用方法二或三。<br>针对方法三和四（<u><em>这是我最喜欢的方法</em></u>）我总结出步骤如下：    </p>
 <ul>
@@ -282,26 +293,7 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
 }
 </code></pre>
 <h5 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h5><hr>
-<ol>
-<li><font color="green"><a href="http://www.cnblogs.com/GarveyCalvin/p/4250145.html" target="_blank" rel="external">http://www.cnblogs.com/GarveyCalvin/p/4250145.html</a></font></li>
-<li><font color="green"><a href="http://www.jianshu.com/p/ea10003d224a" target="_blank" rel="external">http://www.jianshu.com/p/ea10003d224a</a></font>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</li>
-</ol>
+<p><a href="http://www.cnblogs.com/GarveyCalvin/p/4250145.html" target="_blank" rel="external">http://www.cnblogs.com/GarveyCalvin/p/4250145.html</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">

@@ -471,7 +471,7 @@
     <link href="http://yoursite.com/2015/08/25/iOS-regex2/"/>
     <id>http://yoursite.com/2015/08/25/iOS-regex2/</id>
     <published>2015-08-25T07:30:32.000Z</published>
-    <updated>2016-08-11T15:51:11.000Z</updated>
+    <updated>2016-08-11T15:59:56.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h3><hr>
 <p><a href="http://coderperson.com/2015/08/14/iOS-regex/" target="_blank" rel="external">上一篇</a>已经对正则表达式做了详细的讲解，如果对正则的作用和语法不是很了解的同学可以看看。下面我们来学习在iOS中使用正则表达式。        </p>
@@ -504,6 +504,17 @@
    NSRegularExpressionUseUnicodeWordBoundaries    = 1 &lt;&lt; 6 //使用Unicode TR<span class="comment">#29标准作为词的边界，否则所有传统正则表达式的词边界都有效</span>
 };
 </code></pre>
+<p>关于匹配过程有<font color="green"><strong>四</strong></font>种方法：    </p>
+<pre><code class="sh">// 返回所有匹配结果的集合
+- (NSArray *)matchesInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;  
+// 返回正确匹配的个数
+- (NSUInteger)numberOfMatchesInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;  
+// 返回第一个匹配的结果。注意，匹配的结果保存在  NSTextCheckingResult 类型中
+- (NSTextCheckingResult *)firstMatchInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;  
+// 返回第一个正确匹配结果字符串的NSRange
+- (NSRange)rangeOfFirstMatchInString:(NSString *)string options:(NSMatchingOptions)options range:(NSRange)range;
+</code></pre>
+<p>我们可根据具体要求选择合适的方法。</p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
 <p>一般来说，判断用户输入的字符是否合法，只需要使用方法一就可以了。如果是需要捕获用户输入的特定内容，可以用方法二或方法三，如果是可能有多个捕获结果，那么可以使用方法四，否则使用方法二或三。<br>针对方法三和四（<u><em>这是我最喜欢的方法</em></u>）我总结出步骤如下：    </p>
 <ul>
@@ -652,26 +663,7 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
 }
 </code></pre>
 <h5 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h5><hr>
-<ol>
-<li><font color="green"><a href="http://www.cnblogs.com/GarveyCalvin/p/4250145.html" target="_blank" rel="external">http://www.cnblogs.com/GarveyCalvin/p/4250145.html</a></font></li>
-<li><font color="green"><a href="http://www.jianshu.com/p/ea10003d224a" target="_blank" rel="external">http://www.jianshu.com/p/ea10003d224a</a></font>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</li>
-</ol>
+<p><a href="http://www.cnblogs.com/GarveyCalvin/p/4250145.html" target="_blank" rel="external">http://www.cnblogs.com/GarveyCalvin/p/4250145.html</a></p>
 ]]></content>
     
     <summary type="html">
