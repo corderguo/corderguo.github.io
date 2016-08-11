@@ -21,7 +21,7 @@
 <meta property="og:description" content="正则表达式到底是什么东西
 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。正则表达式就是用于描述这些规则的工具。换句话说，正则表达式就是记录文本规则的代码。    
 很可能你使用过Windows/Dos下用于文件查找的通配符(wildcard)，也就是*和?。如果你想查找某个目录下的所有的Word文档的话，你会搜索*.doc。在这里，*会被解释成任意的字符串。和通配符类">
-<meta property="og:updated_time" content="2016-08-10T07:13:11.000Z">
+<meta property="og:updated_time" content="2016-08-11T10:18:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则表达式详解">
 <meta name="twitter:description" content="正则表达式到底是什么东西
@@ -93,7 +93,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式到底是什么东西"><span class="toc-number">1.</span> <span class="toc-text">正则表达式到底是什么东西</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入门"><span class="toc-number">2.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试正则表达式"><span class="toc-number">3.</span> <span class="toc-text">测试正则表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元字符"><span class="toc-number">4.</span> <span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符转义"><span class="toc-number">5.</span> <span class="toc-text">字符转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重复"><span class="toc-number">6.</span> <span class="toc-text">重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符类"><span class="toc-number">7.</span> <span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分枝条件"><span class="toc-number">8.</span> <span class="toc-text">分枝条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分组"><span class="toc-number">9.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反义"><span class="toc-number">10.</span> <span class="toc-text">反义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后向引用"><span class="toc-number">11.</span> <span class="toc-text">后向引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#零宽断言"><span class="toc-number">12.</span> <span class="toc-text">零宽断言</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#引用"><span class="toc-number">12.0.1.</span> <span class="toc-text">引用</span></a></li></ol></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式到底是什么东西"><span class="toc-number">1.</span> <span class="toc-text">正则表达式到底是什么东西</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入门"><span class="toc-number">2.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试正则表达式"><span class="toc-number">3.</span> <span class="toc-text">测试正则表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元字符"><span class="toc-number">4.</span> <span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符转义"><span class="toc-number">5.</span> <span class="toc-text">字符转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重复"><span class="toc-number">6.</span> <span class="toc-text">重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符类"><span class="toc-number">7.</span> <span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分枝条件"><span class="toc-number">8.</span> <span class="toc-text">分枝条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分组"><span class="toc-number">9.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反义"><span class="toc-number">10.</span> <span class="toc-text">反义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后向引用"><span class="toc-number">11.</span> <span class="toc-text">后向引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#零宽断言"><span class="toc-number">12.</span> <span class="toc-text">零宽断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#负向零宽断言"><span class="toc-number">13.</span> <span class="toc-text">负向零宽断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释"><span class="toc-number">14.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#贪婪与懒惰"><span class="toc-number">15.</span> <span class="toc-text">贪婪与懒惰</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡组-递归匹配"><span class="toc-number">16.</span> <span class="toc-text">平衡组/递归匹配</span></a></li></ol>
 		
 		</div>
 		
@@ -191,9 +191,46 @@
 <p>(?=exp)也叫零宽度正预测先行断言，它断言自身出现的位置的后面能匹配表达式exp。比如\b\w+(?=ing\b)，匹配以ing结尾的单词的前面部分(除了ing以外的部分)，如查找I’m singing while you’re dancing.时，它会匹配sing和danc。        </p>
 <p>(?&lt;=exp)也叫零宽度正回顾后发断言，它断言自身出现的位置的前面能匹配表达式exp。比如(?&lt;=\bre)\w+\b会匹配以re开头的单词的后半部分(除了re以外的部分)，例如在查找reading a book时，它匹配ading。        </p>
 <p>假如你想要给一个很长的数字中每三位间加一个逗号(当然是从右边加起了)，你可以这样查找需要在前面和里面添加逗号的部分：((?&lt;=\d)\d{3})+\b，用它对1234567890进行查找时结果是234567890。        </p>
-<p>下面这个例子同时使用了这两种断言：(?&lt;=\s)\d+(?=\s)匹配以空白符间隔的数字(再次强调，不包括这些空白符)。        </p>
-<h5 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h5><hr>
-<p>本文转载之<a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">这里</a>，我只写了部分，大家若想更深入学习可以直接阅读原文。</p>
+<p>下面这个例子同时使用了这两种断言：(?&lt;=\s)\d+(?=\s)匹配以空白符间隔的数字(再次强调，不包括这些空白符)。</p>
+<h3 id="负向零宽断言"><a href="#负向零宽断言" class="headerlink" title="负向零宽断言"></a>负向零宽断言</h3><hr>
+<p>前面我们提到过怎么查找不是某个字符或不在某个字符类里的字符的方法(反义)。但是如果我们只是想要确保某个字符没有出现，但并不想去匹配它时怎么办？例如，如果我们想查找这样的单词–它里面出现了字母q,但是q后面跟的不是字母u,我们可以尝试这样：        </p>
+<p>\b\w*q[^u]\w*\b匹配包含后面不是字母u的字母q的单词。但是如果多做测试(或者你思维足够敏锐，直接就观察出来了)，你会发现，如果q出现在单词的结尾的话，像Iraq,Benq，这个表达式就会出错。这是因为[^u]总要匹配一个字符，所以如果q是单词的最后一个字符的话，后面的[^u]将会匹配q后面的单词分隔符(可能是空格，或者是句号或其它的什么)，后面的\w*\b将会匹配下一个单词，于是\b\w*q[^u]\w*\b就能匹配整个Iraq fighting。负向零宽断言能解决这样的问题，因为它只匹配一个位置，并不消费任何字符。现在，我们可以这样来解决这个问题：\b\w*q(?!u)\w*\b。        </p>
+<p>零宽度负预测先行断言(?!exp)，断言此位置的后面不能匹配表达式exp。例如：\d{3}(?!\d)匹配三位数字，而且这三位数字的后面不能是数字；\b((?!abc)\w)+\b匹配不包含连续字符串abc的单词。        </p>
+<p>同理，我们可以用(?&lt;!exp),零宽度负回顾后发断言来断言此位置的前面不能匹配表达式exp：(?&lt;![a-z])\d{7}匹配前面不是小写字母的七位数字。        </p>
+<p>一个更复杂的例子：(?&lt;=&lt;(\w+)&gt;).*(?=&lt;\/\1&gt;)匹配不包含属性的简单HTML标签内里的内容。(?&lt;=&lt;(\w+)&gt;)指定了这样的前缀：被尖括号括起来的单词(比如可能是\<b\>)，然后是.*(任意的字符串),最后是一个后缀(?=&lt;\/\1&gt;)。注意后缀里的\/，它用到了前面提过的字符转义；\1则是一个反向引用，引用的正是捕获的第一组，前面的(\w+)匹配的内容，这样如果前缀实际上是\<b\>的话，后缀就是\</b\>了。整个表达式匹配的是\<b\>和\</b\>之间的内容(再次提醒，不包括前缀和后缀本身)。        </b\></p>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><hr>
+<p>小括号的另一种用途是通过语法(?#comment)来包含注释。例如：2[0-4]\d(?#200-249)|25[0-5](?#250-255)|[01]?\d\d?(?#0-199)。        </p>
+<p>要包含注释的话，最好是启用“忽略模式里的空白符”选项，这样在编写表达式时能任意的添加空格，Tab，换行，而实际使用时这些都将被忽略。启用这个选项后，在#后面到这一行结束的所有文本都将被当成注释忽略掉。例如，我们可以前面的一个表达式写成这样：        </p>
+<p>(?&lt;=   # 断言要匹配的文本的前缀<br>      &lt;(\w+)&gt; # 查找尖括号括起来的字母或数字(即HTML/XML标签)<br>      )       # 前缀结束<br>      .*      # 匹配任意文本<br>      (?=     # 断言要匹配的文本的后缀<br>      &lt;\/\1&gt;  # 查找尖括号括起来的内容：前面是一个”/“，后面是先前捕获的标签<br>      )       # 后缀结束    </p>
+<h3 id="贪婪与懒惰"><a href="#贪婪与懒惰" class="headerlink" title="贪婪与懒惰"></a>贪婪与懒惰</h3><hr>
+<p>当正则表达式中包含能接受重复的限定符时，通常的行为是（在使整个表达式能得到匹配的前提下）匹配尽可能多的字符。以这个表达式为例：a.*b，它将会匹配最长的以a开始，以b结束的字符串。如果用它来搜索aabab的话，它会匹配整个字符串aabab。这被称为贪婪匹配。        </p>
+<p>有时，我们更需要懒惰匹配，也就是匹配尽可能少的字符。前面给出的限定符都可以被转化为懒惰匹配模式，只要在它后面加上一个问号?。这样.*?就意味着匹配任意数量的重复，但是在能使整个匹配成功的前提下使用最少的重复。现在看看懒惰版的例子吧：        </p>
+<p>a.*?b匹配最短的，以a开始，以b结束的字符串。如果把它应用于aabab的话，它会匹配aab（第一到第三个字符）和ab（第四到第五个字符）。          </p>
+<p>懒惰限定符:    </p>
+<ul>
+<li>*?    重复任意次，但尽可能少重复</li>
+<li>+?    重复1次或更多次，但尽可能少重复</li>
+<li>??    重复0次或1次，但尽可能少重复</li>
+<li>{n,m}?    重复n到m次，但尽可能少重复</li>
+<li>{n,}?    重复n次以上，但尽可能少重复</li>
+</ul>
+<h3 id="平衡组-递归匹配"><a href="#平衡组-递归匹配" class="headerlink" title="平衡组/递归匹配"></a>平衡组/递归匹配</h3><hr>
+<p>有时我们需要匹配像( 100 * ( 50 + 15 ) )这样的可嵌套的层次性结构，这时简单地使用(.+)则只会匹配到最左边的左括号和最右边的右括号之间的内容(这里我们讨论的是贪婪模式，懒惰模式也有下面的问题)。假如原来的字符串里的左括号和右括号出现的次数不相等，比如( 5 / ( 3 + 2 ) ) )，那我们的匹配结果里两者的个数也不会相等。有没有办法在这样的字符串里匹配到最长的，配对的括号之间的内容呢？        </p>
+<p>为了避免(和(把你的大脑彻底搞糊涂，我们还是用尖括号代替圆括号吧。现在我们的问题变成了如何把xx <aa <bbb=""> <bbb> aa&gt; yy这样的字符串里，最长的配对的尖括号内的内容捕获出来？        </bbb></aa></p>
+<p>这里需要用到以下的语法构造：        </p>
+<ul>
+<li>(?’group’) 把捕获的内容命名为group,并压入堆栈(Stack)</li>
+<li>(?’-group’) 从堆栈上弹出最后压入堆栈的名为group的捕获内容，如果堆栈本来为空，则本分组的匹配失败</li>
+<li>(?(group)yes|no) 如果堆栈上存在以名为group的捕获内容的话，继续匹配yes部分的表达式，否则继续匹配no部分</li>
+<li>(?!) 零宽负向先行断言，由于没有后缀表达式，试图匹配总是失败        </li>
+</ul>
+<p>我们需要做的是每碰到了左括号，就在压入一个”Open”,每碰到一个右括号，就弹出一个，到了最后就看看堆栈是否为空－－如果不为空那就证明左括号比右括号多，那匹配就应该失败。正则表达式引擎会进行回溯(放弃最前面或最后面的一些字符)，尽量使整个表达式得到匹配。        </p>
+<p>平衡组的一个最常见的应用就是匹配HTML,下面这个例子可以匹配嵌套的<div>标签：<div[^>]*&gt;[^&lt;&gt;]*(((?’Open’<div[^>]*&gt;)[^&lt;&gt;]*)+((?’-Open’</div[^></div[^></div>)[^&lt;&gt;]*)+)*(?(Open)(?!))</p>
+<p>&amp;nbsp<br>&amp;nbsp    </p>
+<hr>
+<blockquote>
+<p>本文引用之<a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">这里</a>，感谢作者的付出。</p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -260,7 +297,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式到底是什么东西"><span class="toc-number">1.</span> <span class="toc-text">正则表达式到底是什么东西</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入门"><span class="toc-number">2.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试正则表达式"><span class="toc-number">3.</span> <span class="toc-text">测试正则表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元字符"><span class="toc-number">4.</span> <span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符转义"><span class="toc-number">5.</span> <span class="toc-text">字符转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重复"><span class="toc-number">6.</span> <span class="toc-text">重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符类"><span class="toc-number">7.</span> <span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分枝条件"><span class="toc-number">8.</span> <span class="toc-text">分枝条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分组"><span class="toc-number">9.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反义"><span class="toc-number">10.</span> <span class="toc-text">反义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后向引用"><span class="toc-number">11.</span> <span class="toc-text">后向引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#零宽断言"><span class="toc-number">12.</span> <span class="toc-text">零宽断言</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#引用"><span class="toc-number">12.0.1.</span> <span class="toc-text">引用</span></a></li></ol></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式到底是什么东西"><span class="toc-number">1.</span> <span class="toc-text">正则表达式到底是什么东西</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#入门"><span class="toc-number">2.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试正则表达式"><span class="toc-number">3.</span> <span class="toc-text">测试正则表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元字符"><span class="toc-number">4.</span> <span class="toc-text">元字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符转义"><span class="toc-number">5.</span> <span class="toc-text">字符转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重复"><span class="toc-number">6.</span> <span class="toc-text">重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符类"><span class="toc-number">7.</span> <span class="toc-text">字符类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分枝条件"><span class="toc-number">8.</span> <span class="toc-text">分枝条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分组"><span class="toc-number">9.</span> <span class="toc-text">分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反义"><span class="toc-number">10.</span> <span class="toc-text">反义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后向引用"><span class="toc-number">11.</span> <span class="toc-text">后向引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#零宽断言"><span class="toc-number">12.</span> <span class="toc-text">零宽断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#负向零宽断言"><span class="toc-number">13.</span> <span class="toc-text">负向零宽断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释"><span class="toc-number">14.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#贪婪与懒惰"><span class="toc-number">15.</span> <span class="toc-text">贪婪与懒惰</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#平衡组-递归匹配"><span class="toc-number">16.</span> <span class="toc-text">平衡组/递归匹配</span></a></li></ol>
  
   </div>
 
