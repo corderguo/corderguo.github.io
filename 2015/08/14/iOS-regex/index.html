@@ -21,7 +21,7 @@
 <meta property="og:description" content="正则表达式到底是什么东西
 在编写处理字符串的程序或网页时，经常会有查找符合某些复杂规则的字符串的需要。正则表达式就是用于描述这些规则的工具。换句话说，正则表达式就是记录文本规则的代码。    
 很可能你使用过Windows/Dos下用于文件查找的通配符(wildcard)，也就是*和?。如果你想查找某个目录下的所有的Word文档的话，你会搜索*.doc。在这里，*会被解释成任意的字符串。和通配符类">
-<meta property="og:updated_time" content="2016-08-11T10:18:16.000Z">
+<meta property="og:updated_time" content="2016-08-11T10:25:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="正则表达式详解">
 <meta name="twitter:description" content="正则表达式到底是什么东西
@@ -226,8 +226,6 @@
 </ul>
 <p>我们需要做的是每碰到了左括号，就在压入一个”Open”,每碰到一个右括号，就弹出一个，到了最后就看看堆栈是否为空－－如果不为空那就证明左括号比右括号多，那匹配就应该失败。正则表达式引擎会进行回溯(放弃最前面或最后面的一些字符)，尽量使整个表达式得到匹配。        </p>
 <p>平衡组的一个最常见的应用就是匹配HTML,下面这个例子可以匹配嵌套的<div>标签：<div[^>]*&gt;[^&lt;&gt;]*(((?’Open’<div[^>]*&gt;)[^&lt;&gt;]*)+((?’-Open’</div[^></div[^></div>)[^&lt;&gt;]*)+)*(?(Open)(?!))</p>
-<p>&amp;nbsp<br>&amp;nbsp    </p>
-<hr>
 <blockquote>
 <p>本文引用之<a href="http://deerchao.net/tutorials/regex/regex.htm" target="_blank" rel="external">这里</a>，感谢作者的付出。</p>
 </blockquote>
