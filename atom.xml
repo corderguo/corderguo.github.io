@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-08-04T05:55:56.000Z</updated>
+  <updated>2016-08-18T06:54:50.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,42 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>iOS使用AVAudioPlayer遇到的奇葩问题</title>
+    <link href="http://yoursite.com/2016/08/10/bugs-AvAudioPlayer/"/>
+    <id>http://yoursite.com/2016/08/10/bugs-AvAudioPlayer/</id>
+    <published>2016-08-10T13:16:15.000Z</published>
+    <updated>2016-08-18T06:54:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工<br>具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    </p>
+</blockquote>
+<p>我开始播放音频的播放代码如下：    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:recorderPath] error:nil];</span><br><span class="line">    self.player.numberOfLoops = 0;</span><br><span class="line">    [self.player prepareToPlay];</span><br><span class="line">    self.player.delegate = self;</span><br><span class="line">    [self.player play];</span><br></pre></td></tr></table></figure>
+<p>结果开始播放语音的时候，程序始终停在初始化这句：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:recorderPath] error:nil];</span><br></pre></td></tr></table></figure>
+<p>在这里你可以手动在Xcode上使程序强制运行过去，这样程序可以正常运行了，没有任何影响，这就奇了怪了。于是我在<font color="green">stackoverflow</font>上找到了一个解决方案:<br><img src="http://upload-images.jianshu.io/upload_images/1389022-a81ead68cba8f0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片">    </p>
+<p>原来是我在XCode中设置了全局断点，导致audio无法播放，（但是我这里就有疑问了，同一个工具类为什么我播放IM中录音时没有问题，到这里就有问题了呢？）于是我把全局断点去掉后，程序果断正常运行了。        </p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<p>以后遇到异常终止的情况（<strong>注意</strong>不是出错，可以手动使程序继续正常运行），可以尝试移除全局断点的方法。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工&lt;br&gt;具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="bugs" scheme="http://yoursite.com/tags/bugs/"/>
+    
+  </entry>
   
   <entry>
     <title>沉痛悼念CSDN博主、年仅26岁的音视频专家雷霄骅</title>

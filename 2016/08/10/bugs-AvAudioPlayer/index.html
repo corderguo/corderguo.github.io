@@ -4,50 +4,34 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>CSS学习 | 骚客</title>
+    <title>iOS使用AVAudioPlayer遇到的奇葩问题 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="CSS样式
-css分为三大样式：行内样式，页内样式，外部样式        
-行内样式：    
-&amp;lt;div style=&quot;font-size: 30px; 
-color: red; background-color: green;&quot;&amp;gt;
-1111111111111
-&amp;lt;/div&amp;gt;
+    <meta name="description" content="最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    
 
-页内样式：在当前页面的\标签中书写，使用\标签包起来        
-&amp;lt;style&amp;gt;">
+我开始播放音频的播放代码如下：    
+12345self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CSS学习">
-<meta property="og:url" content="http://yoursite.com/2014/08/11/web-css/index.html">
+<meta property="og:title" content="iOS使用AVAudioPlayer遇到的奇葩问题">
+<meta property="og:url" content="http://yoursite.com/2016/08/10/bugs-AvAudioPlayer/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="CSS样式
-css分为三大样式：行内样式，页内样式，外部样式        
-行内样式：    
-&amp;lt;div style=&quot;font-size: 30px; 
-color: red; background-color: green;&quot;&amp;gt;
-1111111111111
-&amp;lt;/div&amp;gt;
+<meta property="og:description" content="最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    
 
-页内样式：在当前页面的\标签中书写，使用\标签包起来        
-&amp;lt;style&amp;gt;">
-<meta property="og:updated_time" content="2016-08-04T09:03:30.000Z">
+我开始播放音频的播放代码如下：    
+12345self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWi">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1389022-a81ead68cba8f0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2016-08-18T06:54:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CSS学习">
-<meta name="twitter:description" content="CSS样式
-css分为三大样式：行内样式，页内样式，外部样式        
-行内样式：    
-&amp;lt;div style=&quot;font-size: 30px; 
-color: red; background-color: green;&quot;&amp;gt;
-1111111111111
-&amp;lt;/div&amp;gt;
+<meta name="twitter:title" content="iOS使用AVAudioPlayer遇到的奇葩问题">
+<meta name="twitter:description" content="最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    
 
-页内样式：在当前页面的\标签中书写，使用\标签包起来        
-&amp;lt;style&amp;gt;">
+我开始播放音频的播放代码如下：    
+12345self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWi">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1389022-a81ead68cba8f0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -98,14 +82,14 @@ color: red; background-color: green;&quot;&amp;gt;
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/08/11/web-css/" title="CSS学习" itemprop="url">CSS学习</a>
+      <a href="/2016/08/10/bugs-AvAudioPlayer/" title="iOS使用AVAudioPlayer遇到的奇葩问题" itemprop="url">iOS使用AVAudioPlayer遇到的奇葩问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2014-08-11T07:50:12.000Z" itemprop="datePublished"> 发表于 2014-08-11</time>
+    <time datetime="2016-08-10T13:16:15.000Z" itemprop="datePublished"> 发表于 2016-08-10</time>
     
   </p>
 </header>
@@ -114,110 +98,21 @@ color: red; background-color: green;&quot;&amp;gt;
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS样式"><span class="toc-number">1.</span> <span class="toc-text">CSS样式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS选择器类型"><span class="toc-number">2.</span> <span class="toc-text">CSS选择器类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#伪类"><span class="toc-number">3.</span> <span class="toc-text">伪类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签类型"><span class="toc-number">4.</span> <span class="toc-text">标签类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些CSS属性Tips"><span class="toc-number">5.</span> <span class="toc-text">一些CSS属性Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#盒子模型"><span class="toc-number">6.</span> <span class="toc-text">盒子模型</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">1.</span> <span class="toc-text">小结</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="CSS样式"><a href="#CSS样式" class="headerlink" title="CSS样式"></a>CSS样式</h3><hr>
-<p>css分为三大样式：行内样式，页内样式，外部样式        </p>
-<p>行内样式：    </p>
-<pre><code class="sh">&lt;div style=<span class="string">"font-size: 30px; 
-color: red; background-color: green;"</span>&gt;
-1111111111111
-&lt;/div&gt;
-</code></pre>
-<p>页内样式：在当前页面的\<head\>标签中书写，使用\<style\>标签包起来        </style\></head\></p>
-<pre><code class="sh">&lt;style&gt;
-       div{
-          color: purple;
-          font-size: 40px;
-          background-color: yellowgreen;
-       }
-       &lt;/style&gt;
-</code></pre>
-<p>外部样式：新建一个.css文件，统一在里面进行样式布局,注意在\<head\>标签中把该文件引用进来        </head\></p>
-<pre><code class="sh">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"css/index.css"</span>&gt;
-</code></pre>
-<blockquote>
-<p>三种样式混合使用时，遵循’就近原则’和’叠加原则’</p>
+		<blockquote>
+<p>最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工<br>具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    </p>
 </blockquote>
-<h3 id="CSS选择器类型"><a href="#CSS选择器类型" class="headerlink" title="CSS选择器类型"></a>CSS选择器类型</h3><hr>
-<p>css选择器有很多种类型，主要常用的有：标签选择器、类选择器、id选择器、后代选择器。<br>格式如下：        </p>
-<pre><code class="sh"> /*标签选择器*/
-div{
-    color: red;
-}
-/*类选择器*/
-.one{
-    color: yellow;
-}
-/*id选择器*/
-<span class="comment">#main{</span>
-    font-size: 40px;
-}
-/*后代选择器*/
-<span class="comment">#test2 div{</span>
-    color: green;
-}
-</code></pre>
-<blockquote>
-<p>css选择器遵循:            </p>
-<ul>
-<li>在相同级别:1.叠加原则  2.就近原则            </li>
-<li>id选择器&gt; 类选择器 &gt; 标签选择器                </li>
-<li>范围越小,优先级别越高        </li>
-<li>如果属性后面添加了 !important 修饰，则优先级别最高    </li>
-</ul>
-</blockquote>
-<h3 id="伪类"><a href="#伪类" class="headerlink" title="伪类"></a>伪类</h3><hr>
-<p>伪类是对标签的一种响应，有很多种，常用的有：hover，focus等<br>hover:当鼠标移动到上面的时候响应：    </p>
-<pre><code class="sh"> div:hover{
-    background-color: green;
-    width: 100px;
-    height: 180px;
-}
-</code></pre>
-<p>focus：当控件聚焦时响应：        </p>
-<pre><code class="sh"> input:focus{
-    outline: none;
-    width: 500px;
-    height: 300px;
-    border: 10px double yellow;
-}
-</code></pre>
-<h3 id="标签类型"><a href="#标签类型" class="headerlink" title="标签类型"></a>标签类型</h3><hr>
-<p>快级标签：常见div等<br>行内标签：常见span等<br>行内-快级标签：常见input等        </p>
-<p>标签类型之间和相互转换，利用display属性，例如，把快级标签变成行内-快级标签：        </p>
-<pre><code class="sh">display: inline-block;
-</code></pre>
-<p>把行内标签变成快级标签：        </p>
-<pre><code class="sh">display: block;
-</code></pre>
-<h3 id="一些CSS属性Tips"><a href="#一些CSS属性Tips" class="headerlink" title="一些CSS属性Tips"></a>一些CSS属性Tips</h3><hr>
-<p>1.都是隐藏内容，display和visibility的区别：    </p>
-<ul>
-<li>display会连同尺寸一起隐藏        </li>
-<li>visibility不会隐藏尺寸    </li>
-</ul>
-<p>2.超出标签的内容处理:hidden, auto；<br>  overflow: hidden;        </p>
-<p>3.设置去除下划线,用于a标签：text-decoration: none;<br>4.设置缩进:text-indent: 3%;        </p>
-<p>5.设置列表的类型: none  square；list-style:square;<br>6.字体加粗： font-weight: bolder;        </p>
-<p>7.行高,用于垂直居中：line-height: 300px;        </p>
-<p>8.设置文字阴影, 水平方向  垂直方向 模糊 颜色：<br>  text-shadow: 5px 5px 10px green;        </p>
-<p>9.设置圆角：border-top-left-radius: 90px;    </p>
-<h3 id="盒子模型"><a href="#盒子模型" class="headerlink" title="盒子模型"></a>盒子模型</h3><hr>
-<p>这也没什么好说的，很重要，记住’上右下左’的顺序，IE浏览器的标准和国际的标准不一样。<br>这里针对居中方式做一下总结：        </p>
-<blockquote>
-<p>标签水平居中:        </p>
-<ul>
-<li>行内标签, 行内块级标签:  text-align: center;        </li>
-<li>块级标签:  margin: 0px auto;    </li>
-</ul>
-<p>标签垂直居中:        </p>
-<ul>
-<li>line-height: 400px;        </li>
-</ul>
-</blockquote>
+<p>我开始播放音频的播放代码如下：    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:recorderPath] error:nil];</span><br><span class="line">    self.player.numberOfLoops = 0;</span><br><span class="line">    [self.player prepareToPlay];</span><br><span class="line">    self.player.delegate = self;</span><br><span class="line">    [self.player play];</span><br></pre></td></tr></table></figure>
+<p>结果开始播放语音的时候，程序始终停在初始化这句：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:recorderPath] error:nil];</span><br></pre></td></tr></table></figure>
+<p>在这里你可以手动在Xcode上使程序强制运行过去，这样程序可以正常运行了，没有任何影响，这就奇了怪了。于是我在<font color="green">stackoverflow</font>上找到了一个解决方案:<br><img src="http://upload-images.jianshu.io/upload_images/1389022-a81ead68cba8f0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片">    </p>
+<p>原来是我在XCode中设置了全局断点，导致audio无法播放，（但是我这里就有疑问了，同一个工具类为什么我播放IM中录音时没有问题，到这里就有问题了呢？）于是我把全局断点去掉后，程序果断正常运行了。        </p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<p>以后遇到异常终止的情况（<strong>注意</strong>不是出错，可以手动使程序继续正常运行），可以尝试移除全局断点的方法。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -225,13 +120,13 @@ div{
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Web/">Web</a>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/CSS/">CSS</a>
+  <span></span> <a href="/tags/bugs/">bugs</a>
   </div>
 
 </div>
@@ -240,7 +135,7 @@ div{
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2014/08/11/web-css/" data-title="CSS学习 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2016/08/10/bugs-AvAudioPlayer/" data-title="iOS使用AVAudioPlayer遇到的奇葩问题 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -253,19 +148,11 @@ div{
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/10/24/MIME/" title="MIME TYPE 详解">
-  <strong>上一篇：</strong><br/>
-  <span>
-  MIME TYPE 详解</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/05/25/iOS-ifdefDEBUG/"  title="\#ifdef DEBUG的介绍">
+<a href="/2016/08/04/meidia-person/"  title="沉痛悼念CSDN博主、年仅26岁的音视频专家雷霄骅">
  <strong>下一篇：</strong><br/> 
- <span>\#ifdef DEBUG的介绍
+ <span>沉痛悼念CSDN博主、年仅26岁的音视频专家雷霄骅
 </span>
 </a>
 </div>
@@ -274,7 +161,7 @@ div{
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/08/11/web-css/" data-title="CSS学习" data-url="http://yoursite.com/2014/08/11/web-css/"></div>
+	<div class="ds-thread" data-thread-key="2016/08/10/bugs-AvAudioPlayer/" data-title="iOS使用AVAudioPlayer遇到的奇葩问题" data-url="http://yoursite.com/2016/08/10/bugs-AvAudioPlayer/"></div>
 </section>
 
 
@@ -284,7 +171,7 @@ div{
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS样式"><span class="toc-number">1.</span> <span class="toc-text">CSS样式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS选择器类型"><span class="toc-number">2.</span> <span class="toc-text">CSS选择器类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#伪类"><span class="toc-number">3.</span> <span class="toc-text">伪类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签类型"><span class="toc-number">4.</span> <span class="toc-text">标签类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些CSS属性Tips"><span class="toc-number">5.</span> <span class="toc-text">一些CSS属性Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#盒子模型"><span class="toc-number">6.</span> <span class="toc-text">盒子模型</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">1.</span> <span class="toc-text">小结</span></a></li></ol>
  
   </div>
 
