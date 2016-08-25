@@ -332,6 +332,85 @@
   </entry>
   
   <entry>
+    <title>iOS中block的Strong-Weak Dance的思考</title>
+    <link href="http://yoursite.com/2016/03/24/iOS-block-strong-weak-dance/"/>
+    <id>http://yoursite.com/2016/03/24/iOS-block-strong-weak-dance/</id>
+    <published>2016-03-24T02:10:18.000Z</published>
+    <updated>2016-08-25T09:57:40.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><hr>
+<p>在使用 Block 时，除了使用 __weak 修饰符避免循环引用外，还有一点经常容易忘记。苹果把它称为：“Strong-Weak Dance”。        </p>
+<h3 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h3><hr>
+<p>这是一种 强引用 –&gt; 弱引用 –&gt; 强引用 的变换过程。在弄明白为什么要如此大费周章之前，我们首先来看看一般的写法会有什么问题。        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__weak MyViewController *wself = self;</span><br><span class="line">self.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    [wself.property removeObserver: wself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这种写法可以避免循环引用，但是我们要考虑这样的问题：    </p>
+<p><strong>假设 block 被放在子线程中执行，而且执行过程中 self 在主线程被释放了。由于 wself 是一个弱引用，因此会自动变为 nil。而在 KVO 中，这会导致崩溃。</strong>    </p>
+<h3 id="Strong-Weak-Dance"><a href="#Strong-Weak-Dance" class="headerlink" title="Strong-Weak Dance"></a>Strong-Weak Dance</h3><hr>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__weak MyViewController *wself = self;</span><br><span class="line">self.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    __strong __typeof(wself) sself = wself; // 强引用一次</span><br><span class="line">    [sself.property removeObserver: sself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这样一来，self 所指向对象的引用计数变成 2，即使主线程中的 self 因为超出作用于而释放，对象的引用计数依然为 1，避免了对象的销毁。        </p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><hr>
+<p>在和小伙伴的讨论过程中，他提出了几个问题。虽然都不难，但是有利于把各种知识融会贯通起来。</p>
+<p>1.Q：下面这行代码，将一个弱引用的指针赋值给强引用的指针，可以起到强引用效果么？</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__strong __typeof(wself) sself = wself;</span><br></pre></td></tr></table></figure>
+<p>A：会的。引用计数描述的是对象而不是指针。这句话的意思是：        </p>
+<blockquote>
+<p>sself 强引用 wself 指向的那个对象</p>
+</blockquote>
+<p>因此对象的引用计数会增加一个。</p>
+<p>2.Q：block 内部定义了sself，会不会因此强引用了 sself？<br>A：不会。block 只有截获外部变量时，才会引用它。如果是内部新建一个，则没有任何问题。<br>3.Q：如果在 block 内部没有强引用，而是通过 if 判断，是不是也可以，比如这样写：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> __weak MyViewController *wself = self;</span><br><span class="line">wself.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    <span class="keyword">if</span> (wself) &#123; // 只有当 wself 不为 nil 时，才执行以下代码</span><br><span class="line">        [wself.property removeObserver: wself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>A：不可以！考虑到多线程执行，也许在判断的时候，self 还没释放，但是执行 self 里面的代码时，就刚好释放了。</p>
+<p>4.Q：那按照这个说法，block 内部强引用也没用啊。也许 block 执行以前，self 就释放了。</p>
+<p>A：有用！如果在 block 执行以前，self 就释放了，那么 block 的引用计数降为 0，所以自己就会被释放。这样它根本就不会被执行。另外，如果执行一个为 nil 的闭包会导致崩溃。        </p>
+<p>5.Q：如果在执行 block 的过程中，block 被释放了怎么办？        </p>
+<p>A：简单来说，block 还会继续执行，但是它捕获的指针会具有不确定的值，详细内容请参考<a href="http://stackoverflow.com/questions/12272783/what-happens-when-a-block-is-set-to-nil-during-its-execution" target="_blank" rel="external">这篇文章</a>    </p>
+<h3 id="strongify-和-weakify"><a href="#strongify-和-weakify" class="headerlink" title="@strongify 和 @weakify"></a>@strongify 和 @weakify</h3><hr>
+<p>这是<a href="https://github.com/ReactiveCocoa/ReactiveCocoa" target="_blank" rel="external">ReactiveCocoa</a> 中定义的一个宏。一般可以这样使用：    </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@weakify(self);</span><br><span class="line">self.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    @strongify(self);</span><br><span class="line">    [self.property removeObserver: sself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>本文并非分析它们的实现原理，所以就简单解释两点：        </p>
+<ol>
+<li><p>这里的“@”没有任何用处，仅表示强调，这个宏实际上包含了一个空的 AutoreleasePool，这也就是为什么一定要加上“@”。        </p>
+</li>
+<li><p>它的原理还是和之前一样，生成了一段形如 __weak MyViewController *wself = self; 这种格式的代码：</p>
+</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#define rac_strongify_(INDEX, VAR) \\</span></span><br><span class="line">__strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);</span><br></pre></td></tr></table></figure>
+<h3 id="Swift-中的情况"><a href="#Swift-中的情况" class="headerlink" title="Swift 中的情况"></a>Swift 中的情况</h3><hr>
+<p>在 Swift 中也有 Strong-Weak Dance 的概念。最简单的方法就是直接沿用 OC 的思路：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.completionHandler = &#123; [weak self] <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">let</span> strongSelf = self &#123;</span><br><span class="line">        /// ....</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这种写法的缺点在于，我们不能写 if let self = self，因此需要重新定义一个变量 strongSelf，命名方式显得不够优雅。            </p>
+<p>除此以外还可以使用 Swift 标准库提供的函数 withExtendedLifetime：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.completionHandler = &#123; [weak self] <span class="keyword">in</span></span><br><span class="line">    withExtendedLifetime(self) &#123;</span><br><span class="line">        /// ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这种写法的缺点在于，self 依然是可选类型的，还需要把它解封后才能使用。        </p>
+<p>最后，还有一种解决方案是自定义 withExtendedLifetime函数：            </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">extension Optional &#123;</span><br><span class="line">    func withExtendedLifetime(body: T -&gt; Void) &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">let</span> strongSelf = self &#123;</span><br><span class="line">            body(strongSelf)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至于这种写法是否更加优雅，就见仁见智了：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.completionHandler = &#123; [weak self] <span class="keyword">in</span></span><br><span class="line">    self.withExtendedLifetime &#123;</span><br><span class="line">        /// 这里用 <span class="variable">$0</span> 表示 self</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="关于YYKit中block的细节"><a href="#关于YYKit中block的细节" class="headerlink" title="关于YYKit中block的细节"></a>关于YYKit中block的细节</h3><hr>
+<p>下面是YYCache中的一段代码：        </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (void)_trimRecursively &#123;</span><br><span class="line">    __weak typeof(self) _self = self;</span><br><span class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_autoTrimInterval * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;</span><br><span class="line">        __strong typeof(_self) self = _self;</span><br><span class="line">        <span class="keyword">if</span> (!self) <span class="built_in">return</span>;</span><br><span class="line">        [self _trimInBackground];</span><br><span class="line">        [self _trimRecursively];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>思考：         </p>
+<p>如果直接引用 strong self，那 block 创建时就会立刻强引用了 self；而如果先用 weak 引用，则 block 创建时对 self 是弱引用，而直到 block 开始执行时，self 才会被强引用。    </p>
+<p>如果 block 提交到 queue 但还未执行的时候，整个 Cache 对象被释放了，那这时 weak self 就会变为 nil 了，而后 block 执行的时候 if (!self) return; 就会成立了。            </p>
+<p>非常严谨！！！</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><hr>
+<p><a href="http://www.jianshu.com/p/4ec18161d790" target="_blank" rel="external">http://www.jianshu.com/p/4ec18161d790</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;在使用 Block 时，除了使用 __weak 修饰符避免循环引用外，还有一点经常容易忘记。苹果把它称为：“Strong-Weak
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="block" scheme="http://yoursite.com/tags/block/"/>
+    
+  </entry>
+  
+  <entry>
     <title>三行代码搞定静态页面</title>
     <link href="http://yoursite.com/2016/03/15/iOS-staticPage/"/>
     <id>http://yoursite.com/2016/03/15/iOS-staticPage/</id>
@@ -1499,55 +1578,6 @@ NSLog(@<span class="string">"name=%@ classs=%d level=%@ count=%d"</span>,teacher
     
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>矢量图和位图的区别</title>
-    <link href="http://yoursite.com/2013/04/15/trivial-image/"/>
-    <id>http://yoursite.com/2013/04/15/trivial-image/</id>
-    <published>2013-04-15T02:20:22.000Z</published>
-    <updated>2016-08-12T09:35:36.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><hr>
-<p>位图和矢量图是计算机图形中的两大概念，这两种图形都被广泛应用到出版，印刷，互联网[如flash和svg]等各个方面，他们各有优缺点，两者各自的好处几乎是无法相互替代的，所以，长久以来，矢量跟位图在应用中一直是平分秋色。    </p>
-<h3 id="位图-bitmap"><a href="#位图-bitmap" class="headerlink" title="位图[bitmap]"></a>位图[bitmap]</h3><hr>
-<p>位图[bitmap]，也叫做点阵图，删格图象，像素图，简单的说，就是最小单位由象素构成的图，缩放会失真。构成位图的最小单位是象素，位图就是由象素阵列的排列来实现其显示效果的，每个象素有自己的颜色信息，在对位图图像进行编辑操作的时候，可操作的对象是每个象素，我们可以改变图像的色相、饱和度、明度，从而改变图像的显示效果。举个例子来说，位图图像就好比在巨大的沙盘上画好的画，当你从远处看的时候，画面细腻多彩，但是当你靠的非常近的时候，你就能看到组成画面的每粒沙子以及每个沙粒单纯的不可变化颜色。        </p>
-<h3 id="矢量图-vector"><a href="#矢量图-vector" class="headerlink" title="矢量图[vector]"></a>矢量图[vector]</h3><hr>
-<p>矢量图[vector]，也叫做向量图，简单的说，就是缩放不失真的图像格式。矢量图是通过多个对象的组合生成的，对其中的每一个对象的纪录方式，都是以数学函数来实现的，也就是说，矢量图实际上并不是象位图那样纪录画面上每一点的信息，而是纪录了元素形状及颜色的算法，当你打开一付矢量图的时候，软件对图形象对应的函数进行运算，将运算结果[图形的形状和颜色]显示给你看。无论显示画面是大还是小，画面上的对象对应的算法是不变的，所以，即使对画面进行倍数相当大的缩放，其显示效果仍然相同[不失真]。举例来说，矢量图就好比画在质量非常好的橡胶膜上的图，不管对橡胶膜怎样的常宽等比成倍拉伸，画面依然清晰，不管你离得多么近去看，也不会看到图形的最小单位。        </p>
-<h3 id="区别及联系"><a href="#区别及联系" class="headerlink" title="区别及联系"></a>区别及联系</h3><hr>
-<p>从下面的图中，我们很容易可以看出位图和矢量图的区别。<br>下面这是矢量图，放大后的效果，可以看到图片仍然是清晰的。</p>
-<p><img src="http://www.ittribalwo.com/upfiles/201207/20120728214725929.jpg" alt="矢量图">    </p>
-<p>下面是位图，放大到一定程度，画面就严重马赛克，模糊了。<br><img src="http://www.ittribalwo.com/upfiles/201207/20120728214747258.jpg" alt="位图"><br>位图的好处是，色彩变化丰富，编辑上，可以改变任何形状的区域的色彩显示效果，相应的，要实现的效果越复杂，需要的象素数越多，图像文件的大小[长宽]和体积[存储空间]越大。        </p>
-<p>矢量的好处是，轮廓的形状更容易修改和控制，但是对于单独的对象，色彩上变化的实现不如位图来的方便直接。另外，支持矢量格式的应用程序也远远没有支持位图的多，很多矢量图形都需要专门设计的程序才能打开浏览和编辑。        </p>
-<p>常用的位图绘制软件有adobe photoshop、corel painter等，对应的文件格式为[.psd .tif][.rif]等，另外还有[.jpg][.gif][.png][.bmp]等。        </p>
-<p>常用的矢量绘制软件有adobe illustrator、coreldraw、freehand、flash等，对应的文件格式为[.ai .eps][.cdr][.fh][.fla/.swf]等，另外还有[.dwg][.wmf][.emf]等。        </p>
-<p>矢量图可以很容易的转化成位图，但是位图转化为矢量图却并不简单，往往需要比较复杂的运算和手工调节。        </p>
-<p>矢量和位图在应用上也是可以相互结合的，比如在矢量文件中嵌入位图实现特别的效果，再比如在三维影象中用矢量建模和位图贴图实现逼真的视觉效果等等。                </p>
-<ul>
-<li>矢量图：图形。        </li>
-<li>像素图：图像。        </li>
-</ul>
-<p>图形通常是绘制出来的，而图像一般是拍摄获得的。    </p>
-<p>复杂的图像转换成图形需要更大的存储空间（存在一个图像复杂度的临界值），并且同时也失去了缩放的意义，原因是转换后原本的图像已经不存在了（你用一个低像素的相机拍摄一个图像然后转换成矢量图放大再与一个高像素的相机拍摄的图像做对比，你会发现它们并不一样）。    </p>
-<p>因此，图形和图像有着完全不同的应用范围。将图像用矢量格式保存并不明智。原因是图像的清晰度取决于拍摄的相机，超过原始比例的放大并不能使图像变得更清晰，缩放比例不是100%从某种意义上来说也是失真。而对于图形来说却不一样，图形是绘制出来的，一般它的结构比图像简单得多，而且确实存在的缩放的意义。    </p>
-<p>假设：相机拍摄后生成的是矢量格式也是没有意义的，原因是现实世界并不是矢量的，即使镜头能将景物拍摄得和显微镜一样清晰，那看到的也不是矢量的。就算假设现实世界最小的粒子是矢量的并且能够被拍摄出来，那么你需要多大的存储空间来保存这张图像呢（如果假设成立的话，确实用矢量图保存图像更为优秀，不仅比像素图更省空间，还能在不同的缩放比例看到真实的图像）？事实上那几乎也是不可能的，并且目前看来也是完全没有必要的。            </p>
-<blockquote>
-<p>参考：<a href="http://www.cnblogs.com/areliang/archive/2006/04/29/388769.html" target="_blank" rel="external">http://www.cnblogs.com/areliang/archive/2006/04/29/388769.html</a></p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;位图和矢量图是计算机图形中的两大概念，这两种图形都被广泛应用到出版，印刷，互联网[如flash和svg]等各个方面，他们各有优缺点
-    
-    </summary>
-    
-      <category term="Trivial" scheme="http://yoursite.com/categories/Trivial/"/>
-    
-    
-      <category term="image" scheme="http://yoursite.com/tags/image/"/>
     
   </entry>
   
