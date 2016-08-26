@@ -27,7 +27,7 @@ Homebrew是OS X的套件(包)管理器，我们可以通过它获取并且安装
 1ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
 2.安装npm 和 Node.js:        
  Node.js最">
-<meta property="og:updated_time" content="2016-08-26T02:39:24.000Z">
+<meta property="og:updated_time" content="2016-08-26T02:43:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React Native开发环境配置">
 <meta name="twitter:description" content="环境需求
@@ -141,7 +141,12 @@ Homebrew是OS X的套件(包)管理器，我们可以通过它获取并且安装
 <p>c）此外，node_modules文件夹，是为Node.js存放和管理npm包资源，也包含React Native框架文件。    </p>
 <h3 id="管理React-Native库的版本"><a href="#管理React-Native库的版本" class="headerlink" title="管理React Native库的版本"></a>管理React Native库的版本</h3><hr>
 <p>1.查看本地的React Native的版本        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">react-native --version</span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2.更新本地的React Native的版本           </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```sh</span><br><span class="line">npm update -g react-native-cli</span><br><span class="line">```	</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3.查询react-native的npm包最新版本		</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">npm包地址 ：https://www.npmjs.com/package/react-native</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```sh</span><br><span class="line"> npm info react-native</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">react-native --version</span><br></pre></td></tr></table></figure>
+<p>2.更新本地的React Native的版本           </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update -g react-native-cli</span><br></pre></td></tr></table></figure>
+<p>3.查询react-native的npm包最新版本        </p>
+<p>npm包地址 ：<a href="https://www.npmjs.com/package/react-native" target="_blank" rel="external">https://www.npmjs.com/package/react-native</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm info react-native</span><br></pre></td></tr></table></figure>
 <p>4.升级或者降级npm包的版本：        </p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save react-native@0.18</span><br></pre></td></tr></table></figure>
 <p>5.更新项目templates文件（可选）：             </p>
