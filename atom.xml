@@ -1212,7 +1212,7 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
     <link href="http://yoursite.com/2015/06/08/iOS-runtime-messageForwarding/"/>
     <id>http://yoursite.com/2015/06/08/iOS-runtime-messageForwarding/</id>
     <published>2015-06-08T01:11:08.000Z</published>
-    <updated>2016-08-26T08:26:28.000Z</updated>
+    <updated>2016-08-26T08:32:48.000Z</updated>
     
     <content type="html"><![CDATA[<p>相信大家对Object-C的消息传递机制并不陌生（如果不熟悉，我后续会再写一篇关于消息传递机制的文章），今天我来讲解另外一个重要的问题，就是对象在收到无法解读的消息之后会发生什么情况。</p>
 <p>若想令类能理解某条消息，我们必须以程序码实现出对应的方法才行。但是，在编译器向类发送了其无法解读的消息并不会报错，因为在运行期可以继续向类中添加方法（动态添加），所以编译器在编译时还无法确知类中到底会不会有某个方法实现。当对象接收到无法解读的消息后，就会启动“消息转发”(message forwarding)机制，程序员可经由此过程告诉对象应该如何处理未知消息。</p>
@@ -1270,7 +1270,7 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
       <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="iOS runtime" scheme="http://yoursite.com/tags/iOS-runtime/"/>
+      <category term="iOS;runtime" scheme="http://yoursite.com/tags/iOS-runtime/"/>
     
   </entry>
   
