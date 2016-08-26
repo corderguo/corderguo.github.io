@@ -1085,7 +1085,7 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
     <link href="http://yoursite.com/2015/07/26/book-mood/"/>
     <id>http://yoursite.com/2015/07/26/book-mood/</id>
     <published>2015-07-26T09:59:12.000Z</published>
-    <updated>2016-07-02T12:27:27.000Z</updated>
+    <updated>2016-08-26T04:17:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>沙场点兵，卧品书香！        </p>
 <p>昨天在公司看到这本书《别让情绪失控害了你》，感觉不错，今天上午躺在床上读了几章，获益匪浅！虽然有些大道理我们都懂，但是当我们在生活中真正遇到事情的时候，真正做到坐怀不乱的又有几人？！静下心来好好读书，想想发生在自己身上的一些事情，当时的做法和看法现在想来多半是不正确甚至是不理智的。        </p>
@@ -1114,7 +1114,7 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
     
     </summary>
     
-      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
+      <category term="读书笔记" scheme="http://yoursite.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
     
       <category term="读书" scheme="http://yoursite.com/tags/%E8%AF%BB%E4%B9%A6/"/>
