@@ -1,0 +1,560 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>深入理解Object-C消息转发机制 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="相信大家对Object-C的消息传递机制并不陌生（如果不熟悉，我后续会再写一篇关于消息传递机制的文章），今天我来讲解另外一个重要的问题，就是对象在收到无法解读的消息之后会发生什么情况。
+若想令类能理解某条消息，我们必须以程序码实现出对应的方法才行。但是，在编译器向类发送了其无法解读的消息并不会报错，因为在运行期可以继续向类中添加方法（动态添加），所以编译器在编译时还无法确知类中到底会不会有某个方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Object-C消息转发机制">
+<meta property="og:url" content="http://yoursite.com/2015/06/08/iOS-runtime-messageForwarding/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="相信大家对Object-C的消息传递机制并不陌生（如果不熟悉，我后续会再写一篇关于消息传递机制的文章），今天我来讲解另外一个重要的问题，就是对象在收到无法解读的消息之后会发生什么情况。
+若想令类能理解某条消息，我们必须以程序码实现出对应的方法才行。但是，在编译器向类发送了其无法解读的消息并不会报错，因为在运行期可以继续向类中添加方法（动态添加），所以编译器在编译时还无法确知类中到底会不会有某个方法">
+<meta property="og:updated_time" content="2016-08-26T08:18:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Object-C消息转发机制">
+<meta name="twitter:description" content="相信大家对Object-C的消息传递机制并不陌生（如果不熟悉，我后续会再写一篇关于消息传递机制的文章），今天我来讲解另外一个重要的问题，就是对象在收到无法解读的消息之后会发生什么情况。
+若想令类能理解某条消息，我们必须以程序码实现出对应的方法才行。但是，在编译器向类发送了其无法解读的消息并不会报错，因为在运行期可以继续向类中添加方法（动态添加），所以编译器在编译时还无法确知类中到底会不会有某个方法">
+
+    
+    <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/08/iOS-runtime-messageForwarding/" title="深入理解Object-C消息转发机制" itemprop="url">深入理解Object-C消息转发机制</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-08T01:11:08.000Z" itemprop="datePublished"> 发表于 2015-06-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#动态方法解析"><span class="toc-number">1.</span> <span class="toc-text">动态方法解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#备援接收者"><span class="toc-number">2.</span> <span class="toc-text">备援接收者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完整的消息转发"><span class="toc-number">3.</span> <span class="toc-text">完整的消息转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以完整的例子演示动态方法解析"><span class="toc-number">4.</span> <span class="toc-text">以完整的例子演示动态方法解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a></li></ol>
+		
+		</div>
+		
+		<p>相信大家对Object-C的消息传递机制并不陌生（如果不熟悉，我后续会再写一篇关于消息传递机制的文章），今天我来讲解另外一个重要的问题，就是对象在收到无法解读的消息之后会发生什么情况。</p>
+<p>若想令类能理解某条消息，我们必须以程序码实现出对应的方法才行。但是，在编译器向类发送了其无法解读的消息并不会报错，因为在运行期可以继续向类中添加方法（动态添加），所以编译器在编译时还无法确知类中到底会不会有某个方法实现。当对象接收到无法解读的消息后，就会启动“消息转发”(message forwarding)机制，程序员可经由此过程告诉对象应该如何处理未知消息。</p>
+<p>你可能早就遇到过经由消息转发流程所处理的消息了，只是未加留意。如果在控制台中看到下面这种提示信息，那就说明你曾向某个对象发送过一条无法解读的消息，从而启动了消息转发机制，并将次消息转发给了NSObject得默认实现。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-[__NSCFNumber lowercaseString]:unrecognized selector </span><br><span class="line">sent to instance 0x87</span><br><span class="line"> *** Terminating app due to uncaught exception </span><br><span class="line"><span class="string">'NSInvalidArgumentException'</span>,reason:</span><br><span class="line"><span class="string">'-[__NSCFNumber lowercaseString]:unrecognized selector sent to instance ox87'</span></span><br></pre></td></tr></table></figure>
+<p>上面这段异常信息是由NSObject的“doesNotRecognizeSelector:”方法所抛出的，此异常表明：消息接收者的类型是__NSCFNumber,而该接受者无法理解名位lowercaseString的选择子。本例所列举的这种情况并不奇怪，因为NSNumber类里本来就没有名为lowercaseString的方法。在本例中，消息转发过程以应用程序崩溃而告终，不过，开发者在编写自己的类时，可于转发过程中设置挂钩，用以执行预定的逻辑，而不使应用程序崩溃。</p>
+<p>消息的转发分为两大阶段。第一阶段先征询接收者，所属的类，看其是否能动态添加方法，以处理当前这个“未知的选择子”（unknown selector）,这叫做“动态方法解析”（dynamic method resolution）。第二阶段涉及“完整的消息转发机制”。如果运行期系统已经把第一阶段执行完了，那么接收者自己就无法再以动态新增方法的手段来响应包含该选择子的消息了。此时，运行期系统会请求接受者以其他手段来处理与消息相关的方法调用。这又细分为两小步。首先，请接受者看看有没有其他对象处理这条消息。若有，则运行期系统会把消息转给那个对象，于是消息转发过程结束，一起如常。若没有“备援的接收者”，则启动完整的消息转发机制，运行期系统会把于消息有关的全部细节都封装到NSInvocation对象中，再给接收者最后一次机会，令其设法解决当前还未处理的这条消息。</p>
+<h3 id="动态方法解析"><a href="#动态方法解析" class="headerlink" title="动态方法解析"></a>动态方法解析</h3><hr>
+<p>对象在收到无法解读的消息后，首先将调用其所属类的下列类方法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel</span><br></pre></td></tr></table></figure>
+<p>该方法的参数就是那个未知的选择子，其返回值为Boolean类型，表示这个类是否能新增一个实例方法用以处理此选择子。在继续往下执行转发机制之前，本类有机会新增一个处理此选择子的方法。加入尚未实现的方法不是实例方法而是类方法，那么运行期系统就会调用另外一个方法</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (BOOL)resolveClassMethod:(SEL)sel</span><br></pre></td></tr></table></figure>
+<p>使用这种办法的前提是：相关方法的实现代码已经写好，只等着运行的时候动态插在类里面就可以了。此方案常用来实现@dynamic属性。</p>
+<h3 id="备援接收者"><a href="#备援接收者" class="headerlink" title="备援接收者"></a>备援接收者</h3><hr>
+<p>当前接收者还有第二次机会能处理未知的选择子，在这一步中，运行期系统会问它：能不能把这条消息转给其他接收者来处理。与该步骤对应的处理方法如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector</span><br></pre></td></tr></table></figure>
+<p>方法参数代表未知的选择子，若当前接收者能找到被援对象，则将其返回，若找不到就返回nil。在一个对象内部，可能还有一系列其他对象，该对象可经由此方法将能够处理某选择子的相关内部对象返回，这样的话，在外界看来，好像是该对象亲自处理了这些消息似的。</p>
+<h3 id="完整的消息转发"><a href="#完整的消息转发" class="headerlink" title="完整的消息转发"></a>完整的消息转发</h3><hr>
+<p>如果转发算法已经来到这一波的话，那么唯一能做的就是启用完整的消息转发机制了。首先创建NSInvocation对象，把与尚未处理的那条消息有关的全部细节都封于其中。在触发NSInvocation对象时，“消息派发系统”将亲自出马，把消息指派给目标对象。</p>
+<p>此步骤会调用下列方法来转发消息：            </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-(void)forwardInvocation:(NSInvocation *)invocation</span><br></pre></td></tr></table></figure>
+<p>这个方法实现很简单：只需改变调用目标，使消息在新目标上得以调用即可。然而这样实现出来的方法与“备援接收者”方案实现的方法等效，所以很少有人采用这么简单的实现方式。        </p>
+<h3 id="以完整的例子演示动态方法解析"><a href="#以完整的例子演示动态方法解析" class="headerlink" title="以完整的例子演示动态方法解析"></a>以完整的例子演示动态方法解析</h3><hr>
+<p>下面编写一个类似于“字典”的对象。</p>
+<p>在接口文件中随便定义几个属性：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@interface GXZDictionary : NSObject</span><br><span class="line">@property (nonatomic,strong) NSString *name;</span><br><span class="line">@property (nonatomic,strong) NSNumber *number;</span><br><span class="line">@property (nonatomic,strong) NSDate *date;</span><br></pre></td></tr></table></figure>
+<p>本例的关键在于resolveInstanceMethod:方法的实现代码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@dynamic name,number,date;</span><br><span class="line">```		</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```sh</span><br><span class="line"> + (BOOL)resolveInstanceMethod:(SEL)selector</span><br><span class="line">&#123; </span><br><span class="line">    NSString *selectorString = NSStringFromSelector(selector);</span><br><span class="line">    <span class="keyword">if</span> ([selectorString hasPrefix:@<span class="string">"set"</span>]) &#123;</span><br><span class="line">        class_addMethod(self, selector, (IMP)autoDictionarySetter, <span class="string">"v@:@"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        class_addMethod(self, selector, (IMP)autoDictionaryGetter, <span class="string">"@@:"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就是Getter和Setter方法实现了：        </p>
+<p>getter:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">id autoDictionaryGetter(id self,SEL _cmd)</span><br><span class="line">&#123;</span><br><span class="line">    GXZDictionary *typedSelf = (GXZDictionary *)self;</span><br><span class="line">    NSMutableDictionary *backingStore = typedSelf.backingStore;</span><br><span class="line">    NSString *key = NSStringFromSelector(_cmd);</span><br><span class="line">    <span class="built_in">return</span> [backingStore objectForKey:key];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的backingStore是实现文件中定义的可变的字典，用于存储数据。</p>
+<p>下面是Setter方法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">void autoDictionarySetter(id self,SEL _cmd,id value)</span><br><span class="line">&#123;</span><br><span class="line">    GXZDictionary *typedSelf = (GXZDictionary *)self;</span><br><span class="line">    NSMutableDictionary *backingStore = typedSelf.backingStore;</span><br><span class="line">    NSString *selectorString = NSStringFromSelector(_cmd);</span><br><span class="line">    NSMutableString *key  = [selectorString mutableCopy];</span><br><span class="line">    [key deleteCharactersInRange:NSMakeRange(key.length - 1, 1)];</span><br><span class="line">    [key deleteCharactersInRange:NSMakeRange(0, 3)];</span><br><span class="line">    NSString *lowercaseFirstChar = [[key substringToIndex:1] lowercaseString];</span><br><span class="line">    [key replaceCharactersInRange:NSMakeRange(0, 1) withString:lowercaseFirstChar];</span><br><span class="line">    <span class="keyword">if</span> (value) &#123;</span><br><span class="line">        [backingStore <span class="built_in">set</span>Object:value <span class="keyword">for</span>Key:key];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        [backingStore removeObjectForKey:key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好了，主要工作已经完成，下面直接使用就可以了，调用很简单：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GXZDictionary *dict = [GXZDictionary new];</span><br><span class="line">dic.date = [NSDate dateWithTimeIntervalSince1970:475372800];</span><br><span class="line">NSLog(@<span class="string">"%@"</span>,dict.date);</span><br></pre></td></tr></table></figure>
+<p>好了，是不是很神奇，很简单，现在可以随便在接口文件中添加属性了。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<ul>
+<li>若对象无法响应某个选择子，则进入消息转发流程。</li>
+<li>通过运行期的动态方法解析功能，我们可以在需要用到某个方法时再将其加入类中。</li>
+<li>对象可以把其无法解读的某些选择子转交给其他对象处理。</li>
+<li>经过上述两步之后，如果还是没办法处理选择子，那就启动完整的消息转发机制。</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/iOS-runtime/">iOS,runtime</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/06/08/iOS-runtime-messageForwarding/" data-title="深入理解Object-C消息转发机制 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/06/20/threeCharacter/" title="三字经">
+  <strong>上一篇：</strong><br/>
+  <span>
+  三字经</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/05/26/byeyouth/"  title="再见-百度空间">
+ <strong>下一篇：</strong><br/> 
+ <span>再见-百度空间
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/08/iOS-runtime-messageForwarding/" data-title="深入理解Object-C消息转发机制" data-url="http://yoursite.com/2015/06/08/iOS-runtime-messageForwarding/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#动态方法解析"><span class="toc-number">1.</span> <span class="toc-text">动态方法解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#备援接收者"><span class="toc-number">2.</span> <span class="toc-text">备援接收者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完整的消息转发"><span class="toc-number">3.</span> <span class="toc-text">完整的消息转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以完整的例子演示动态方法解析"><span class="toc-number">4.</span> <span class="toc-text">以完整的例子演示动态方法解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Trivial/" title="Trivial">Trivial<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>16</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/资讯/" title="资讯">资讯<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/ACM/" style="font-size: 10px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 10px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/iOS-runtime/" style="font-size: 10px;">iOS,runtime</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 15px;">regex</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/情感/" style="font-size: 10px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5970082832&verifier=2b92bb86&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方......
+ <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/corderguo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/6653679" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:guoxianzhuang@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+		<br>
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+
+
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    $('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"guozai"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260049497'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1260049497' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

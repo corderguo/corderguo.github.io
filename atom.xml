@@ -1208,6 +1208,72 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
   </entry>
   
   <entry>
+    <title>深入理解Object-C消息转发机制</title>
+    <link href="http://yoursite.com/2015/06/08/iOS-runtime-messageForwarding/"/>
+    <id>http://yoursite.com/2015/06/08/iOS-runtime-messageForwarding/</id>
+    <published>2015-06-08T01:11:08.000Z</published>
+    <updated>2016-08-26T08:18:43.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>相信大家对Object-C的消息传递机制并不陌生（如果不熟悉，我后续会再写一篇关于消息传递机制的文章），今天我来讲解另外一个重要的问题，就是对象在收到无法解读的消息之后会发生什么情况。</p>
+<p>若想令类能理解某条消息，我们必须以程序码实现出对应的方法才行。但是，在编译器向类发送了其无法解读的消息并不会报错，因为在运行期可以继续向类中添加方法（动态添加），所以编译器在编译时还无法确知类中到底会不会有某个方法实现。当对象接收到无法解读的消息后，就会启动“消息转发”(message forwarding)机制，程序员可经由此过程告诉对象应该如何处理未知消息。</p>
+<p>你可能早就遇到过经由消息转发流程所处理的消息了，只是未加留意。如果在控制台中看到下面这种提示信息，那就说明你曾向某个对象发送过一条无法解读的消息，从而启动了消息转发机制，并将次消息转发给了NSObject得默认实现。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-[__NSCFNumber lowercaseString]:unrecognized selector </span><br><span class="line">sent to instance 0x87</span><br><span class="line"> *** Terminating app due to uncaught exception </span><br><span class="line"><span class="string">'NSInvalidArgumentException'</span>,reason:</span><br><span class="line"><span class="string">'-[__NSCFNumber lowercaseString]:unrecognized selector sent to instance ox87'</span></span><br></pre></td></tr></table></figure>
+<p>上面这段异常信息是由NSObject的“doesNotRecognizeSelector:”方法所抛出的，此异常表明：消息接收者的类型是__NSCFNumber,而该接受者无法理解名位lowercaseString的选择子。本例所列举的这种情况并不奇怪，因为NSNumber类里本来就没有名为lowercaseString的方法。在本例中，消息转发过程以应用程序崩溃而告终，不过，开发者在编写自己的类时，可于转发过程中设置挂钩，用以执行预定的逻辑，而不使应用程序崩溃。</p>
+<p>消息的转发分为两大阶段。第一阶段先征询接收者，所属的类，看其是否能动态添加方法，以处理当前这个“未知的选择子”（unknown selector）,这叫做“动态方法解析”（dynamic method resolution）。第二阶段涉及“完整的消息转发机制”。如果运行期系统已经把第一阶段执行完了，那么接收者自己就无法再以动态新增方法的手段来响应包含该选择子的消息了。此时，运行期系统会请求接受者以其他手段来处理与消息相关的方法调用。这又细分为两小步。首先，请接受者看看有没有其他对象处理这条消息。若有，则运行期系统会把消息转给那个对象，于是消息转发过程结束，一起如常。若没有“备援的接收者”，则启动完整的消息转发机制，运行期系统会把于消息有关的全部细节都封装到NSInvocation对象中，再给接收者最后一次机会，令其设法解决当前还未处理的这条消息。</p>
+<h3 id="动态方法解析"><a href="#动态方法解析" class="headerlink" title="动态方法解析"></a>动态方法解析</h3><hr>
+<p>对象在收到无法解读的消息后，首先将调用其所属类的下列类方法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel</span><br></pre></td></tr></table></figure>
+<p>该方法的参数就是那个未知的选择子，其返回值为Boolean类型，表示这个类是否能新增一个实例方法用以处理此选择子。在继续往下执行转发机制之前，本类有机会新增一个处理此选择子的方法。加入尚未实现的方法不是实例方法而是类方法，那么运行期系统就会调用另外一个方法</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ (BOOL)resolveClassMethod:(SEL)sel</span><br></pre></td></tr></table></figure>
+<p>使用这种办法的前提是：相关方法的实现代码已经写好，只等着运行的时候动态插在类里面就可以了。此方案常用来实现@dynamic属性。</p>
+<h3 id="备援接收者"><a href="#备援接收者" class="headerlink" title="备援接收者"></a>备援接收者</h3><hr>
+<p>当前接收者还有第二次机会能处理未知的选择子，在这一步中，运行期系统会问它：能不能把这条消息转给其他接收者来处理。与该步骤对应的处理方法如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector</span><br></pre></td></tr></table></figure>
+<p>方法参数代表未知的选择子，若当前接收者能找到被援对象，则将其返回，若找不到就返回nil。在一个对象内部，可能还有一系列其他对象，该对象可经由此方法将能够处理某选择子的相关内部对象返回，这样的话，在外界看来，好像是该对象亲自处理了这些消息似的。</p>
+<h3 id="完整的消息转发"><a href="#完整的消息转发" class="headerlink" title="完整的消息转发"></a>完整的消息转发</h3><hr>
+<p>如果转发算法已经来到这一波的话，那么唯一能做的就是启用完整的消息转发机制了。首先创建NSInvocation对象，把与尚未处理的那条消息有关的全部细节都封于其中。在触发NSInvocation对象时，“消息派发系统”将亲自出马，把消息指派给目标对象。</p>
+<p>此步骤会调用下列方法来转发消息：            </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-(void)forwardInvocation:(NSInvocation *)invocation</span><br></pre></td></tr></table></figure>
+<p>这个方法实现很简单：只需改变调用目标，使消息在新目标上得以调用即可。然而这样实现出来的方法与“备援接收者”方案实现的方法等效，所以很少有人采用这么简单的实现方式。        </p>
+<h3 id="以完整的例子演示动态方法解析"><a href="#以完整的例子演示动态方法解析" class="headerlink" title="以完整的例子演示动态方法解析"></a>以完整的例子演示动态方法解析</h3><hr>
+<p>下面编写一个类似于“字典”的对象。</p>
+<p>在接口文件中随便定义几个属性：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@interface GXZDictionary : NSObject</span><br><span class="line">@property (nonatomic,strong) NSString *name;</span><br><span class="line">@property (nonatomic,strong) NSNumber *number;</span><br><span class="line">@property (nonatomic,strong) NSDate *date;</span><br></pre></td></tr></table></figure>
+<p>本例的关键在于resolveInstanceMethod:方法的实现代码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@dynamic name,number,date;</span><br><span class="line">```		</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```sh</span><br><span class="line"> + (BOOL)resolveInstanceMethod:(SEL)selector</span><br><span class="line">&#123; </span><br><span class="line">    NSString *selectorString = NSStringFromSelector(selector);</span><br><span class="line">    <span class="keyword">if</span> ([selectorString hasPrefix:@<span class="string">"set"</span>]) &#123;</span><br><span class="line">        class_addMethod(self, selector, (IMP)autoDictionarySetter, <span class="string">"v@:@"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        class_addMethod(self, selector, (IMP)autoDictionaryGetter, <span class="string">"@@:"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> YES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就是Getter和Setter方法实现了：        </p>
+<p>getter:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">id autoDictionaryGetter(id self,SEL _cmd)</span><br><span class="line">&#123;</span><br><span class="line">    GXZDictionary *typedSelf = (GXZDictionary *)self;</span><br><span class="line">    NSMutableDictionary *backingStore = typedSelf.backingStore;</span><br><span class="line">    NSString *key = NSStringFromSelector(_cmd);</span><br><span class="line">    <span class="built_in">return</span> [backingStore objectForKey:key];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中的backingStore是实现文件中定义的可变的字典，用于存储数据。</p>
+<p>下面是Setter方法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">void autoDictionarySetter(id self,SEL _cmd,id value)</span><br><span class="line">&#123;</span><br><span class="line">    GXZDictionary *typedSelf = (GXZDictionary *)self;</span><br><span class="line">    NSMutableDictionary *backingStore = typedSelf.backingStore;</span><br><span class="line">    NSString *selectorString = NSStringFromSelector(_cmd);</span><br><span class="line">    NSMutableString *key  = [selectorString mutableCopy];</span><br><span class="line">    [key deleteCharactersInRange:NSMakeRange(key.length - 1, 1)];</span><br><span class="line">    [key deleteCharactersInRange:NSMakeRange(0, 3)];</span><br><span class="line">    NSString *lowercaseFirstChar = [[key substringToIndex:1] lowercaseString];</span><br><span class="line">    [key replaceCharactersInRange:NSMakeRange(0, 1) withString:lowercaseFirstChar];</span><br><span class="line">    <span class="keyword">if</span> (value) &#123;</span><br><span class="line">        [backingStore <span class="built_in">set</span>Object:value <span class="keyword">for</span>Key:key];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        [backingStore removeObjectForKey:key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好了，主要工作已经完成，下面直接使用就可以了，调用很简单：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GXZDictionary *dict = [GXZDictionary new];</span><br><span class="line">dic.date = [NSDate dateWithTimeIntervalSince1970:475372800];</span><br><span class="line">NSLog(@<span class="string">"%@"</span>,dict.date);</span><br></pre></td></tr></table></figure>
+<p>好了，是不是很神奇，很简单，现在可以随便在接口文件中添加属性了。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<ul>
+<li>若对象无法响应某个选择子，则进入消息转发流程。</li>
+<li>通过运行期的动态方法解析功能，我们可以在需要用到某个方法时再将其加入类中。</li>
+<li>对象可以把其无法解读的某些选择子转交给其他对象处理。</li>
+<li>经过上述两步之后，如果还是没办法处理选择子，那就启动完整的消息转发机制。</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;相信大家对Object-C的消息传递机制并不陌生（如果不熟悉，我后续会再写一篇关于消息传递机制的文章），今天我来讲解另外一个重要的问题，就是对象在收到无法解读的消息之后会发生什么情况。&lt;/p&gt;
+&lt;p&gt;若想令类能理解某条消息，我们必须以程序码实现出对应的方法才行。但是，在编译
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS,runtime" scheme="http://yoursite.com/tags/iOS-runtime/"/>
+    
+  </entry>
+  
+  <entry>
     <title>再见-百度空间</title>
     <link href="http://yoursite.com/2015/05/26/byeyouth/"/>
     <id>http://yoursite.com/2015/05/26/byeyouth/</id>
@@ -1500,56 +1566,6 @@ div{
     
     
       <category term="CSS" scheme="http://yoursite.com/tags/CSS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>\#ifdef DEBUG的介绍</title>
-    <link href="http://yoursite.com/2014/05/25/iOS-ifdefDEBUG/"/>
-    <id>http://yoursite.com/2014/05/25/iOS-ifdefDEBUG/</id>
-    <published>2014-05-25T01:26:05.000Z</published>
-    <updated>2016-08-04T03:00:50.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="ifdef-DEBUG宏定义理解"><a href="#ifdef-DEBUG宏定义理解" class="headerlink" title="#ifdef DEBUG宏定义理解"></a>#ifdef DEBUG宏定义理解</h3><hr>
-<p>在工程设置里有一些设置会对该工程自动产生一系列的宏，用以控制程序的编译和运行。如果你把代码夹在#ifdef DEBUG 和对应的 #endif 中间，那么这段代码只有在调试（DEBUG）下才会被编译。也就是说，如果你在RELEASE模式下，这些代码根本就不会存在于你的最终代码里头。        </p>
-<p> 你可以手动实现DEBUG的定义如:        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#define DEBUG</span></span><br></pre></td></tr></table></figure>
-<p>那么你的 #ifdef DEBUG 就会是真的。夹在中间的代码会进行编译，可以说，这些宏代码本身是面向编译器使用的，不要用来实现你的业务逻辑代码，这样会带来很不好的影响。这类宏定义的一个典型应用就是产生/屏蔽调试信息，看下面的例子        </p>
-<pre><code class="sh"><span class="comment">#ifdef DEBUG</span>
-NSLog(@<span class="string">"Debug 模式的代码..."</span>);
-<span class="comment">#else</span>
-// Release 模式的代码...
-<span class="comment">#endif</span>
-</code></pre>
-<p>上面的代码在DEBUG 模式下是会输出一句话的，你可以把这种应用放在你希望对程序的执行过程进行跟踪的代码里，为它们加上一些‘痕迹’，方便你进行判断。而在其他模式（RELEASE）下，则没有任何操作。这样你就能为自己的代码带来一种非常实用的效果，既能在DEBUG模式下为你提供判断的依据，又能在最终的RELEASE版中方便的抛弃掉它们,而不需要你手动地删除掉那些代码。            </p>
-<h3 id="Xcode中定义"><a href="#Xcode中定义" class="headerlink" title="Xcode中定义"></a>Xcode中定义</h3><hr>
-<p>其中的DEBUG是在Xcode默认的工程中已经定义好的，也可以根据自己的实际情况添加其他常量定义。        </p>
-<p>在Xcode中，DEBUG位置为Xcode工程-&gt;TAGGETS-&gt;Build Setting-&gt;preProcessing，如图：        </p>
-<p><img src="http://img.blog.csdn.net/20150730162339945" alt="图片"></p>
-<p>在程序预定义宏的位置定义了。        </p>
-<h3 id="debug和release之间的关系"><a href="#debug和release之间的关系" class="headerlink" title="debug和release之间的关系"></a>debug和release之间的关系</h3><hr>
-<p>在ios中，我们经常看到有debug和release两种模式。其实这两种模式分别表示发行版本和调试版本。        </p>
-<blockquote>
-<p>注意：Release是发行版本,比Debug版本有一些优化，文件比Debug文件小 Debug是调试版本，Debug和Release调用两个不同的底层库.<br>一、”Debug是调试版本，包括的程序信息更多”<br>二、只有DEBUG版的程序才能设置断点、单步执行、使用TRACE/ASSERT等调试输出语句。<br>三、REALEASE不包含任何调试信息，所以体积小、运行速度快。        </p>
-</blockquote>
-<h3 id="切换debug和release版本"><a href="#切换debug和release版本" class="headerlink" title="切换debug和release版本"></a>切换debug和release版本</h3><hr>
-<p>如果要测试在不同模式下代码的运行效果，可以选择Product-&gt;Scheme-&gt;Edit Scheme，修改Build Configuration即可，如下图所示：        </p>
-<p><img src="http://img.blog.csdn.net/20150730163048504" alt="图片"></p>
-<h3 id="号外"><a href="#号外" class="headerlink" title="号外"></a>号外</h3><hr>
-<p>推荐大家扫码关注下面二维码，iOS和Mac干货不断：<br><img src="http://img.blog.csdn.net/20160623095054012" alt="二维码"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;ifdef-DEBUG宏定义理解&quot;&gt;&lt;a href=&quot;#ifdef-DEBUG宏定义理解&quot; class=&quot;headerlink&quot; title=&quot;#ifdef DEBUG宏定义理解&quot;&gt;&lt;/a&gt;#ifdef DEBUG宏定义理解&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;在工程设置里有
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
   </entry>
   
