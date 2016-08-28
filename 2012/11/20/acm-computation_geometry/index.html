@@ -4,34 +4,32 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>iOS开发各种权限问题(相机、录音等) | 骚客</title>
+    <title>计算几何:多边形重心模板 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="起因
-在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        
-麦克风权限
-我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有">
+    <meta name="description" content="123456789 #include &amp;lt;iostream&amp;gt; #include &amp;lt;cmath&amp;gt; #include &amp;lt;iomanip&amp;gt;using namespace std;struct point&amp;#123;double x;double y;&amp;#125;;
+求多边形的重心算法
+说明:
+求多边形重心并不是简单的把求三角形的重心公式推广就行了我的算法是在平面上取一点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS开发各种权限问题(相机、录音等)">
-<meta property="og:url" content="http://yoursite.com/2016/08/02/iOS-authorization/index.html">
+<meta property="og:title" content="计算几何:多边形重心模板">
+<meta property="og:url" content="http://yoursite.com/2012/11/20/acm-computation_geometry/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="起因
-在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        
-麦克风权限
-我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有">
-<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-08-02T09:52:08.000Z">
+<meta property="og:description" content="123456789 #include &amp;lt;iostream&amp;gt; #include &amp;lt;cmath&amp;gt; #include &amp;lt;iomanip&amp;gt;using namespace std;struct point&amp;#123;double x;double y;&amp;#125;;
+求多边形的重心算法
+说明:
+求多边形重心并不是简单的把求三角形的重心公式推广就行了我的算法是在平面上取一点">
+<meta property="og:updated_time" content="2016-08-28T05:29:24.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS开发各种权限问题(相机、录音等)">
-<meta name="twitter:description" content="起因
-在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        
-麦克风权限
-我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta name="twitter:title" content="计算几何:多边形重心模板">
+<meta name="twitter:description" content="123456789 #include &amp;lt;iostream&amp;gt; #include &amp;lt;cmath&amp;gt; #include &amp;lt;iomanip&amp;gt;using namespace std;struct point&amp;#123;double x;double y;&amp;#125;;
+求多边形的重心算法
+说明:
+求多边形重心并不是简单的把求三角形的重心公式推广就行了我的算法是在平面上取一点">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -82,14 +80,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/08/02/iOS-authorization/" title="iOS开发各种权限问题(相机、录音等)" itemprop="url">iOS开发各种权限问题(相机、录音等)</a>
+      <a href="/2012/11/20/acm-computation_geometry/" title="计算几何:多边形重心模板" itemprop="url">计算几何:多边形重心模板</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2016-08-02T09:13:02.000Z" itemprop="datePublished"> 发表于 2016-08-02</time>
+    <time datetime="2012-11-20T14:12:59.000Z" itemprop="datePublished"> 发表于 2012-11-20</time>
     
   </p>
 </header>
@@ -98,28 +96,15 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#麦克风权限"><span class="toc-number">2.</span> <span class="toc-text">麦克风权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相机权限"><span class="toc-number">3.</span> <span class="toc-text">相机权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相册权限"><span class="toc-number">4.</span> <span class="toc-text">相册权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定位权限"><span class="toc-number">5.</span> <span class="toc-text">定位权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#号外"><span class="toc-number">7.</span> <span class="toc-text">号外</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><hr>
-<p>在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        </p>
-<h3 id="麦克风权限"><a href="#麦克风权限" class="headerlink" title="麦克风权限"></a>麦克风权限</h3><hr>
-<p>我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有响应的麦克风权限，则提示用户到手机的设置页面打开麦克风的权限，当用权限的时候直接录制就可以了。   </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)canRecord</span><br><span class="line">&#123;</span><br><span class="line">    __block BOOL bCanRecord = YES;</span><br><span class="line">    <span class="keyword">if</span> ([[[UIDevice currentDevice] systemVersion] compare:@<span class="string">"7.0"</span>] != NSOrderedAscending)</span><br><span class="line">    &#123;</span><br><span class="line">        AVAudioSession *audioSession = [AVAudioSession sharedInstance];</span><br><span class="line">        <span class="keyword">if</span> ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) &#123;</span><br><span class="line">            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) &#123;</span><br><span class="line">                bCanRecord = granted;</span><br><span class="line">            &#125;];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> bCanRecord;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="相机权限"><a href="#相机权限" class="headerlink" title="相机权限"></a>相机权限</h3><hr>
-<p>同样在开发IM的小视屏(和微信小视屏一样)功能的时候也遇到了同样的问题，在没有判断相机权限的前提下，我手动关掉了APP的相机访问权限，则我录制视频的时候的预览页黑乎乎一片，什么也没有，同样没办法录制，这给用户的体验非常差，所以当我们调用系统资源的时候，一定要先判断是否拥有相应的权限。以下是我的判断相机权限的代码：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)canRecordViedo</span><br><span class="line">&#123;</span><br><span class="line">    NSString *mediaType = AVMediaTypeVideo;</span><br><span class="line">    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];</span><br><span class="line">    <span class="keyword">if</span> (authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied)&#123;</span><br><span class="line">        <span class="built_in">return</span> NO;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">return</span> YES;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="相册权限"><a href="#相册权限" class="headerlink" title="相册权限"></a>相册权限</h3><hr>
-<p>其实该权限不去判断也可以，因为当你没有相册权限而去调用本机相册的时候，系统默认会pop出一个提示的页面，提示用户，没有相册权限，去手机的设置页面设置该权限。系统的这个页面还是可以的（不丑），所以我就用了系统的提示页面了。但是我还是在工具类中实现了相册权限的判断，方便以后归类。        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)albumAuthority</span><br><span class="line">&#123;</span><br><span class="line">    ALAuthorizationStatus author = [ALAssetsLibrary authorizationStatus];</span><br><span class="line">    <span class="keyword">if</span> (author == kCLAuthorizationStatusRestricted || author ==kCLAuthorizationStatusDenied)&#123;</span><br><span class="line">        <span class="built_in">return</span> NO;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">return</span> YES;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="定位权限"><a href="#定位权限" class="headerlink" title="定位权限"></a>定位权限</h3><hr>
-<p>当用户用到定位的功能的时候，也涉及到权限的问题，我顺便也实现了该功能权限的判断：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)locationAuthority</span><br><span class="line">&#123;</span><br><span class="line">    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];</span><br><span class="line">    <span class="keyword">if</span> (kCLAuthorizationStatusDenied == status || kCLAuthorizationStatusRestricted == status) &#123;</span><br><span class="line">        <span class="built_in">return</span> NO;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">return</span> YES;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
-<p>当我们调用系统资源的时候，一定要先判断是否拥有相应的权限，做到代码的严谨性。        </p>
-<h3 id="号外"><a href="#号外" class="headerlink" title="号外"></a>号外</h3><hr>
-<p>扫码关注下面二维码，干货不断：<br><img src="http://img.blog.csdn.net/20160623095054012" alt="二维码"></p>
+		<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">#include &lt;iostream&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;cmath&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;iomanip&gt;</span></span><br><span class="line">using namespace std;</span><br><span class="line">struct point</span><br><span class="line">&#123;</span><br><span class="line">double x;</span><br><span class="line">double y;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>求多边形的重心算法</p>
+<p>说明:</p>
+<p>求多边形重心并不是简单的把求三角形的重心公式推广就行了<br>我的算法是在平面上取一点(一般取原点, 这样可以减少很多计算, 而且使思路更清晰^_^)<br>这样就得到了N个三角形OP[i]P[i+1](其中点的顺序要为逆时针的),<br>分别求出这N个三角形的重心Ci和面积Ai(注意此处面积是又向面积, 就是用叉乘求面积时保留其正负号)<br>在求出A = A1+A2+…+AN(同样保留正负号的代数相加)<br>最终重心C = sigma(Ai+Ci)/A;</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">point gravity(point *p, int n)</span><br><span class="line">&#123;</span><br><span class="line">double area = 0;</span><br><span class="line">point center;</span><br><span class="line">center.x = 0;</span><br><span class="line">center.y = 0;</span><br><span class="line"><span class="keyword">for</span> (int i = 0; i &lt; n-1; i++)</span><br><span class="line">&#123;</span><br><span class="line">   area += (p[i].x*p[i+1].y - p[i+1].x*p[i].y)/2;</span><br><span class="line">   center.x += (p[i].x*p[i+1].y - p[i+1].x*p[i].y) * (p[i].x + p[i+1].x);</span><br><span class="line">   center.y += (p[i].x*p[i+1].y - p[i+1].x*p[i].y) * (p[i].y + p[i+1].y);</span><br><span class="line">&#125;</span><br><span class="line">area += (p[n-1].x*p[0].y - p[0].x*p[n-1].y)/2;</span><br><span class="line">center.x += (p[n-1].x*p[0].y - p[0].x*p[n-1].y) * (p[n-1].x + p[0].x);</span><br><span class="line">center.y += (p[n-1].x*p[0].y - p[0].x*p[n-1].y) * (p[n-1].y + p[0].y);</span><br><span class="line">center.x /= 6*area;</span><br><span class="line">center.y /= 6*area;</span><br><span class="line"><span class="built_in">return</span> center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -127,13 +112,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/技术/">技术</a>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a>
+  <span></span> <a href="/tags/ACM/">ACM</a>
   </div>
 
 </div>
@@ -142,7 +127,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2016/08/02/iOS-authorization/" data-title="iOS开发各种权限问题(相机、录音等) | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2012/11/20/acm-computation_geometry/" data-title="计算几何:多边形重心模板 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,18 +141,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/08/04/meidia-person/" title="沉痛悼念CSDN博主、年仅26岁的音视频专家雷霄骅">
+ <a href="/2013/04/15/trivial-image/" title="矢量图和位图的区别">
   <strong>上一篇：</strong><br/>
   <span>
-  沉痛悼念CSDN博主、年仅26岁的音视频专家雷霄骅</span>
+  矢量图和位图的区别</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/07/11/iOS-cocoaPods-bugs/"  title="CocoaPods更新遇redefinition问题及其它问题汇总">
+<a href="/2012/11/13/acm-HDU1869-floyd/"  title="HDU1869最短路径,弗洛伊德算法">
  <strong>下一篇：</strong><br/> 
- <span>CocoaPods更新遇redefinition问题及其它问题汇总
+ <span>HDU1869最短路径,弗洛伊德算法
 </span>
 </a>
 </div>
@@ -176,7 +161,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/08/02/iOS-authorization/" data-title="iOS开发各种权限问题(相机、录音等)" data-url="http://yoursite.com/2016/08/02/iOS-authorization/"></div>
+	<div class="ds-thread" data-thread-key="2012/11/20/acm-computation_geometry/" data-title="计算几何:多边形重心模板" data-url="http://yoursite.com/2012/11/20/acm-computation_geometry/"></div>
 </section>
 
 
@@ -186,7 +171,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#麦克风权限"><span class="toc-number">2.</span> <span class="toc-text">麦克风权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相机权限"><span class="toc-number">3.</span> <span class="toc-text">相机权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相册权限"><span class="toc-number">4.</span> <span class="toc-text">相册权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定位权限"><span class="toc-number">5.</span> <span class="toc-text">定位权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#号外"><span class="toc-number">7.</span> <span class="toc-text">号外</span></a></li></ol>
+ 
  
   </div>
 
