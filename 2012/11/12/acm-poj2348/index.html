@@ -4,50 +4,35 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>CSS学习 | 骚客</title>
+    <title>POJ2348 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="CSS样式
-css分为三大样式：行内样式，页内样式，外部样式        
-行内样式：    
-&amp;lt;div style=&quot;font-size: 30px; 
-color: red; background-color: green;&quot;&amp;gt;
-1111111111111
-&amp;lt;/div&amp;gt;
-
-页内样式：在当前页面的\标签中书写，使用\标签包起来        
-&amp;lt;style&amp;gt;">
+    <meta name="description" content="不知道怎么了，错的要死~~泥煤的蛋疼
+题意：
+给定两堆石子,二人轮流取子,要求只能从石子数目较大的那一堆取子,取子的数目只能是另一堆石子数目的倍数.最终使得某一堆数目为零的一方为对于(a,b)，如果a&amp;gt;b且a/b&amp;gt;=2，则(a,b)是关键状态谁面对这个状态则谁必胜，动手模拟一下就知道啦之后便是计算剩下的啦；
+上代码：
+1234567891011121314151617181920212">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CSS学习">
-<meta property="og:url" content="http://yoursite.com/2014/08/11/web-css/index.html">
+<meta property="og:title" content="POJ2348">
+<meta property="og:url" content="http://yoursite.com/2012/11/12/acm-poj2348/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="CSS样式
-css分为三大样式：行内样式，页内样式，外部样式        
-行内样式：    
-&amp;lt;div style=&quot;font-size: 30px; 
-color: red; background-color: green;&quot;&amp;gt;
-1111111111111
-&amp;lt;/div&amp;gt;
-
-页内样式：在当前页面的\标签中书写，使用\标签包起来        
-&amp;lt;style&amp;gt;">
-<meta property="og:updated_time" content="2016-08-04T09:03:30.000Z">
+<meta property="og:description" content="不知道怎么了，错的要死~~泥煤的蛋疼
+题意：
+给定两堆石子,二人轮流取子,要求只能从石子数目较大的那一堆取子,取子的数目只能是另一堆石子数目的倍数.最终使得某一堆数目为零的一方为对于(a,b)，如果a&amp;gt;b且a/b&amp;gt;=2，则(a,b)是关键状态谁面对这个状态则谁必胜，动手模拟一下就知道啦之后便是计算剩下的啦；
+上代码：
+1234567891011121314151617181920212">
+<meta property="og:updated_time" content="2016-08-28T05:15:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CSS学习">
-<meta name="twitter:description" content="CSS样式
-css分为三大样式：行内样式，页内样式，外部样式        
-行内样式：    
-&amp;lt;div style=&quot;font-size: 30px; 
-color: red; background-color: green;&quot;&amp;gt;
-1111111111111
-&amp;lt;/div&amp;gt;
-
-页内样式：在当前页面的\标签中书写，使用\标签包起来        
-&amp;lt;style&amp;gt;">
+<meta name="twitter:title" content="POJ2348">
+<meta name="twitter:description" content="不知道怎么了，错的要死~~泥煤的蛋疼
+题意：
+给定两堆石子,二人轮流取子,要求只能从石子数目较大的那一堆取子,取子的数目只能是另一堆石子数目的倍数.最终使得某一堆数目为零的一方为对于(a,b)，如果a&amp;gt;b且a/b&amp;gt;=2，则(a,b)是关键状态谁面对这个状态则谁必胜，动手模拟一下就知道啦之后便是计算剩下的啦；
+上代码：
+1234567891011121314151617181920212">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -98,14 +83,14 @@ color: red; background-color: green;&quot;&amp;gt;
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/08/11/web-css/" title="CSS学习" itemprop="url">CSS学习</a>
+      <a href="/2012/11/12/acm-poj2348/" title="POJ2348" itemprop="url">POJ2348</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2014-08-11T07:50:12.000Z" itemprop="datePublished"> 发表于 2014-08-11</time>
+    <time datetime="2012-11-12T10:31:59.000Z" itemprop="datePublished"> 发表于 2012-11-12</time>
     
   </p>
 </header>
@@ -114,124 +99,30 @@ color: red; background-color: green;&quot;&amp;gt;
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS样式"><span class="toc-number">1.</span> <span class="toc-text">CSS样式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS选择器类型"><span class="toc-number">2.</span> <span class="toc-text">CSS选择器类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#伪类"><span class="toc-number">3.</span> <span class="toc-text">伪类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签类型"><span class="toc-number">4.</span> <span class="toc-text">标签类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些CSS属性Tips"><span class="toc-number">5.</span> <span class="toc-text">一些CSS属性Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#盒子模型"><span class="toc-number">6.</span> <span class="toc-text">盒子模型</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h3 id="CSS样式"><a href="#CSS样式" class="headerlink" title="CSS样式"></a>CSS样式</h3><hr>
-<p>css分为三大样式：行内样式，页内样式，外部样式        </p>
-<p>行内样式：    </p>
-<pre><code class="sh">&lt;div style=<span class="string">"font-size: 30px; 
-color: red; background-color: green;"</span>&gt;
-1111111111111
-&lt;/div&gt;
-</code></pre>
-<p>页内样式：在当前页面的\<head\>标签中书写，使用\<style\>标签包起来        </style\></head\></p>
-<pre><code class="sh">&lt;style&gt;
-       div{
-          color: purple;
-          font-size: 40px;
-          background-color: yellowgreen;
-       }
-       &lt;/style&gt;
-</code></pre>
-<p>外部样式：新建一个.css文件，统一在里面进行样式布局,注意在\<head\>标签中把该文件引用进来        </head\></p>
-<pre><code class="sh">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"css/index.css"</span>&gt;
-</code></pre>
-<blockquote>
-<p>三种样式混合使用时，遵循’就近原则’和’叠加原则’</p>
-</blockquote>
-<h3 id="CSS选择器类型"><a href="#CSS选择器类型" class="headerlink" title="CSS选择器类型"></a>CSS选择器类型</h3><hr>
-<p>css选择器有很多种类型，主要常用的有：标签选择器、类选择器、id选择器、后代选择器。<br>格式如下：        </p>
-<pre><code class="sh"> /*标签选择器*/
-div{
-    color: red;
-}
-/*类选择器*/
-.one{
-    color: yellow;
-}
-/*id选择器*/
-<span class="comment">#main{</span>
-    font-size: 40px;
-}
-/*后代选择器*/
-<span class="comment">#test2 div{</span>
-    color: green;
-}
-</code></pre>
-<blockquote>
-<p>css选择器遵循:            </p>
-<ul>
-<li>在相同级别:1.叠加原则  2.就近原则            </li>
-<li>id选择器&gt; 类选择器 &gt; 标签选择器                </li>
-<li>范围越小,优先级别越高        </li>
-<li>如果属性后面添加了 !important 修饰，则优先级别最高    </li>
-</ul>
-</blockquote>
-<h3 id="伪类"><a href="#伪类" class="headerlink" title="伪类"></a>伪类</h3><hr>
-<p>伪类是对标签的一种响应，有很多种，常用的有：hover，focus等<br>hover:当鼠标移动到上面的时候响应：    </p>
-<pre><code class="sh"> div:hover{
-    background-color: green;
-    width: 100px;
-    height: 180px;
-}
-</code></pre>
-<p>focus：当控件聚焦时响应：        </p>
-<pre><code class="sh"> input:focus{
-    outline: none;
-    width: 500px;
-    height: 300px;
-    border: 10px double yellow;
-}
-</code></pre>
-<h3 id="标签类型"><a href="#标签类型" class="headerlink" title="标签类型"></a>标签类型</h3><hr>
-<p>快级标签：常见div等<br>行内标签：常见span等<br>行内-快级标签：常见input等        </p>
-<p>标签类型之间和相互转换，利用display属性，例如，把快级标签变成行内-快级标签：        </p>
-<pre><code class="sh">display: inline-block;
-</code></pre>
-<p>把行内标签变成快级标签：        </p>
-<pre><code class="sh">display: block;
-</code></pre>
-<h3 id="一些CSS属性Tips"><a href="#一些CSS属性Tips" class="headerlink" title="一些CSS属性Tips"></a>一些CSS属性Tips</h3><hr>
-<p>1.都是隐藏内容，display和visibility的区别：    </p>
-<ul>
-<li>display会连同尺寸一起隐藏        </li>
-<li>visibility不会隐藏尺寸    </li>
-</ul>
-<p>2.超出标签的内容处理:hidden, auto；<br>  overflow: hidden;        </p>
-<p>3.设置去除下划线,用于a标签：text-decoration: none;<br>4.设置缩进:text-indent: 3%;        </p>
-<p>5.设置列表的类型: none  square；list-style:square;<br>6.字体加粗： font-weight: bolder;        </p>
-<p>7.行高,用于垂直居中：line-height: 300px;        </p>
-<p>8.设置文字阴影, 水平方向  垂直方向 模糊 颜色：<br>  text-shadow: 5px 5px 10px green;        </p>
-<p>9.设置圆角：border-top-left-radius: 90px;    </p>
-<h3 id="盒子模型"><a href="#盒子模型" class="headerlink" title="盒子模型"></a>盒子模型</h3><hr>
-<p>这也没什么好说的，很重要，记住’上右下左’的顺序，IE浏览器的标准和国际的标准不一样。<br>这里针对居中方式做一下总结：        </p>
-<blockquote>
-<p>标签水平居中:        </p>
-<ul>
-<li>行内标签, 行内块级标签:  text-align: center;        </li>
-<li>块级标签:  margin: 0px auto;    </li>
-</ul>
-<p>标签垂直居中:        </p>
-<ul>
-<li>line-height: 400px;        </li>
-</ul>
-</blockquote>
-  
+		<p>不知道怎么了，错的要死~~泥煤的蛋疼</p>
+<p>题意：</p>
+<p><em>给定两堆石子,二人轮流取子,要求只能从石子数目较大的那一堆取子,<br>取子的数目只能是另一堆石子数目的倍数.最终使得某一堆数目为零的一方为<br>对于(a,b)，如果a&gt;b且a/b&gt;=2，则(a,b)是关键状态<br>谁面对这个状态则谁必胜，动手模拟一下就知道啦<br>之后便是计算剩下的啦；</em></p>
+<p>上代码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">#include&lt;cstdio&gt;</span></span><br><span class="line"> <span class="comment">#include&lt;cstring&gt;</span></span><br><span class="line"> <span class="comment">#include&lt;cstdlib&gt;</span></span><br><span class="line"> <span class="comment">#include&lt;iostream&gt;</span></span><br><span class="line">//<span class="comment">#define max(a,b) a&gt;b?a:b</span></span><br><span class="line">//<span class="comment">#define min(a,b) a&gt;b?b:a</span></span><br><span class="line">using namespace std;</span><br><span class="line">int main(void)&#123;</span><br><span class="line">int k,t,i,j;</span><br><span class="line">int  m,n;</span><br><span class="line">int  large,smale;</span><br><span class="line"><span class="keyword">while</span>(scanf(<span class="string">"%d%d"</span>,&amp;m,&amp;n)!=EOF,m||n)&#123;</span><br><span class="line">//<span class="keyword">if</span>(m==0||n==0)&#123;</span><br><span class="line">//cout&lt;&lt;<span class="string">"Stan wins"</span>&lt;&lt;endl;</span><br><span class="line">//<span class="built_in">continue</span>;</span><br><span class="line">//&#125;</span><br><span class="line">large=max(m,n);</span><br><span class="line">smale=min(m,n);</span><br><span class="line">bool t;</span><br><span class="line">t=<span class="literal">true</span>;</span><br><span class="line">int digit=0;</span><br><span class="line"><span class="keyword">while</span>(smale!=0)&#123;</span><br><span class="line">    <span class="keyword">if</span>(large/smale&gt;=2)//刚开始把这个<span class="keyword">if</span>语句写到外面啦结果一直wa</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt;<span class="string">"Stan wins"</span>&lt;&lt;endl;</span><br><span class="line">    digit=1;</span><br><span class="line">    <span class="built_in">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">t=!t;</span><br><span class="line">k=large%smale;//这里刚开始写成了减号结果一直超时，殊不知到1是就不用再减啦。。。</span><br><span class="line">large=smale;</span><br><span class="line">smale=k;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(digit==0)&#123;</span><br><span class="line"><span class="keyword">if</span>(t!=<span class="literal">true</span>)</span><br><span class="line">cout&lt;&lt;<span class="string">"Stan wins"</span>&lt;&lt;endl;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">cout&lt;&lt;<span class="string">"Ollie wins"</span>&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面和网上的一段一对比：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">#include &lt;iostream&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;algorithm&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;math.h&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;stdlib.h&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;string&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;vector&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;set&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;map&gt;</span></span><br><span class="line"> <span class="comment">#include &lt;functional&gt;</span></span><br><span class="line">using namespace std;</span><br><span class="line">bool isStan;</span><br><span class="line">void <span class="function"><span class="title">print</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (isStan) <span class="built_in">printf</span>(<span class="string">"Stan wins\n"</span>);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"Ollie wins\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line">int <span class="function"><span class="title">main</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">    int a,b,t;</span><br><span class="line">    <span class="keyword">while</span> (scanf(<span class="string">"%d%d"</span>,&amp;a,&amp;b),a!=0 || b!=0)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (a&lt;b)</span><br><span class="line">        &#123; t=b; b=a; a=t;&#125;</span><br><span class="line">        isStan=1;</span><br><span class="line">        <span class="keyword">while</span> (1)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (a/b&gt;=2)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">print</span>();</span><br><span class="line">                <span class="built_in">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            t=a%b;</span><br><span class="line">            a=b;</span><br><span class="line">            b=t;</span><br><span class="line">            <span class="keyword">if</span> (b==0)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">print</span>();</span><br><span class="line">                <span class="built_in">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            isStan=1-isStan;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Web/">Web</a>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/CSS/">CSS</a>
+  <span></span> <a href="/tags/ACM/">ACM</a>
   </div>
 
 </div>
@@ -240,7 +131,7 @@ div{
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2014/08/11/web-css/" data-title="CSS学习 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2012/11/12/acm-poj2348/" data-title="POJ2348 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -254,18 +145,18 @@ div{
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/10/24/MIME/" title="MIME TYPE 详解">
+ <a href="/2012/11/13/acm-HDU1869-floyd/" title="HDU1869最短路径,弗洛伊德算法">
   <strong>上一篇：</strong><br/>
   <span>
-  MIME TYPE 详解</span>
+  HDU1869最短路径,弗洛伊德算法</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/05/25/iOS-ifdefDEBUG/"  title="\#ifdef DEBUG的介绍">
+<a href="/2012/03/29/pku2528/"  title="pku2528">
  <strong>下一篇：</strong><br/> 
- <span>\#ifdef DEBUG的介绍
+ <span>pku2528
 </span>
 </a>
 </div>
@@ -274,7 +165,7 @@ div{
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/08/11/web-css/" data-title="CSS学习" data-url="http://yoursite.com/2014/08/11/web-css/"></div>
+	<div class="ds-thread" data-thread-key="2012/11/12/acm-poj2348/" data-title="POJ2348" data-url="http://yoursite.com/2012/11/12/acm-poj2348/"></div>
 </section>
 
 
@@ -284,7 +175,7 @@ div{
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS样式"><span class="toc-number">1.</span> <span class="toc-text">CSS样式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS选择器类型"><span class="toc-number">2.</span> <span class="toc-text">CSS选择器类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#伪类"><span class="toc-number">3.</span> <span class="toc-text">伪类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签类型"><span class="toc-number">4.</span> <span class="toc-text">标签类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些CSS属性Tips"><span class="toc-number">5.</span> <span class="toc-text">一些CSS属性Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#盒子模型"><span class="toc-number">6.</span> <span class="toc-text">盒子模型</span></a></li></ol>
+ 
  
   </div>
 
