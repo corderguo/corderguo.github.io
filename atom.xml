@@ -1322,6 +1322,32 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
   </entry>
   
   <entry>
+    <title>不忘初心，方得始终</title>
+    <link href="http://yoursite.com/2015/03/05/life-novel/"/>
+    <id>http://yoursite.com/2015/03/05/life-novel/</id>
+    <published>2015-03-05T03:14:21.000Z</published>
+    <updated>2016-08-28T04:39:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>心中挂念着好多人好多事，是这个多愁善感的年纪，还是这个年纪多愁善感的人？！内心还是不够强大，不过是自寻烦恼罢了！不去想，不去听，不去问，自然而然就不会念了。</p>
+<p>《仙古道》，我闲暇时候构思的一本小说，整体框架还没想好，所以迟迟不能下笔。其实也是自己好久没有去想了，在这个浮夸的社会，人也渐渐变得浮躁了（虽然之前就本浮躁），很难再静下心读书，写书就更成了奢望。写书一直是自己的向往的事，能写下来一个完整的故事，一本成型的书，便一直是自己的梦想！不求好，自己看着舒服享受就行。        </p>
+<p>《仙古道》小说地址：<a href="http://chuangshi.qq.com/bk/xx/544055.html" target="_blank" rel="external">http://chuangshi.qq.com/bk/xx/544055.html</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;心中挂念着好多人好多事，是这个多愁善感的年纪，还是这个年纪多愁善感的人？！内心还是不够强大，不过是自寻烦恼罢了！不去想，不去听，不去问，自然而然就不会念了。&lt;/p&gt;
+&lt;p&gt;《仙古道》，我闲暇时候构思的一本小说，整体框架还没想好，所以迟迟不能下笔。其实也是自己好久没有去想了，
+    
+    </summary>
+    
+      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+      <category term="情感" scheme="http://yoursite.com/tags/%E6%83%85%E6%84%9F/"/>
+    
+  </entry>
+  
+  <entry>
     <title>iOS开发之断言详解</title>
     <link href="http://yoursite.com/2014/11/12/iOS-NSAssert/"/>
     <id>http://yoursite.com/2014/11/12/iOS-NSAssert/</id>
@@ -1443,130 +1469,6 @@ self.block = ^(int num){
     
     
       <category term="网络" scheme="http://yoursite.com/tags/%E7%BD%91%E7%BB%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CSS学习</title>
-    <link href="http://yoursite.com/2014/08/11/web-css/"/>
-    <id>http://yoursite.com/2014/08/11/web-css/</id>
-    <published>2014-08-11T07:50:12.000Z</published>
-    <updated>2016-08-04T09:03:30.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="CSS样式"><a href="#CSS样式" class="headerlink" title="CSS样式"></a>CSS样式</h3><hr>
-<p>css分为三大样式：行内样式，页内样式，外部样式        </p>
-<p>行内样式：    </p>
-<pre><code class="sh">&lt;div style=<span class="string">"font-size: 30px; 
-color: red; background-color: green;"</span>&gt;
-1111111111111
-&lt;/div&gt;
-</code></pre>
-<p>页内样式：在当前页面的\<head\>标签中书写，使用\<style\>标签包起来        </style\></head\></p>
-<pre><code class="sh">&lt;style&gt;
-       div{
-          color: purple;
-          font-size: 40px;
-          background-color: yellowgreen;
-       }
-       &lt;/style&gt;
-</code></pre>
-<p>外部样式：新建一个.css文件，统一在里面进行样式布局,注意在\<head\>标签中把该文件引用进来        </head\></p>
-<pre><code class="sh">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"css/index.css"</span>&gt;
-</code></pre>
-<blockquote>
-<p>三种样式混合使用时，遵循’就近原则’和’叠加原则’</p>
-</blockquote>
-<h3 id="CSS选择器类型"><a href="#CSS选择器类型" class="headerlink" title="CSS选择器类型"></a>CSS选择器类型</h3><hr>
-<p>css选择器有很多种类型，主要常用的有：标签选择器、类选择器、id选择器、后代选择器。<br>格式如下：        </p>
-<pre><code class="sh"> /*标签选择器*/
-div{
-    color: red;
-}
-/*类选择器*/
-.one{
-    color: yellow;
-}
-/*id选择器*/
-<span class="comment">#main{</span>
-    font-size: 40px;
-}
-/*后代选择器*/
-<span class="comment">#test2 div{</span>
-    color: green;
-}
-</code></pre>
-<blockquote>
-<p>css选择器遵循:            </p>
-<ul>
-<li>在相同级别:1.叠加原则  2.就近原则            </li>
-<li>id选择器&gt; 类选择器 &gt; 标签选择器                </li>
-<li>范围越小,优先级别越高        </li>
-<li>如果属性后面添加了 !important 修饰，则优先级别最高    </li>
-</ul>
-</blockquote>
-<h3 id="伪类"><a href="#伪类" class="headerlink" title="伪类"></a>伪类</h3><hr>
-<p>伪类是对标签的一种响应，有很多种，常用的有：hover，focus等<br>hover:当鼠标移动到上面的时候响应：    </p>
-<pre><code class="sh"> div:hover{
-    background-color: green;
-    width: 100px;
-    height: 180px;
-}
-</code></pre>
-<p>focus：当控件聚焦时响应：        </p>
-<pre><code class="sh"> input:focus{
-    outline: none;
-    width: 500px;
-    height: 300px;
-    border: 10px double yellow;
-}
-</code></pre>
-<h3 id="标签类型"><a href="#标签类型" class="headerlink" title="标签类型"></a>标签类型</h3><hr>
-<p>快级标签：常见div等<br>行内标签：常见span等<br>行内-快级标签：常见input等        </p>
-<p>标签类型之间和相互转换，利用display属性，例如，把快级标签变成行内-快级标签：        </p>
-<pre><code class="sh">display: inline-block;
-</code></pre>
-<p>把行内标签变成快级标签：        </p>
-<pre><code class="sh">display: block;
-</code></pre>
-<h3 id="一些CSS属性Tips"><a href="#一些CSS属性Tips" class="headerlink" title="一些CSS属性Tips"></a>一些CSS属性Tips</h3><hr>
-<p>1.都是隐藏内容，display和visibility的区别：    </p>
-<ul>
-<li>display会连同尺寸一起隐藏        </li>
-<li>visibility不会隐藏尺寸    </li>
-</ul>
-<p>2.超出标签的内容处理:hidden, auto；<br>  overflow: hidden;        </p>
-<p>3.设置去除下划线,用于a标签：text-decoration: none;<br>4.设置缩进:text-indent: 3%;        </p>
-<p>5.设置列表的类型: none  square；list-style:square;<br>6.字体加粗： font-weight: bolder;        </p>
-<p>7.行高,用于垂直居中：line-height: 300px;        </p>
-<p>8.设置文字阴影, 水平方向  垂直方向 模糊 颜色：<br>  text-shadow: 5px 5px 10px green;        </p>
-<p>9.设置圆角：border-top-left-radius: 90px;    </p>
-<h3 id="盒子模型"><a href="#盒子模型" class="headerlink" title="盒子模型"></a>盒子模型</h3><hr>
-<p>这也没什么好说的，很重要，记住’上右下左’的顺序，IE浏览器的标准和国际的标准不一样。<br>这里针对居中方式做一下总结：        </p>
-<blockquote>
-<p>标签水平居中:        </p>
-<ul>
-<li>行内标签, 行内块级标签:  text-align: center;        </li>
-<li>块级标签:  margin: 0px auto;    </li>
-</ul>
-<p>标签垂直居中:        </p>
-<ul>
-<li>line-height: 400px;        </li>
-</ul>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;CSS样式&quot;&gt;&lt;a href=&quot;#CSS样式&quot; class=&quot;headerlink&quot; title=&quot;CSS样式&quot;&gt;&lt;/a&gt;CSS样式&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;css分为三大样式：行内样式，页内样式，外部样式        &lt;/p&gt;
-&lt;p&gt;行内样式：    &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Web" scheme="http://yoursite.com/categories/Web/"/>
-    
-    
-      <category term="CSS" scheme="http://yoursite.com/tags/CSS/"/>
     
   </entry>
   
