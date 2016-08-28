@@ -4,34 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>iOS开发各种权限问题(相机、录音等) | 骚客</title>
+    <title>PKU3468:成段更新,区间求和 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="起因
-在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        
-麦克风权限
-我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有">
+    <meta name="description" content="小心越界
+每次在修改节点的sum值时，如果每次都下放到叶子节点，那么复杂度会变成nlogn，还不如直接暴力（树状数组还sqrt（n）呢，虽然我不会），而且对于某些修改一大段值的问题，用线段树动态维护的时候，如果找到了要修改的大区间，可以直接在这个大区间上标记，然后改掉sum值，等下次修改或者查询时再修改或者查询它的标记值，这样就可以做到每次查询或修改都为logn，大大节省了时间。
+12345678">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS开发各种权限问题(相机、录音等)">
-<meta property="og:url" content="http://yoursite.com/2016/08/02/iOS-authorization/index.html">
+<meta property="og:title" content="PKU3468:成段更新,区间求和">
+<meta property="og:url" content="http://yoursite.com/2012/03/27/acm-pku3468/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="起因
-在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        
-麦克风权限
-我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有">
-<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-08-02T09:52:08.000Z">
+<meta property="og:description" content="小心越界
+每次在修改节点的sum值时，如果每次都下放到叶子节点，那么复杂度会变成nlogn，还不如直接暴力（树状数组还sqrt（n）呢，虽然我不会），而且对于某些修改一大段值的问题，用线段树动态维护的时候，如果找到了要修改的大区间，可以直接在这个大区间上标记，然后改掉sum值，等下次修改或者查询时再修改或者查询它的标记值，这样就可以做到每次查询或修改都为logn，大大节省了时间。
+12345678">
+<meta property="og:updated_time" content="2016-08-28T05:36:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS开发各种权限问题(相机、录音等)">
-<meta name="twitter:description" content="起因
-在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        
-麦克风权限
-我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta name="twitter:title" content="PKU3468:成段更新,区间求和">
+<meta name="twitter:description" content="小心越界
+每次在修改节点的sum值时，如果每次都下放到叶子节点，那么复杂度会变成nlogn，还不如直接暴力（树状数组还sqrt（n）呢，虽然我不会），而且对于某些修改一大段值的问题，用线段树动态维护的时候，如果找到了要修改的大区间，可以直接在这个大区间上标记，然后改掉sum值，等下次修改或者查询时再修改或者查询它的标记值，这样就可以做到每次查询或修改都为logn，大大节省了时间。
+12345678">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -82,14 +77,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/08/02/iOS-authorization/" title="iOS开发各种权限问题(相机、录音等)" itemprop="url">iOS开发各种权限问题(相机、录音等)</a>
+      <a href="/2012/03/27/acm-pku3468/" title="PKU3468:成段更新,区间求和" itemprop="url">PKU3468:成段更新,区间求和</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2016-08-02T09:13:02.000Z" itemprop="datePublished"> 发表于 2016-08-02</time>
+    <time datetime="2012-03-27T11:12:59.000Z" itemprop="datePublished"> 发表于 2012-03-27</time>
     
   </p>
 </header>
@@ -98,42 +93,26 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#麦克风权限"><span class="toc-number">2.</span> <span class="toc-text">麦克风权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相机权限"><span class="toc-number">3.</span> <span class="toc-text">相机权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相册权限"><span class="toc-number">4.</span> <span class="toc-text">相册权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定位权限"><span class="toc-number">5.</span> <span class="toc-text">定位权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#号外"><span class="toc-number">7.</span> <span class="toc-text">号外</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><hr>
-<p>在iOS开发中我们经常会调用系统相机和麦克风，但是这些权限都是用户可以控制的，当APP没有权限调用这些手机资源，但是我们没有判断，直接去调用了，这样会出现问题。        </p>
-<h3 id="麦克风权限"><a href="#麦克风权限" class="headerlink" title="麦克风权限"></a>麦克风权限</h3><hr>
-<p>我在项目中开发IM的录音功能的时候，没有判断当前APP是否拥有响应的权限，导致录制失败（录制出来是0kb，长度也是0毫秒）。为此我在工具类中，添加了麦克风权限的判断方法，当用户去录音的时候，如果检测到没有响应的麦克风权限，则提示用户到手机的设置页面打开麦克风的权限，当用权限的时候直接录制就可以了。   </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)canRecord</span><br><span class="line">&#123;</span><br><span class="line">    __block BOOL bCanRecord = YES;</span><br><span class="line">    <span class="keyword">if</span> ([[[UIDevice currentDevice] systemVersion] compare:@<span class="string">"7.0"</span>] != NSOrderedAscending)</span><br><span class="line">    &#123;</span><br><span class="line">        AVAudioSession *audioSession = [AVAudioSession sharedInstance];</span><br><span class="line">        <span class="keyword">if</span> ([audioSession respondsToSelector:@selector(requestRecordPermission:)]) &#123;</span><br><span class="line">            [audioSession performSelector:@selector(requestRecordPermission:) withObject:^(BOOL granted) &#123;</span><br><span class="line">                bCanRecord = granted;</span><br><span class="line">            &#125;];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">return</span> bCanRecord;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="相机权限"><a href="#相机权限" class="headerlink" title="相机权限"></a>相机权限</h3><hr>
-<p>同样在开发IM的小视屏(和微信小视屏一样)功能的时候也遇到了同样的问题，在没有判断相机权限的前提下，我手动关掉了APP的相机访问权限，则我录制视频的时候的预览页黑乎乎一片，什么也没有，同样没办法录制，这给用户的体验非常差，所以当我们调用系统资源的时候，一定要先判断是否拥有相应的权限。以下是我的判断相机权限的代码：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)canRecordViedo</span><br><span class="line">&#123;</span><br><span class="line">    NSString *mediaType = AVMediaTypeVideo;</span><br><span class="line">    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];</span><br><span class="line">    <span class="keyword">if</span> (authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied)&#123;</span><br><span class="line">        <span class="built_in">return</span> NO;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">return</span> YES;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="相册权限"><a href="#相册权限" class="headerlink" title="相册权限"></a>相册权限</h3><hr>
-<p>其实该权限不去判断也可以，因为当你没有相册权限而去调用本机相册的时候，系统默认会pop出一个提示的页面，提示用户，没有相册权限，去手机的设置页面设置该权限。系统的这个页面还是可以的（不丑），所以我就用了系统的提示页面了。但是我还是在工具类中实现了相册权限的判断，方便以后归类。        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)albumAuthority</span><br><span class="line">&#123;</span><br><span class="line">    ALAuthorizationStatus author = [ALAssetsLibrary authorizationStatus];</span><br><span class="line">    <span class="keyword">if</span> (author == kCLAuthorizationStatusRestricted || author ==kCLAuthorizationStatusDenied)&#123;</span><br><span class="line">        <span class="built_in">return</span> NO;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">return</span> YES;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="定位权限"><a href="#定位权限" class="headerlink" title="定位权限"></a>定位权限</h3><hr>
-<p>当用户用到定位的功能的时候，也涉及到权限的问题，我顺便也实现了该功能权限的判断：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (BOOL)locationAuthority</span><br><span class="line">&#123;</span><br><span class="line">    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];</span><br><span class="line">    <span class="keyword">if</span> (kCLAuthorizationStatusDenied == status || kCLAuthorizationStatusRestricted == status) &#123;</span><br><span class="line">        <span class="built_in">return</span> NO;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">return</span> YES;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
-<p>当我们调用系统资源的时候，一定要先判断是否拥有相应的权限，做到代码的严谨性。        </p>
-<h3 id="号外"><a href="#号外" class="headerlink" title="号外"></a>号外</h3><hr>
-<p>扫码关注下面二维码，干货不断：<br><img src="http://img.blog.csdn.net/20160623095054012" alt="二维码"></p>
-  
+		<p>小心越界</p>
+<p>每次在修改节点的sum值时，如果每次都下放到叶子节点，那么复杂度会变成nlogn，还不如直接暴力（树状数组还sqrt（n）呢，虽然我不会），而且对于某些修改一大段值的问题，用线段树动态维护的时候，如果找到了要修改的大区间，可以直接在这个大区间上标记，然后改掉sum值，等下次修改或者查询时再修改或者查询它的标记值，这样就可以做到每次查询或修改都为logn，大大节省了时间。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">#include&lt;cstdlib&gt;</span></span><br><span class="line"> <span class="comment">#include&lt;iostream&gt;</span></span><br><span class="line"> <span class="comment">#include&lt;cstring&gt;</span></span><br><span class="line"> <span class="comment">#include&lt;cstdio&gt;</span></span><br><span class="line"> <span class="comment">#define ll(x) ((x)&lt;&lt;1)</span></span><br><span class="line"> <span class="comment">#define rr(x) ((x)&lt;&lt;1|1)</span></span><br><span class="line">using namespace std;</span><br><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">int left;</span><br><span class="line">int right;</span><br><span class="line">__int64 value;//这里注意</span><br><span class="line">int add;//标记，提高时间效率</span><br><span class="line">&#125;tree[300000];</span><br><span class="line">int num[100010];</span><br><span class="line">__int64 build(int l,int r,int idx)</span><br><span class="line">&#123;</span><br><span class="line">int mid;</span><br><span class="line">tree[idx].left=l;</span><br><span class="line">tree[idx].right=r;</span><br><span class="line">tree[idx].add=0;</span><br><span class="line"><span class="keyword">if</span>(l==r)</span><br><span class="line">&#123;</span><br><span class="line"><span class="built_in">return</span> tree[idx].value=num[l];//叶子节点值</span><br><span class="line">&#125;</span><br><span class="line">mid=(l+r)/2;</span><br><span class="line"><span class="built_in">return</span> tree[idx].value=build(l,mid,ll(idx))+build(mid+1,r,rr(idx));//又忘了加1，囧事</span><br><span class="line">&#125;</span><br><span class="line">__int64 query(int l,int r,int idx)</span><br><span class="line">&#123;</span><br><span class="line">int mid;</span><br><span class="line"><span class="keyword">if</span>(tree[idx].left==l&amp;&amp;tree[idx].right==r)</span><br><span class="line"><span class="built_in">return</span> tree[idx].value;//</span><br><span class="line"><span class="keyword">if</span>(tree[idx].add)//接着更新，这里易错</span><br><span class="line">&#123;</span><br><span class="line">tree[ll(idx)].value+=(__int64)(tree[ll(idx)].right-tree[ll(idx)].left+1)*tree[idx].add;</span><br><span class="line">tree[rr(idx)].value+=(__int64)(tree[rr(idx)].right-tree[rr(idx)].left+1)*tree[idx].add;</span><br><span class="line">tree[ll(idx)].add+=tree[idx].add;</span><br><span class="line">tree[rr(idx)].add+=tree[idx].add;</span><br><span class="line">tree[idx].add=0;</span><br><span class="line">&#125;</span><br><span class="line">mid=(tree[idx].left+tree[idx].right)/2;</span><br><span class="line"><span class="keyword">if</span>(r&lt;=mid)</span><br><span class="line"><span class="built_in">return</span> query(l,r,ll(idx));</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(l&gt;mid)</span><br><span class="line"><span class="built_in">return</span> query(l,r,rr(idx));</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"><span class="built_in">return</span> query(l,mid,ll(idx))+query(mid+1,r,rr(idx));//一直忘记+1；</span><br><span class="line">&#125;</span><br><span class="line">void update(int l,int r,int a,int idx)</span><br><span class="line">&#123;</span><br><span class="line">int mid;</span><br><span class="line"><span class="keyword">if</span>(tree[idx].left&gt;=l&amp;&amp;tree[idx].right&lt;=r)</span><br><span class="line">&#123;</span><br><span class="line">tree[idx].value+=(__int64)(tree[idx].right-tree[idx].left+1)*a;</span><br><span class="line">tree[idx].add+=a;</span><br><span class="line"><span class="built_in">return</span> ;//以为这里没有更新孩子节点，所以在query中还有更新的环节</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(tree[idx].add)//接着更新，这里易错</span><br><span class="line">&#123;</span><br><span class="line">tree[ll(idx)].value+=(__int64)(tree[ll(idx)].right-tree[ll(idx)].left+1)*tree[idx].add;</span><br><span class="line">tree[rr(idx)].value+=(__int64)(tree[rr(idx)].right-tree[rr(idx)].left+1)*tree[idx].add;</span><br><span class="line">tree[ll(idx)].add+=tree[idx].add;</span><br><span class="line">tree[rr(idx)].add+=tree[idx].add;</span><br><span class="line">tree[idx].add=0;</span><br><span class="line">&#125;</span><br><span class="line">mid=(tree[idx].left+tree[idx].right)/2;</span><br><span class="line"><span class="keyword">if</span>(l&lt;=mid)</span><br><span class="line">update(l,r,a,ll(idx));//只要有一个就得更新</span><br><span class="line"><span class="keyword">if</span>(r&gt;mid)</span><br><span class="line">update(l,r,a,rr(idx));</span><br><span class="line">tree[idx].value=tree[ll(idx)].value+tree[rr(idx)].value;</span><br><span class="line">&#125;</span><br><span class="line">int <span class="function"><span class="title">main</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">int i,m,n,l,r;</span><br><span class="line">int a;</span><br><span class="line">char ch[10];</span><br><span class="line"><span class="keyword">while</span>(scanf(<span class="string">"%d%d"</span>,&amp;n,&amp;m)!=EOF)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">for</span>(i=1;i&lt;=n;i++)//这里下标从1开始</span><br><span class="line">scanf(<span class="string">"%d"</span>,&amp;num[i]);</span><br><span class="line">build(1,n,1);</span><br><span class="line"><span class="keyword">while</span>(m--)</span><br><span class="line">&#123;</span><br><span class="line">getchar();</span><br><span class="line">cin&gt;&gt;ch;</span><br><span class="line">//scanf(<span class="string">"%s"</span>,ch);</span><br><span class="line"><span class="keyword">if</span>(ch[0]==<span class="string">'Q'</span>)</span><br><span class="line">&#123;</span><br><span class="line">scanf(<span class="string">"%d%d"</span>,&amp;l,&amp;r);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%I64d\n"</span>,query(l,r,1));//防止越界</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">scanf(<span class="string">"%d%d%d"</span>,&amp;l,&amp;r,&amp;a);</span><br><span class="line">update(l,r,a,1);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/技术/">技术</a>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a>
+  <span></span> <a href="/tags/ACM/">ACM</a>
   </div>
 
 </div>
@@ -142,7 +121,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2016/08/02/iOS-authorization/" data-title="iOS开发各种权限问题(相机、录音等) | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2012/03/27/acm-pku3468/" data-title="PKU3468:成段更新,区间求和 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,27 +135,19 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/08/04/meidia-person/" title="沉痛悼念CSDN博主、年仅26岁的音视频专家雷霄骅">
+ <a href="/2012/03/29/pku2528/" title="pku2528">
   <strong>上一篇：</strong><br/>
   <span>
-  沉痛悼念CSDN博主、年仅26岁的音视频专家雷霄骅</span>
+  pku2528</span>
 </a>
 </div>
 
-
-<div class="next">
-<a href="/2016/07/11/iOS-cocoaPods-bugs/"  title="CocoaPods更新遇redefinition问题及其它问题汇总">
- <strong>下一篇：</strong><br/> 
- <span>CocoaPods更新遇redefinition问题及其它问题汇总
-</span>
-</a>
-</div>
 
 </nav>
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/08/02/iOS-authorization/" data-title="iOS开发各种权限问题(相机、录音等)" data-url="http://yoursite.com/2016/08/02/iOS-authorization/"></div>
+	<div class="ds-thread" data-thread-key="2012/03/27/acm-pku3468/" data-title="PKU3468:成段更新,区间求和" data-url="http://yoursite.com/2012/03/27/acm-pku3468/"></div>
 </section>
 
 
@@ -186,7 +157,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#麦克风权限"><span class="toc-number">2.</span> <span class="toc-text">麦克风权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相机权限"><span class="toc-number">3.</span> <span class="toc-text">相机权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#相册权限"><span class="toc-number">4.</span> <span class="toc-text">相册权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定位权限"><span class="toc-number">5.</span> <span class="toc-text">定位权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#号外"><span class="toc-number">7.</span> <span class="toc-text">号外</span></a></li></ol>
+ 
  
   </div>
 
