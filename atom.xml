@@ -225,6 +225,34 @@
   </entry>
   
   <entry>
+    <title>继承的陷阱</title>
+    <link href="http://yoursite.com/2016/06/20/iOS-inherit-trap/"/>
+    <id>http://yoursite.com/2016/06/20/iOS-inherit-trap/</id>
+    <published>2016-06-20T04:16:35.000Z</published>
+    <updated>2016-09-02T02:00:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Objective-C本身并没有私有方法的概念。一个类中定义的方法–不管是类本身定义的还是Category中定义的–最终都会出现在objc_class结构体的objc_method_list链表中。</p>
+<p>在开发中，经常有些方法我们不希望暴露给外界，所以并不会在头文件中去声明，而是直接在.m文件中去实现，也许为了区分，还会为方法加上类似于”xx_”这样的前缀，如图1所示，以这种方式定义”私有方法“。</p>
+<p>但这只是一种障眼法，在外部调用时，确实是看不到，如果我们直接调用这些方法，编译器会报错，但如果用performSelector:来调用，依然可以正常执行。</p>
+<p>上面这种问题通常可以避免。一个潜藏的问题是出现在继承体系里面。如果父类和子类的.m文件定义了两个同名的”私有方法“，则子类的方法会覆盖父类的方法，这样我们可能会在不经意间修改了父类的一些实现。</p>
+<p>在继承第三方非开源库中的类时，如果遇到这种情况，会是一种很淡疼的感觉，那样你只能修改自己的方法名了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Objective-C本身并没有私有方法的概念。一个类中定义的方法–不管是类本身定义的还是Category中定义的–最终都会出现在objc_class结构体的objc_method_list链表中。&lt;/p&gt;
+&lt;p&gt;在开发中，经常有些方法我们不希望暴露给外界，所以并不会在头文
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
     <title>iOS7导航栏适配translucent属性设置问题</title>
     <link href="http://yoursite.com/2016/04/28/iOS-translucent/"/>
     <id>http://yoursite.com/2016/04/28/iOS-translucent/</id>
@@ -1402,73 +1430,6 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
     
     
       <category term="情感" scheme="http://yoursite.com/tags/%E6%83%85%E6%84%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS开发之断言详解</title>
-    <link href="http://yoursite.com/2014/11/12/iOS-NSAssert/"/>
-    <id>http://yoursite.com/2014/11/12/iOS-NSAssert/</id>
-    <published>2014-11-12T07:16:35.000Z</published>
-    <updated>2016-08-08T03:35:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="断言"><a href="#断言" class="headerlink" title="断言"></a>断言</h3><hr>
-<p>断言（assertion）是指在开发期间使用的、让程序在运行时进行自检的代码（通常是一个子程序或宏）。断言为真，则表明程序运行正常，而断言为假，则意味着它已经在代码中发现了意料之外的错误。断言对于大型的复杂程序或可靠性要求极高的程序来说尤其有用。        </p>
-<h3 id="使用原则"><a href="#使用原则" class="headerlink" title="使用原则"></a>使用原则</h3><hr>
-<p>有关断言的详细信息，推荐大家一定去看《代码大全2》中“防御式编程”这一章。下面，摘录一些代码大全中有关断言使用的经典指导性建议：        </p>
-<blockquote>
-<p>用错误处理代码来处理预期会发生的状况，用断言来处理绝不应该发生的状况。<br>避免把需要执行的代码放到断言中<br>用断言来注解并验证前条件和后条件<br>对于高健壮性的代码，应该先使用断言再处理错误<br>对来源于内部系统的可靠的数据使用断言，而不要对外部不可靠的数据使用断言，对于外部不可靠数据，应该使用错误处理代码。断言可以看成可执行的注释。<br>系统外部的数据（用户输入，文件，网络读取等等）都是不可信的，需要严格检查（通常是错误处理）才能放行到系统内部，这相当于一个守卫。而对于系统内部的交互（比如子程序调用），如果每次也都去处理输入的数据，也就相当于系统没有可信的边界了，会让代码变的臃肿复杂；而事实上，在系统内部，传递给子程序预期的恰当数据应该是调用者的责任，系统内的调用者应该确保传递给子程序的数据是恰当可以正常工作的。这样一来，就隔离了不可靠的外部环境和可靠的系统内部环境，降低复杂度。<br>但是在开发阶段，代码极可能包含缺陷，也许是处理外部数据的程序考虑的不够周全，也许是调用系统内部子程序的代码存在错误，造成子程序调用失败。这个时候，断言就可以发挥作用，用来确诊到底是那部分出现了问题而导致子程序调用失败。在清理了所有缺陷之后，内外有别的信用体系就建立起来。等到发行版时候，这些断言就应该没有存在必要。    </p>
-</blockquote>
-<h3 id="不同版本之间的断言使用"><a href="#不同版本之间的断言使用" class="headerlink" title="不同版本之间的断言使用"></a>不同版本之间的断言使用</h3><hr>
-<p>在iOS开发中，可以使用宏NSAssert()在程序中进行断言处理。NSAssert()使用正确，可以帮助开发者尽快定位bug。开发者没有必要在应用程序的每个版本中都进行断言检查，这是因为大多数项目都是有两个版本：Debug版和Release版。在Debug版中，开发者希望所有的断言都检查到，而在Release版中，往往都是禁用断言检查的。设置Release版本中禁用断言的方法如下：        </p>
-<p>在Build Settings菜单，找到Preprocessor Macros项，Preprocessor Macros项下面有一个选择，用于程序生成配置：Debug版和Release版。选择 Release项，设置NS_BLOCK_ASSERTIONS，不进行断言检查。如下图所示        </p>
-<p><img src="http://img.blog.csdn.net/20131121134220437?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdW5pdmNvcmU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="">        </p>
-<p>下面，我们在一个 打印名字的函数里面，加入断言，以使程序在发现输入的名字为空时，抛出异常。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (void)<span class="built_in">print</span>MyName:(NSString *)myName  </span><br><span class="line">&#123;  </span><br><span class="line">    NSAssert(myName != nil, @<span class="string">"名字不能为空！"</span>);  </span><br><span class="line">    NSLog(@<span class="string">"My name is %@."</span>,myName);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>当传给函数的参数（myName）为空时，断言将被执行，程序Crash，并打印出断言中的描述信息。本例中，在控制台打印出了如下的日志：    </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NSAssert[1268:a0b] *** Assertion failure <span class="keyword">in</span> -[ViewController <span class="built_in">print</span>MyName:]  </span><br><span class="line">NSAssert/NSAssert/ViewController.m:38</span><br><span class="line">2013-11-21 13:56:01.927 NSAssert[1268:a0b] *** Terminating app due to uncaught exception <span class="string">'NSInternalInconsistencyException'</span>, reason: <span class="string">'名字不能为空！'</span></span><br></pre></td></tr></table></figure>
-<p>断言告诉我们，传入的参数不能为空，通过这个报错很容易就能确定错误发生的原因及位置。<br>如果，我们传入非空的参数，则程序会正确打印出传入的名字：<strong>My name is UnivCore.</strong>    </p>
-<p>下面，我们将测试程序设置为Release版本，依据之前的设定，即使当传入的参数为空时，断言也不会被执行。设置为Release版本的方法如下：<br>依次点击Product-&gt;Scheme-&gt;Edit Scheme…(也可以直接按快捷键command + shift + ,)，选择Run 项，然后在Info面板上修改Build Configuration为Release，就可以将当前的生成配置改为Release。然后，生成并运行程序，就会生成Release版本的程序。注意，对于Archive 项，默认的生成配置就是Release。<br><img src="http://img.blog.csdn.net/20131121141258609?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdW5pdmNvcmU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="">        </p>
-<p>此时，我们再运行程序，程序会打印如下语句：<br><strong>My name is (null).</strong><br>这说明，断言代码没有运行。    </p>
-<p><strong>苹果优化</strong>：    </p>
-<p>从 Xcode 4.2 开始，发布构建默认关闭了断言，它是通过定义 NS_BLOCK_ASSERTIONS 宏实现的。也就是说，当编译发布版时，任何调用 NSAssert 等的地方都被有效的移除了。不用我们再手动处理了。    </p>
-<h3 id="避免把要执行的代码放到断言中"><a href="#避免把要执行的代码放到断言中" class="headerlink" title="避免把要执行的代码放到断言中"></a>避免把要执行的代码放到断言中</h3><hr>
-<p>根据以上讲述，断言的可以在编译器中设置关闭，如果你把一些操作写在断言里，在某些情况下可能编译器会过滤掉这些代码。所有我们应该避免把要执行的代码放到断言中。        </p>
-<h3 id="使用上的注意点"><a href="#使用上的注意点" class="headerlink" title="使用上的注意点"></a>使用上的注意点</h3><hr>
-<p>1.仔细观察 NSAssert 的宏定义 ,你会发现 self 的痕迹，有 self 的地方就一定要注意 block 容易产生的循环引用问题。        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> /** NSAssert */</span><br><span class="line"> <span class="comment">#if !defined(_NSAssertBody)</span></span><br><span class="line"> <span class="comment">#define NSAssert(condition, desc, ...)    \</span></span><br><span class="line"><span class="keyword">do</span> &#123;                \</span><br><span class="line">__PRAGMA_PUSH_NO_EXTRA_ARG_WARNINGS \</span><br><span class="line"><span class="keyword">if</span> (!(condition)) &#123;        \</span><br><span class="line">     NSString *__assert_file__ = [NSString stringWithUTF8String:__FILE__]; \</span><br><span class="line">     __assert_file__ = __assert_file__ ? __assert_file__ : @<span class="string">"&lt;Unknown File&gt;"</span>; \</span><br><span class="line"> [[NSAssertionHandler currentHandler] handleFailureInMethod:_cmd \</span><br><span class="line"> object:self file:__assert_file__ \</span><br><span class="line">     lineNumber:__LINE__ description:(desc), <span class="comment">##__VA_ARGS__]; \</span></span><br><span class="line">&#125;                \</span><br><span class="line"> __PRAGMA_POP_NO_EXTRA_ARG_WARNINGS \</span><br><span class="line">&#125; <span class="keyword">while</span>(0)</span><br><span class="line"> <span class="comment">#endif</span></span><br></pre></td></tr></table></figure>
-<p>例如：我在自己定义的block中使用了NSAssert导致循环引用<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mc = @<span class="string">"mingzhi"</span>;</span><br><span class="line">self.block = ^(int num)&#123;</span><br><span class="line">    NSAssert(mc == nil, @<span class="string">"我不为空了"</span>);</span><br><span class="line">    NSLog(@<span class="string">"%d"</span>,num);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>我们会看到Block中循环引用的警告:        </p>
-<p><img src="http://upload-images.jianshu.io/upload_images/266345-83861541c7aa3ca7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">        </p>
-<p>那如果我想在 Block 中使用断言怎么办呐？用 NSCAssert 替换 NSAssert，NSCParameterAssert 来替换 NSParameterAssert,就不会出现循环引用的问题了。</p>
-<pre><code class="sh">mc = @<span class="string">"mingzhi"</span>;
-self.block = ^(int num){
-    NSCAssert(mc == nil, @<span class="string">"我不为空了"</span>);
-    NSLog(@<span class="string">"%d"</span>,num);
-};
-</code></pre>
-<p>这样就解决了循环引用的问题了。        </p>
-<p>2.使用NSAssert的时候，每个NSAssert只检验一个条件，因为同时检验多个条件时，如果断言失败，无法直观地判断是那个条件失败。        </p>
-<p>3.频繁地调用会极大的影响程序的性能，增加额外开销。    </p>
-<h3 id="什么时候使用断言"><a href="#什么时候使用断言" class="headerlink" title="什么时候使用断言"></a>什么时候使用断言</h3><hr>
-<p>我们在什么时候应该使用断言呢？通常我们期望程序按照我们的预期去运行时，如调用的参数为空时流程就无法继续下去时，可以使用断言。但另一方面，我们也需要考虑，在这加断言确实是需要的么？我们是否可以通过更多的容错处理来使程序正常运行呢？        </p>
-<blockquote>
-<p>参考：<a href="http://blog.csdn.net/univcore/article/details/16859263" target="_blank" rel="external">http://blog.csdn.net/univcore/article/details/16859263</a>        </p>
-</blockquote>
-<h3 id="号外"><a href="#号外" class="headerlink" title="号外"></a>号外</h3><hr>
-<p>推荐大家扫码关注下面二维码，iOS和Mac干货不断：<br><img src="http://img.blog.csdn.net/20160623095054012" alt="二维码"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;断言&quot;&gt;&lt;a href=&quot;#断言&quot; class=&quot;headerlink&quot; title=&quot;断言&quot;&gt;&lt;/a&gt;断言&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;断言（assertion）是指在开发期间使用的、让程序在运行时进行自检的代码（通常是一个子程序或宏）。断言为真，则表明程序运行正常
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
   </entry>
   
