@@ -1,0 +1,739 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>iOS零散知识点汇总 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="runtime怎么添加属性、方法等
+ivar表示成员变量
+class_addIvar
+class_addMethod
+class_addProperty
+class_addProtocol
+class_replaceProperty
+
+是否可以把比较耗时的操作放在NSNotificationCenter中
+首先必须明确通知在哪个线程中发出，那么处理接受到通知的方法也在这个线程中调用
+如果在异步线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS零散知识点汇总">
+<meta property="og:url" content="http://yoursite.com/2015/09/04/iOS-interview/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="runtime怎么添加属性、方法等
+ivar表示成员变量
+class_addIvar
+class_addMethod
+class_addProperty
+class_addProtocol
+class_replaceProperty
+
+是否可以把比较耗时的操作放在NSNotificationCenter中
+首先必须明确通知在哪个线程中发出，那么处理接受到通知的方法也在这个线程中调用
+如果在异步线程">
+<meta property="og:updated_time" content="2016-09-12T15:32:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS零散知识点汇总">
+<meta name="twitter:description" content="runtime怎么添加属性、方法等
+ivar表示成员变量
+class_addIvar
+class_addMethod
+class_addProperty
+class_addProtocol
+class_replaceProperty
+
+是否可以把比较耗时的操作放在NSNotificationCenter中
+首先必须明确通知在哪个线程中发出，那么处理接受到通知的方法也在这个线程中调用
+如果在异步线程">
+
+    
+    <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/04/iOS-interview/" title="iOS零散知识点汇总" itemprop="url">iOS零散知识点汇总</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-04T04:02:04.000Z" itemprop="datePublished"> 发表于 2015-09-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#runtime怎么添加属性、方法等"><span class="toc-number">1.</span> <span class="toc-text">runtime怎么添加属性、方法等</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#是否可以把比较耗时的操作放在NSNotificationCenter中"><span class="toc-number">2.</span> <span class="toc-text">是否可以把比较耗时的操作放在NSNotificationCenter中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#runtime-如何实现-weak-属性"><span class="toc-number">3.</span> <span class="toc-text">runtime 如何实现 weak 属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#weak属性需要在dealloc中置nil么"><span class="toc-number">4.</span> <span class="toc-text">weak属性需要在dealloc中置nil么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一个Objective-C对象如何进行内存布局？（考虑有父类的情况）"><span class="toc-number">5.</span> <span class="toc-text">一个Objective-C对象如何进行内存布局？（考虑有父类的情况）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一个objc对象的isa的指针指向什么？有什么作用？"><span class="toc-number">6.</span> <span class="toc-text">一个objc对象的isa的指针指向什么？有什么作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下面的代码输出什么？"><span class="toc-number">7.</span> <span class="toc-text">下面的代码输出什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）"><span class="toc-number">8.</span> <span class="toc-text">runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#objc中的类方法和实例方法有什么本质区别和联系"><span class="toc-number">9.</span> <span class="toc-text">objc中的类方法和实例方法有什么本质区别和联系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用runtime-Associate方法关联的对象，需要在主对象dealloc的时候释放么？"><span class="toc-number">10.</span> <span class="toc-text">使用runtime Associate方法关联的对象，需要在主对象dealloc的时候释放么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？"><span class="toc-number">11.</span> <span class="toc-text">能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#runloop和线程有什么关系？"><span class="toc-number">12.</span> <span class="toc-text">runloop和线程有什么关系？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以-scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？"><span class="toc-number">13.</span> <span class="toc-text">以+scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#猜想runloop内部是如何实现的？"><span class="toc-number">14.</span> <span class="toc-text">猜想runloop内部是如何实现的？</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="runtime怎么添加属性、方法等"><a href="#runtime怎么添加属性、方法等" class="headerlink" title="runtime怎么添加属性、方法等"></a>runtime怎么添加属性、方法等</h3><ul>
+<li>ivar表示成员变量</li>
+<li>class_addIvar</li>
+<li>class_addMethod</li>
+<li>class_addProperty</li>
+<li>class_addProtocol</li>
+<li>class_replaceProperty</li>
+</ul>
+<h3 id="是否可以把比较耗时的操作放在NSNotificationCenter中"><a href="#是否可以把比较耗时的操作放在NSNotificationCenter中" class="headerlink" title="是否可以把比较耗时的操作放在NSNotificationCenter中"></a>是否可以把比较耗时的操作放在NSNotificationCenter中</h3><ul>
+<li>首先必须<code>明确通知在哪个线程中发出</code>，那么处理接受到通知的方法也在这个线程中调用</li>
+<li>如果在<code>异步</code>线程发的通知，那么<code>可以</code>执行比较耗时的操作；</li>
+<li>如果在<code>主线程</code>发的通知，那么就<code>不可以</code>执行比较耗时的操作</li>
+</ul>
+<h3 id="runtime-如何实现-weak-属性"><a href="#runtime-如何实现-weak-属性" class="headerlink" title="runtime 如何实现 weak 属性"></a>runtime 如何实现 weak 属性</h3><ul>
+<li>首先要搞清楚weak属性的特点</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">weak</span>策略表明该属性定义了一种“非拥有关系” (nonowning relationship)。</span><br><span class="line">为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。此特质同<span class="keyword">assign</span>类似;</span><br><span class="line">然而在属性所指的对象遭到摧毁时，属性值也会清空(<span class="literal">nil</span> <span class="keyword">out</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>那么runtime如何实现weak变量的自动置nil？</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">runtime对注册的类，会进行布局，会将 <span class="keyword">weak</span> 对象放入一个 hash 表中。</span><br><span class="line">用 <span class="keyword">weak</span> 指向的对象内存地址作为 key，当此对象的引用计数为<span class="number">0</span>的时候会调用对象的 dealloc 方法，</span><br><span class="line">假设 <span class="keyword">weak</span> 指向的对象内存地址是a，那么就会以a为key，在这个 <span class="keyword">weak</span> hash表中搜索，找到所有以a为key的 <span class="keyword">weak</span> 对象，从而设置为 <span class="literal">nil</span>。</span><br></pre></td></tr></table></figure>
+<h3 id="weak属性需要在dealloc中置nil么"><a href="#weak属性需要在dealloc中置nil么" class="headerlink" title="weak属性需要在dealloc中置nil么"></a>weak属性需要在dealloc中置nil么</h3><ul>
+<li>在ARC环境无论是强指针还是弱指针都无需在 dealloc 设置为 nil ， ARC 会自动帮我们处理</li>
+<li>即便是编译器不帮我们做这些，weak也不需要在dealloc中置nil</li>
+<li>在属性所指的对象遭到摧毁时，属性值也会清空</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟下weak的setter方法，大致如下</span></span><br><span class="line">- (<span class="keyword">void</span>)setObject:(<span class="built_in">NSObject</span> *)object</span><br><span class="line">&#123;</span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, <span class="string">"object"</span>, object, OBJC_ASSOCIATION_ASSIGN);</span><br><span class="line">    [object cyl_runAtDealloc:^&#123;</span><br><span class="line">        _object = <span class="literal">nil</span>;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="一个Objective-C对象如何进行内存布局？（考虑有父类的情况）"><a href="#一个Objective-C对象如何进行内存布局？（考虑有父类的情况）" class="headerlink" title="一个Objective-C对象如何进行内存布局？（考虑有父类的情况）"></a>一个Objective-C对象如何进行内存布局？（考虑有父类的情况）</h3><ul>
+<li>所有<code>父类的</code>成员变量和<code>自己的</code>成员变量都会存放在该对象所对应的存储空间中</li>
+<li>父类的方法和自己的方法都会缓存在类对象的方法缓存中，类方法是缓存在元类对象中</li>
+<li>每一个对象内部都有一个<code>isa指针</code>,指向他的<code>类对象</code>,类对象中存放着本对象的如下信息<ul>
+<li>对象方法列表</li>
+<li>成员变量的列表</li>
+<li>属性列表</li>
+</ul>
+</li>
+<li>每个 Objective-C 对象都有相同的结构，如下图所示</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Objective-C 对象的结构图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISA指针</td>
+</tr>
+<tr>
+<td>根类(NSObject)的实例变量</td>
+</tr>
+<tr>
+<td>倒数第二层父类的实例变量</td>
+</tr>
+<tr>
+<td>…</td>
+</tr>
+<tr>
+<td>父类的实例变量</td>
+</tr>
+<tr>
+<td>类的实例变量</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>根类对象就是NSObject，它的super class指针指向nil</li>
+<li>类对象既然称为对象，那它也是一个实例。类对象中也有一个isa指针指向它的元类(meta class)，即类对象是元类的实例。元类内部存放的是<code>类方法</code>列表，<code>根元类的isa指针指向自己，superclass指针指向NSObject类</code></li>
+</ul>
+<h3 id="一个objc对象的isa的指针指向什么？有什么作用？"><a href="#一个objc对象的isa的指针指向什么？有什么作用？" class="headerlink" title="一个objc对象的isa的指针指向什么？有什么作用？"></a>一个objc对象的isa的指针指向什么？有什么作用？</h3><ul>
+<li>每一个对象内部都有一个isa指针，这个指针是指向它的真实类型</li>
+<li>根据这个指针就能知道将来调用哪个类的方法</li>
+</ul>
+<h3 id="下面的代码输出什么？"><a href="#下面的代码输出什么？" class="headerlink" title="下面的代码输出什么？"></a>下面的代码输出什么？</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Son</span> : <span class="title">Father</span></span></span><br><span class="line">- (<span class="keyword">id</span>)init</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, <span class="built_in">NSStringFromClass</span>([<span class="keyword">self</span> class]));</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, <span class="built_in">NSStringFromClass</span>([<span class="keyword">super</span> class]));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>答案：都输出 Son</li>
+<li><p>这个题目主要是考察关于objc中对 self 和 super 的理解：</p>
+<ul>
+<li>self 是类的隐藏参数，指向当前调用方法的这个类的实例。而 super 本质是一个<code>编译器标示符</code>，和 self 是指向的同一个消息接受者</li>
+<li>当使用 self 调用方法时，会从<code>当前类</code>的方法列表中开始找，<code>如果没有</code>，就从<code>父类中再找</code>；</li>
+<li>而当使用 super时，则从父类的方法列表中开始找。然后调用父类的这个方法</li>
+<li><p>调用[self class] 时，会转化成 objc_msgSend函数</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> objc_msgSend(<span class="keyword">id</span> <span class="keyword">self</span>, SEL op, ...)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用 [super class]时，会转化成 objc_msgSendSuper函数</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> objc_msgSendSuper(<span class="keyword">struct</span> objc_super *<span class="keyword">super</span>, SEL op, ...)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第一个参数是 <code>objc_super</code> 这样一个结构体，其定义如下</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> objc_super &#123;</span><br><span class="line">    __unsafe_unretained <span class="keyword">id</span> receiver;</span><br><span class="line">    __unsafe_unretained Class super_class;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第一个成员是 receiver, 类似于上面的 objc_msgSend函数第一个参数self</p>
+</li>
+<li>第二个成员是记录当前类的父类是什么，告诉程序从父类中开始找方法，找到方法后，最后内部是使用 objc_msgSend(objc_super-&gt;receiver, @selector(class))去调用， 此时已经和[self class]调用相同了，故上述输出结果仍然返回 Son</li>
+<li><p>objc Runtime开源代码对- (Class)class方法的实现</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-(Class)class &#123;</span><br><span class="line">    <span class="keyword">return</span> object_getClass(<span class="keyword">self</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）"><a href="#runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）" class="headerlink" title="runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）"></a>runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）</h3><ul>
+<li>每一个类对象中都一个对象方法列表（对象方法缓存）</li>
+<li>类方法列表是存放在类对象中isa指针指向的元类对象中（类方法缓存）</li>
+<li>方法列表中每个方法结构体中记录着方法的<code>名称</code>,<code>方法实现</code>,以及<code>参数类型</code>，其实selector本质就是方法名称,通过这个方法名称就可以在方法列表中找到对应的方法实现.</li>
+<li>当我们发送一个消息给一个NSObject对象时，这条消息会在对象的类对象方法列表里查找</li>
+<li>当我们发送一个消息给一个类时，这条消息会在类的Meta Class对象的方法列表里查找</li>
+</ul>
+<h3 id="objc中的类方法和实例方法有什么本质区别和联系"><a href="#objc中的类方法和实例方法有什么本质区别和联系" class="headerlink" title="objc中的类方法和实例方法有什么本质区别和联系"></a>objc中的类方法和实例方法有什么本质区别和联系</h3><ul>
+<li>类方法：<ul>
+<li>类方法是属于类对象的</li>
+<li>类方法只能通过类对象调用</li>
+<li>类方法中的self是类对象</li>
+<li>类方法可以调用其他的类方法</li>
+<li>类方法中<code>不能</code>访问成员变量</li>
+<li>类方法中<code>不能</code>直接调用对象方法</li>
+<li>类方法是存储在元类对象的方法缓存中</li>
+</ul>
+</li>
+<li>实例方法：<ul>
+<li>实例方法是属于实例对象的</li>
+<li>实例方法只能通过实例对象调用</li>
+<li>实例方法中的self是实例对象</li>
+<li>实例方法中可以访问成员变量</li>
+<li>实例方法中直接调用实例方法</li>
+<li>实例方法中<code>可以调用类方法(通过类名)</code></li>
+<li>实例方法是存放在类对象的方法缓存中</li>
+</ul>
+</li>
+</ul>
+<h3 id="使用runtime-Associate方法关联的对象，需要在主对象dealloc的时候释放么？"><a href="#使用runtime-Associate方法关联的对象，需要在主对象dealloc的时候释放么？" class="headerlink" title="使用runtime Associate方法关联的对象，需要在主对象dealloc的时候释放么？"></a>使用<code>runtime Associate</code>方法关联的对象，需要在主对象dealloc的时候释放么？</h3><ul>
+<li>无论在MRC下还是ARC下<code>均不需要</code></li>
+<li>被关联的对象在生命周期内要比对象本身释放的<code>晚很多</code>，它们会在被 NSObject -dealloc 调用的 <code>object_dispose()</code>方法中释放</li>
+<li>补充：对象的内存销毁时间表，分四个步骤</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>调用 -release ：引用计数变为零</span><br><span class="line"> * 对象正在被销毁，生命周期即将结束.</span><br><span class="line"> * 不能再有新的 __<span class="keyword">weak</span> 弱引用，否则将指向 <span class="literal">nil</span>.</span><br><span class="line"> * 调用 [<span class="keyword">self</span> dealloc]</span><br><span class="line"><span class="number">2.</span> 父类调用 -dealloc</span><br><span class="line"> * 继承关系中最直接继承的父类再调用 -dealloc</span><br><span class="line"> * 如果是 MRC 代码 则会手动释放实例变量们（iVars）</span><br><span class="line"> * 继承关系中每一层的父类 都再调用 -dealloc</span><br><span class="line"><span class="number">3.</span> <span class="built_in">NSObject</span> 调 -dealloc</span><br><span class="line"> * 只做一件事：调用 Objective-C runtime 中的 object_dispose() 方法</span><br><span class="line"><span class="number">4.</span> 调用 object_dispose()</span><br><span class="line"> * 为 C++ 的实例变量们（iVars）调用 destructors</span><br><span class="line"> * 为 ARC 状态下的 实例变量们（iVars） 调用 -release</span><br><span class="line"> * 解除所有使用 runtime Associate方法关联的对象</span><br><span class="line"> * 解除所有 __<span class="keyword">weak</span> 引用</span><br><span class="line"> * 调用 free()</span><br></pre></td></tr></table></figure>
+<h3 id="能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？"><a href="#能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？" class="headerlink" title="能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？"></a>能否向编译后得到的类中增加<code>实例变量</code>？能否向运行时创建的类中添加<code>实例变量</code>？为什么？</h3><ul>
+<li><code>不能</code>向编译后得到的类中增加<code>实例变量</code>；</li>
+<li><code>能</code>向运行时创建的类中添加<code>实例变量</code>；</li>
+<li>分析如下：<ul>
+<li>因为编译后的类已经注册在runtime中，类结构体中的objc_ivar_list 实例变量的链表和instance_size实例变量的内存大小已经确定，同时runtime 会调用class_setIvarLayout 或 class_setWeakIvarLayout来处理strong weak引用，所以<code>不能</code>向存在的类中添加<code>实例变量</code></li>
+<li>运行时创建的类是<code>可以</code>添加<code>实例变量</code>，调用 class_addIvar函数，但是得在调用objc_allocateClassPair<code>之后</code>，objc_registerClassPair<code>之前</code>，原因同上。</li>
+</ul>
+</li>
+</ul>
+<h3 id="runloop和线程有什么关系？"><a href="#runloop和线程有什么关系？" class="headerlink" title="runloop和线程有什么关系？"></a>runloop和线程有什么关系？</h3><ul>
+<li>每条线程都有<code>唯一</code>的一个RunLoop对象与之对应的</li>
+<li>主线程的RunLoop是<code>自动创建并启动</code></li>
+<li>子线程的RunLoop需要<code>手动创建</code></li>
+<li><p>子线程的RunLoop创建步骤如下：</p>
+<ul>
+<li>在子线程中调用[NSRunLoop currentRunLoop]创建RunLoop对象（<code>懒加载，只创建一次</code>）</li>
+<li><p>获得RunLoop对象后要调用<code>run</code>方法来启动一个运行循环</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启动RunLoop</span></span><br><span class="line">[[<span class="built_in">NSRunLoop</span> currentRunLoop] run];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RunLoop的其他启动方法</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一个参数：指定运行模式</span></span><br><span class="line"><span class="comment">// 第二个参数：指定RunLoop的过期时间，即：到了这个时间后RunLoop就失效了</span></span><br><span class="line">[[<span class="built_in">NSRunLoop</span> currentRunLoop] runMode:kCFRunLoopDefaultMode beforeDate:[<span class="built_in">NSDate</span> distantFuture]];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>### runloop的mode作用是什么？
+</code></pre><ul>
+<li>用来控制一些特殊操作只能在指定模式下运行，一般可以通过指定操作的运行mode来控制执行时机，以提高用户体验</li>
+<li>系统默认注册了5个Mode<ul>
+<li><code>kCFRunLoopDefaultMode</code>：App的<code>默认Mode</code>，<code>通常主线程</code>是在这个Mode下运行，对应OC中的：<code>NSDefaultRunLoopMode</code></li>
+<li><code>UITrackingRunLoopMode</code>：<code>界面跟踪</code> Mode，用于 ScrollView 追踪触摸滑动，保证界面滑动时不受其他Mode影响</li>
+<li><code>kCFRunLoopCommonModes</code>:这是一个<code>标记</code>Mode，不是一种真正的Mode，事件可以运行在所有标有common modes标记的模式中，对应OC中的<code>NSRunLoopCommonModes</code>，带有common modes标记的模式有：UITrackingRunLoopMode和kCFRunLoopDefaultMode</li>
+<li>UIInitializationRunLoopMode：在<code>启动</code> App时进入的第一个 Mode，<code>启动完成后就不再使用</code></li>
+<li>GSEventReceiveRunLoopMode：接受系统事件的内部Mode，通常用不到</li>
+</ul>
+</li>
+</ul>
+<h3 id="以-scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？"><a href="#以-scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？" class="headerlink" title="以+scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？"></a>以+scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？</h3><ul>
+<li>这里强调一点：在主线程中以+scheduledTimerWithTimeInterval…的方式触发的timer默认是运行在<code>NSDefaultRunLoopMode</code>模式下的，当滑动页面上的列表时，进入了<code>UITrackingRunLoopMode</code>模式，这时候timer就会停止</li>
+<li><p>可以修改timer的运行模式为<code>NSRunLoopCommonModes</code>，这样定时器就可以一直运行了</p>
+</li>
+<li><p>以下是我的笔记补充：</p>
+<ul>
+<li>在<code>子线程</code>中通过<code>scheduledTimerWithTimeInterval:...方法</code>来构建NSTimer<ul>
+<li>方法内部已经创建NSTimer对象，并加入到RunLoop中，运行模式为NSDefaultRunLoopMode</li>
+<li>由于Mode有timer对象，所以RunLoop就开始监听定时器事件了，从而开始进入运行循环</li>
+<li>这个方法<code>仅仅</code>是创建RunLoop对象，并<code>不会</code>主动启动RunLoop，需要再<code>调用run方法</code>来启动</li>
+</ul>
+</li>
+<li><p>如果在<code>主线程</code>中通过<code>scheduledTimerWithTimeInterval:...方法</code>来构建NSTimer，就不需要主动启动RunLoop对象，因为主线程的RunLoop对象在程序运行起来就已经被启动了</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// userInfo参数：用来给NSTimer的userInfo属性赋值，userInfo是只读的，只能在构建NSTimer对象时赋值</span></span><br><span class="line">[<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="number">1.0</span> target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(run:) userInfo:<span class="string">@"guoxianzhuang"</span> repeats:<span class="literal">YES</span>];</span><br><span class="line"><span class="comment">// scheduledTimer...方法创建出来NSTimer虽然已经指定了默认模式，但是【允许你修改模式】</span></span><br><span class="line">[[<span class="built_in">NSRunLoop</span> currentRunLoop] addTimer:timer forMode:<span class="built_in">NSRunLoopCommonModes</span>];</span><br><span class="line"><span class="comment">// 【仅在子线程】需要手动启动RunLoop对象，进入运行循环</span></span><br><span class="line">[[<span class="built_in">NSRunLoop</span> currentRunLoop] run];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="猜想runloop内部是如何实现的？"><a href="#猜想runloop内部是如何实现的？" class="headerlink" title="猜想runloop内部是如何实现的？"></a>猜想runloop内部是如何实现的？</h3><ul>
+<li>从字面意思看：运行循环、跑圈；</li>
+<li><strong><code>本质：</code></strong>内部就是<code>do-while循环</code>，在这个循环内部不断地处理各种事件(任务)，比如：Source、Timer、Observer；</li>
+<li>每条线程都有<code>唯一</code>一个RunLoop对象与之对应，主线程的RunLoop默认已经启动，子线程的RunLoop需要<code>手动启动</code>；</li>
+<li>每次RunLoop启动时，<code>只能</code>指定其中一个 Mode，这个Mode被称作 CurrentMode，如果需要切换Mode，只能<code>退出</code>Loop，再<code>重新指定</code>一个Mode进入，这样做主要是为了隔离不同Mode中的Source、Timer、Observer，让其互不影响；</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/多线程/">多线程</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2015/09/04/iOS-interview/" data-title="iOS零散知识点汇总 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/11/28/iOS-offScreen/" title="离屏渲染探究">
+  <strong>上一篇：</strong><br/>
+  <span>
+  离屏渲染探究</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/08/25/iOS-regex2/"  title="iOS中使用正则表达式">
+ <strong>下一篇：</strong><br/> 
+ <span>iOS中使用正则表达式
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/09/04/iOS-interview/" data-title="iOS零散知识点汇总" data-url="http://yoursite.com/2015/09/04/iOS-interview/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#runtime怎么添加属性、方法等"><span class="toc-number">1.</span> <span class="toc-text">runtime怎么添加属性、方法等</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#是否可以把比较耗时的操作放在NSNotificationCenter中"><span class="toc-number">2.</span> <span class="toc-text">是否可以把比较耗时的操作放在NSNotificationCenter中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#runtime-如何实现-weak-属性"><span class="toc-number">3.</span> <span class="toc-text">runtime 如何实现 weak 属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#weak属性需要在dealloc中置nil么"><span class="toc-number">4.</span> <span class="toc-text">weak属性需要在dealloc中置nil么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一个Objective-C对象如何进行内存布局？（考虑有父类的情况）"><span class="toc-number">5.</span> <span class="toc-text">一个Objective-C对象如何进行内存布局？（考虑有父类的情况）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一个objc对象的isa的指针指向什么？有什么作用？"><span class="toc-number">6.</span> <span class="toc-text">一个objc对象的isa的指针指向什么？有什么作用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下面的代码输出什么？"><span class="toc-number">7.</span> <span class="toc-text">下面的代码输出什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）"><span class="toc-number">8.</span> <span class="toc-text">runtime如何通过selector找到对应的IMP地址？（分别考虑类方法和实例方法）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#objc中的类方法和实例方法有什么本质区别和联系"><span class="toc-number">9.</span> <span class="toc-text">objc中的类方法和实例方法有什么本质区别和联系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用runtime-Associate方法关联的对象，需要在主对象dealloc的时候释放么？"><span class="toc-number">10.</span> <span class="toc-text">使用runtime Associate方法关联的对象，需要在主对象dealloc的时候释放么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？"><span class="toc-number">11.</span> <span class="toc-text">能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#runloop和线程有什么关系？"><span class="toc-number">12.</span> <span class="toc-text">runloop和线程有什么关系？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#以-scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？"><span class="toc-number">13.</span> <span class="toc-text">以+scheduledTimerWithTimeInterval…的方式触发的timer，在滑动页面上的列表时，timer会暂定回调，为什么？如何解决？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#猜想runloop内部是如何实现的？"><span class="toc-number">14.</span> <span class="toc-text">猜想runloop内部是如何实现的？</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Trivial/" title="Trivial">Trivial<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/资讯/" title="资讯">资讯<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/ACM/" style="font-size: 17.5px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 10px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 12.5px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 12.5px;">多线程</a> <a href="/tags/情感/" style="font-size: 15px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5970082832&verifier=2b92bb86&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方......
+ <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/corderguo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/6653679" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:guoxianzhuang@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+		<br>
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+
+
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    $('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"guozai"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260049497'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1260049497' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
