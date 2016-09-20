@@ -1,0 +1,590 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>iOS之安全加密 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="数据安全
+在项目中当我们提交用户的隐私数据时，比如:登陆密码、银行账号等，一定要使用POST请求提交用户的这些隐私数据。因为GET请求的所有参数都直接暴露在URL中。同时请求的URL一般会记录在服务器的访问日志中，服务器的访问日志是黑客攻击的重点对象之一。
+仅仅用POST请求提交用户的隐私数据，还是不能完全解决数据安全的问题，我们可以利用软件（比如Charles）设置代理服务器，拦截查看手机的请求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS之安全加密">
+<meta property="og:url" content="http://yoursite.com/2016/09/02/iOS-security-encrypt/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="数据安全
+在项目中当我们提交用户的隐私数据时，比如:登陆密码、银行账号等，一定要使用POST请求提交用户的这些隐私数据。因为GET请求的所有参数都直接暴露在URL中。同时请求的URL一般会记录在服务器的访问日志中，服务器的访问日志是黑客攻击的重点对象之一。
+仅仅用POST请求提交用户的隐私数据，还是不能完全解决数据安全的问题，我们可以利用软件（比如Charles）设置代理服务器，拦截查看手机的请求">
+<meta property="og:updated_time" content="2016-09-20T08:42:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS之安全加密">
+<meta name="twitter:description" content="数据安全
+在项目中当我们提交用户的隐私数据时，比如:登陆密码、银行账号等，一定要使用POST请求提交用户的这些隐私数据。因为GET请求的所有参数都直接暴露在URL中。同时请求的URL一般会记录在服务器的访问日志中，服务器的访问日志是黑客攻击的重点对象之一。
+仅仅用POST请求提交用户的隐私数据，还是不能完全解决数据安全的问题，我们可以利用软件（比如Charles）设置代理服务器，拦截查看手机的请求">
+
+    
+    <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
+    
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/09/02/iOS-security-encrypt/" title="iOS之安全加密" itemprop="url">iOS之安全加密</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2016-09-02T02:12:15.000Z" itemprop="datePublished"> 发表于 2016-09-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据安全"><span class="toc-number">1.</span> <span class="toc-text">数据安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加密方法"><span class="toc-number">2.</span> <span class="toc-text">加密方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA加密算法"><span class="toc-number">3.</span> <span class="toc-text">RSA加密算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Base64补充"><span class="toc-number">4.</span> <span class="toc-text">Base64补充</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="数据安全"><a href="#数据安全" class="headerlink" title="数据安全"></a>数据安全</h3><hr>
+<p>在项目中当我们提交用户的隐私数据时，比如:登陆密码、银行账号等，一定要使用<code>POST</code>请求提交用户的这些隐私数据。因为<code>GET</code>请求的所有参数都直接暴露在<code>URL</code>中。同时请求的<code>URL</code>一般会记录在服务器的访问日志中，服务器的访问日志是黑客攻击的重点对象之一。</p>
+<p>仅仅用<code>POST</code>请求提交用户的隐私数据，还是不能完全解决数据安全的问题，我们可以利用软件（比如Charles）设置代理服务器，拦截查看手机的请求数据。因此：提交用户的隐私数据时，一定不要明文提交，要加密处理后再提交。</p>
+<p>另外，我们也不应该在本地保存用户的隐私数据的<code>明文</code>。</p>
+<h3 id="加密方法"><a href="#加密方法" class="headerlink" title="加密方法"></a>加密方法</h3><hr>
+<p>常见的加密算法:MD5 \ SHA \ DES \ 3DES \ RC2和RC4 \ RSA \ IDEA \ DSA \ AES。</p>
+<p>针对上述加密算法，我把目前流行的几种加密方式做下分类：</p>
+<ul>
+<li><p>哈希（散列）函数</p>
+<ul>
+<li>MD5（Message Digest Algorithm 5，译为“消息摘要算法第5版”）</li>
+<li>SHA1</li>
+<li>SHA256            </li>
+</ul>
+</li>
+<li><p>对称加密算法</p>
+<ul>
+<li>DES</li>
+<li>3DES</li>
+<li>AES(高级密码标准，美国国家安全局使用的)</li>
+</ul>
+</li>
+<li><p>非对称加密算法</p>
+<ul>
+<li>RSA</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>重点说一下散列函数的特点：    </p>
+</blockquote>
+<ul>
+<li>算法是公开的;</li>
+<li>对相同的数据加密，得到的结果是一样的;</li>
+<li>对不同的数据加密，得到的结果是定长的。例如:MD5对不同的数据进行加密，得到的结果都是32个字符长度的字符串;</li>
+<li>信息摘要，信息”指纹”，是用来做数据识别的！比如:搜索;</li>
+<li>不能反算的,即是不可逆的。</li>
+</ul>
+<p>利用这些特点，我们在项目中的应用:    </p>
+<p><code>加密密码</code>：服务器并不需要知道用户真实的密码！        </p>
+<p><code>搜索</code>：比如你要搜索“张老师 杨老师 苍老师”和“苍老师 张老师 杨老师”，其实这两个要搜索的内容所表达的意思是一样的，但是我们应该如何判断呢。我们可以对搜索的每个关键字进行散列，得到三个相对应的结果，按位相加结果如果是一样的，那搜索的内容就是一样的！<br>张老师            1bdf605991920db11cbdf8508204c4eb<br>杨老师             2d97fbce49977313c2aae15ea77fec0f<br>苍老师             692e92669c0ca340eff4fdcef32896ee</p>
+<p><code>版权</code>: 版权保护，文件识别。例如可以对文件内容进行MD5，然后可以根据该MD5串判断文件内容是否被修改过。我以前做IM的文件上传功能就是这样判断的，如果文件内容的MD5相同，表示该文件已经在服务器存在了，就不用再次上传了。</p>
+<p>由于<code>MD5</code>加密算法具有较好的安全性，而且免费，因此该加密算法被广泛使用。不过遗憾的是该加密算法已经被暴力破解了,<a href="http://www.cmd5.com" target="_blank" rel="external">http://www.cmd5.com</a>该网站记录超过24万亿条，共占用160T硬盘 的密码数据，通过对海量数据的搜索得到的结果！    </p>
+<p>不过我们可以通过提升MD5加密的安全性，加大被破解的难度。    </p>
+<p><code>1</code>. 加“盐”（佐料）。<br><code>2</code>. HMAC：给定一个”秘钥”，对明文进行加密，并且做”两次散列”！-&gt; 得到的结果，还是 32 个字符。</p>
+<h3 id="RSA加密算法"><a href="#RSA加密算法" class="headerlink" title="RSA加密算法"></a>RSA加密算法</h3><hr>
+<p>RSA算法中，每个通信主体都有两个钥匙，一个公钥一个私钥。就是有2把钥匙：使用publicKey可以对数据进行加密，使用Key才能对数据进行解密。    </p>
+<p>特点：单方向传输<br>用公钥加密的数据，只有私钥能解开（可用于加密）；<br>同时，使用私钥加密的数据，只有公钥能解开（签名）。但是速度很慢（比私钥加密慢100到1000倍）；</p>
+<p>公钥与私钥：            </p>
+<p>1.权威数字认证机构（CA）给所有通信主体（个人或组织）颁发公钥和私钥，彼此配对，分别唯一。<br>2.私钥好比数字指纹，同时具有解密和加密功能。个人保管，不公开。<br>3.公钥好比安全性极高的挂号信箱地址，公开。        </p>
+<p>举例：若甲有一份需保密的数字商业合同发给乙签署。经过如下步骤：        </p>
+<ol>
+<li>甲用乙的公钥对合同加密。        </li>
+<li>密文从甲发送到乙。        </li>
+<li>乙收到密文，并用自己的私钥对其解密。        </li>
+<li>解密正确，经阅读，乙用自己的私钥对合同进行签署。        </li>
+<li>乙用甲的公钥对已经签署的合同进行加密。            </li>
+<li>乙将密文发给甲。        </li>
+<li>甲用自己的私钥将已签署合同解密。        </li>
+<li>解密正确，确认签署。        </li>
+</ol>
+<p>从以上步骤，我们知道：            </p>
+<ol>
+<li>用公钥加密的密文能且只能用与其唯一配对的私钥才能解开。        </li>
+<li>如果某份密文被解开，那么肯定是密文的目标信息主体解开的。        </li>
+<li>私钥因其唯一标识所有者的属性，被用于数字签名，具有法律效力。        </li>
+</ol>
+<h3 id="Base64补充"><a href="#Base64补充" class="headerlink" title="Base64补充"></a>Base64补充</h3><hr>
+<p>1.Base64简单说明：<br>描述：Base64可以成为密码学的基石，非常重要。<br>特点：可以将任意的二进制数据进行Base64编码<br>结果：所有的数据都能被编码为并只用65个字符就能表示的文本文件。<br>65字符：A~Z a~z 0~9 + / =<br>对文件进行base64编码后文件数据的变化：编码后的数据~=编码前数据的4/3，会大1/3左右。        </p>
+<p>2.命令行进行Base64编码和解码：<br>编码：base64 123.png -o 123.txt<br>解码：base64 123.txt -o test.png -D        </p>
+<p>3.Base64编码原理：<br>1)将所有字符转化为<code>ASCII</code>码；<br>2)将ASCII码转化为<code>8</code>位二进制；<br>3)将二进制<code>3</code>个归成一组(不足<code>3</code>个在后边补<code>0</code>)共<code>24</code>位，再拆分成<code>4</code>组，每组<code>6</code>位；<br>4)统一在<code>6</code>位二进制前补两个<code>0</code>凑足<code>8</code>位；<br>5)将补<code>0</code>后的二进制转为十进制；<br>6)从Base64编码表获取十进制对应的Base64编码；    </p>
+<p>处理过程说明：<br>    a.转换的时候，将三个byte的数据，先后放入一个<code>24bit</code>的缓冲区中，先来的byte占高位。<br>    b.数据不足<code>3byte</code>的话，于缓冲区中剩下的bit用0补足。然后，每次取出<code>6</code>个bit，按照其值选择查表选择对应的字符作为编码后的输出。<br>    c.不断进行，直到全部输入数据转换完成。<br>    d.如果最后剩下两个输入数据，在编码结果后加<code>1</code>个“=”；<br>    e.如果最后剩下一个输入数据，编码结果后加<code>2</code>个“=”；<br>    f.如果没有剩下任何数据，就什么都不要加，这样才可以保证资料还原的正确性。        </p>
+<p> 4.在项目中的应用：        </p>
+<p>1）从iOS7.0 开始，苹果就提供了base64的编码和解码支持<br>2)如果是老项目，则还能看到base64编码和解码的第三方框架，如果当前不再支持iOS7.0以下版本，则建议替换。</p>
+<p>代码实现：    </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//给定一个字符串，对该字符串进行Base64编码，然后返回编码后的结果</span></span><br><span class="line">    -(<span class="built_in">NSString</span> *)base64EncodeString:(<span class="built_in">NSString</span> *)string</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//1.先把字符串转换为二进制数据</span></span><br><span class="line">        <span class="built_in">NSData</span> *data = [string dataUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line">        <span class="comment">//2.对二进制数据进行base64编码，返回编码后的字符串</span></span><br><span class="line">        <span class="keyword">return</span> [data base64EncodedStringWithOptions:<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//对base64编码后的字符串进行解码</span></span><br><span class="line">    -(<span class="built_in">NSString</span> *)base64DecodeString:(<span class="built_in">NSString</span> *)string</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//1.将base64编码后的字符串『解码』为二进制数据</span></span><br><span class="line">        <span class="built_in">NSData</span> *data = [[<span class="built_in">NSData</span> alloc]initWithBase64EncodedString:string options:<span class="number">0</span>];</span><br><span class="line">        <span class="comment">//2.把二进制数据转换为字符串返回</span></span><br><span class="line">        <span class="keyword">return</span> [[<span class="built_in">NSString</span> alloc]initWithData:data encoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>终端测试命令：            </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> -n A | base64			</span><br><span class="line">$ <span class="built_in">echo</span> -n QQ== |base64 -D</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/security/">security</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/09/02/iOS-security-encrypt/" data-title="iOS之安全加密 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/08/20/iOS-delegate_optimized/"  title="关于委托代理的优化">
+ <strong>下一篇：</strong><br/> 
+ <span>关于委托代理的优化
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/09/02/iOS-security-encrypt/" data-title="iOS之安全加密" data-url="http://yoursite.com/2016/09/02/iOS-security-encrypt/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据安全"><span class="toc-number">1.</span> <span class="toc-text">数据安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#加密方法"><span class="toc-number">2.</span> <span class="toc-text">加密方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA加密算法"><span class="toc-number">3.</span> <span class="toc-text">RSA加密算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Base64补充"><span class="toc-number">4.</span> <span class="toc-text">Base64补充</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Trivial/" title="Trivial">Trivial<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>22</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/资讯/" title="资讯">资讯<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/ACM/" style="font-size: 17.5px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 10px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 12.5px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 15px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5970082832&verifier=2b92bb86&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方......
+ <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/corderguo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/6653679" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:guoxianzhuang@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+		<br>
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+
+
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    $('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"guozai"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260049497'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1260049497' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

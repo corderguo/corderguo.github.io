@@ -17,8 +17,8 @@
   
   <entry>
     <title>iOS之安全加密</title>
-    <link href="http://yoursite.com/2016/09/02/iOS-encrypt/"/>
-    <id>http://yoursite.com/2016/09/02/iOS-encrypt/</id>
+    <link href="http://yoursite.com/2016/09/02/iOS-security-encrypt/"/>
+    <id>http://yoursite.com/2016/09/02/iOS-security-encrypt/</id>
     <published>2016-09-02T02:12:15.000Z</published>
     <updated>2016-09-20T08:42:24.000Z</updated>
     
@@ -421,6 +421,45 @@
     
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS开发之HTTPS</title>
+    <link href="http://yoursite.com/2016/06/27/iOS-security-https/"/>
+    <id>http://yoursite.com/2016/06/27/iOS-security-https/</id>
+    <published>2016-06-27T01:42:55.000Z</published>
+    <updated>2016-09-20T16:34:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><hr>
+<p>在WWDC 2016开发者大会上，苹果宣布了一个最后期限：到2017年1月1日 App Store中的所有应用都必须启用 App Transport Security安全功能。App Transport Security（ATS）是苹果在iOS 9中引入的一项隐私保护功能，屏蔽明文HTTP资源加载，连接必须经过更安全的HTTPS。苹果目前允许开发者暂时关闭ATS，可以继续使用HTTP连接，但到年底所有官方商店的应用都必须强制性使用ATS。        </p>
+<h3 id="HTTPS和HTTP"><a href="#HTTPS和HTTP" class="headerlink" title="HTTPS和HTTP"></a>HTTPS和HTTP</h3><hr>
+<p>HTTPS（全称：Hyper Text Transfer Protocol over Secure Socket Layer），是以安全为目标的HTTP通道，简单讲是HTTP的安全版，HTTPS = HTTP + SSL/TLS。即在HTTP下加入了SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。HTTPS的主要思想是在不安全的网络上创建一安全信道，并可在使用适当的加密包和服务器证书可被验证且可被信任时，对窃听和中间人攻击提供合理的保护。HTTPS的信任基于预先安装在浏览器中的证书颁发机构（如VeriSign、Microsoft等）（意即“我信任证书颁发机构告诉我应该信任的”）,因此该网站的HTTPS连接可被信任，如果服务器搭建自己的https 也就是说采用自认证的方式来建立https信道，这样一般在客户端是不被信任的。所以我们一般在浏览器访问一些https站点的时候会有一个提示，问你是否继续。（苹果官网是强制安装证书的,不会询问用户）。</p>
+<blockquote>
+<p>HTTPS和HTTP的区别主要为以下四点：        </p>
+</blockquote>
+<p>一、https协议需要到ca申请证书，一般免费证书很少，需要交费。<br>二、http是超文本传输协议，信息是明文传输，https 则是具有安全性的ssl加密传输协议。<br>三、http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。<br>四、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。        </p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><hr>
+<p>如果是自己使用NSURLSession来封装网络请求，涉及代码如下：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:[<span class="built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration] delegate:<span class="keyword">self</span> delegateQueue:[<span class="built_in">NSOperationQueue</span> mainQueue]];</span><br><span class="line">   <span class="built_in">NSURLSessionDataTask</span> *task =  [session dataTaskWithURL:[<span class="built_in">NSURL</span> URLWithString:<span class="string">@"https://www.apple.com"</span>] completionHandler:^(<span class="built_in">NSData</span> *data, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) &#123;</span><br><span class="line">       <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, [[<span class="built_in">NSString</span> alloc] initWithData:data encoding:<span class="built_in">NSUTF8StringEncoding</span>]);</span><br><span class="line">   &#125;];</span><br><span class="line">   [task resume];</span><br></pre></td></tr></table></figure></p>
+<p>下面我们实现代理方法，在代理方法中处理证书。如果你的请求是HTTP而不是HTTPS是不走该代理方法的：    </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span><br><span class="line"> 我们需要在该方法中告诉系统, 是否信任服务器返回的证书</span><br><span class="line"> Challenge: 挑战 质问 (包含了受保护的区域)</span><br><span class="line"> protectionSpace : 受保护区域</span><br><span class="line"> NSURLAuthenticationMethodServerTrust : 证书的类型是 服务器信任</span><br><span class="line"> */</span></span><br><span class="line">- (<span class="keyword">void</span>)URLSession:(<span class="built_in">NSURLSession</span> *)session didReceiveChallenge:(<span class="built_in">NSURLAuthenticationChallenge</span> *)challenge completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLSessionAuthChallengeDisposition</span>, <span class="built_in">NSURLCredential</span> *))completionHandler</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 1.判断服务器返回的证书类型, 是否是服务器信任</span></span><br><span class="line">    <span class="keyword">if</span> ([challenge.protectionSpace.authenticationMethod isEqualToString:<span class="built_in">NSURLAuthenticationMethodServerTrust</span>]) &#123;</span><br><span class="line">        <span class="comment">/*</span><br><span class="line">         NSURLSessionAuthChallengeUseCredential = 0,                   使用证书</span><br><span class="line">         NSURLSessionAuthChallengePerformDefaultHandling = 1,          忽略证书(默认的处理方式)</span><br><span class="line">         NSURLSessionAuthChallengeCancelAuthenticationChallenge = 2,   忽略书证, 并取消这次请求</span><br><span class="line">         NSURLSessionAuthChallengeRejectProtectionSpace = 3,      拒绝当前这一次, 下一次再询问</span><br><span class="line">         */</span></span><br><span class="line">        <span class="built_in">NSURLCredential</span> *card = [[<span class="built_in">NSURLCredential</span> alloc]initWithTrust:challenge.protectionSpace.serverTrust];</span><br><span class="line">        completionHandler(<span class="built_in">NSURLSessionAuthChallengeUseCredential</span> , card);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是使用<code>AFN</code>框架，那么我们不需要做任何额外的操作，AFN内部已经做了处理。但是对于对于自制证书的网站还需要进行一些设置：        </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];</span><br><span class="line">manager.responseSerializer = [AFHTTPResponseSerializer serializer];</span><br><span class="line"><span class="comment">// allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO</span></span><br><span class="line"><span class="comment">// 如果是需要验证自建证书，需要设置为YES</span></span><br><span class="line">securityPolicy.allowInvalidCertificates = <span class="literal">YES</span>;</span><br><span class="line"><span class="comment">//validatesDomainName 是否需要验证域名，默认为YES；</span></span><br><span class="line"><span class="comment">// 假如证书的域名与你请求的域名不一致，需把该项设置为NO；如设成NO的话，即服务器使用其他可信任机构颁发的证书，也可以建立连接，这个非常危险，建议打开。</span></span><br><span class="line"><span class="comment">// 置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。</span></span><br><span class="line"><span class="comment">// 如置为NO，建议自己添加对应域名的校验逻辑。</span></span><br><span class="line">securityPolicy.validatesDomainName = <span class="literal">NO</span>;</span><br><span class="line"><span class="comment">// 如果就是CA证书，则不需要设置上面两项，正常使用AFN即可</span></span><br><span class="line">[manager GET:url parameters:<span class="literal">nil</span> progress:^(<span class="built_in">NSProgress</span> * _Nonnull downloadProgress) &#123;</span><br><span class="line">&#125; success:^(<span class="built_in">NSURLSessionDataTask</span> * _Nonnull task, <span class="keyword">id</span>  _Nullable responseObject) &#123;</span><br><span class="line">	 <span class="comment">// 请求成功</span></span><br><span class="line">&#125; failure:^(<span class="built_in">NSURLSessionDataTask</span> * _Nullable task, <span class="built_in">NSError</span> * _Nonnull error) &#123;</span><br><span class="line">      <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, error);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<p>虽然HTTPS相比于HTTP来说，会有一定的性能上的劣势，但对于网络飞速发展，移动设备的性能成倍增长的今天，安全才是我们更应该去考虑的。全网HTTPS并不是那么遥远。        </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;在WWDC 2016开发者大会上，苹果宣布了一个最后期限：到2017年1月1日 App Store中的所有应用都必须启用 App 
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="security" scheme="http://yoursite.com/tags/security/"/>
     
   </entry>
   
@@ -1564,92 +1603,6 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
     
     
       <category term="读书" scheme="http://yoursite.com/tags/%E8%AF%BB%E4%B9%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>三字经</title>
-    <link href="http://yoursite.com/2015/06/20/threeCharacter/"/>
-    <id>http://yoursite.com/2015/06/20/threeCharacter/</id>
-    <published>2015-06-20T08:21:08.000Z</published>
-    <updated>2016-06-24T03:36:12.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　</p>
-<p>昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　</p>
-<p>养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　</p>
-<p>玉不琢，不成器，人不学，不知义。为人子，方少时，亲师友，习礼仪。 　　</p>
-<p>香九龄，能温席，孝于亲，所当执。融四岁，能让梨，弟于长，宜先知。 　　</p>
-<p>首孝悌，次见闻，知某数，识某文。一而十，十而百，百而千，千而万。 　　</p>
-<p>三才者，天地人，三光者，日月星。三纲者，君臣义，父子亲，夫妇顺。 　　</p>
-<p>曰春夏，曰秋冬，此四时，运不穷。曰南北，曰西东，此四方，应乎中。 　　</p>
-<p>曰水火，木金土，此五行，本乎数。十干者，甲至癸。十二支，子至亥。 　　</p>
-<p>曰黄道，日所躔。曰赤道，当中权。赤道下，温暖极。我中华，在东北。 　　</p>
-<p>曰江河，曰淮济。此四渎，水之纪。曰岱华，嵩恒衡。此五岳，山之名。 　　</p>
-<p>曰士农，曰工商。此四民，国之良。曰仁义，礼智信，此五常，不容紊。 　　</p>
-<p>地所生，有草木。此植物，遍水陆。有虫鱼，有鸟兽。此动物，能飞走。 　　</p>
-<p>稻粱菽，麦黍稷。此六谷，人所食。马牛羊，鸡犬豕。此六畜，人所饲。 　　</p>
-<p>曰喜怒，曰哀惧，爱恶欲，七情具。青赤黄，及白黑，此五色，目所识。 　　</p>
-<p>酸苦甘，及辛咸，此五味，口所含。膻焦香，及腥朽，此五臭，鼻所嗅。 　　</p>
-<p>匏土革，木石金，丝与竹，乃八音。曰平上，曰去入，此四声，宜调协。 　　</p>
-<p>高曾祖，父而身，身而子，子而孙。自子孙，至玄曾，乃九族，人之伦。 　　</p>
-<p>父子恩，夫妇从，兄则友，弟则恭；长幼序，友与朋，君则敬，臣则忠。 　　</p>
-<p>此十义，人所同，当顺叙，勿违背。斩齐衰，大小幼。至缌麻，五服终。 　　</p>
-<p>礼乐射，御书数，古六艺，今不具。唯书学，人共遵，既识字，讲说文。 　　</p>
-<p>有古文，大小篆，隶草继，不可乱。 　　</p>
-<p>若广学，惧其繁，但略说，能知源。凡训蒙，须讲究，详训诂，明句读。 　　</p>
-<p>为学者，必有初，小学终，至四书。论语者，二十篇，群弟子，记善言。 　　</p>
-<p>孟子者，七篇止，讲道德，说仁义。作中庸，子思笔，中不偏，庸不易。 　　</p>
-<p>作大学，乃曾子，自修齐，至平治。孝经通，四书熟，如六经，始可读。 　　</p>
-<p>诗书易，礼春秋，号六经，当讲究。有连山，有归藏，有周易，三易详。 　　</p>
-<p>有典谟，有训诰，有誓命，书之奥。我周公，作周礼，著六官，存治体。 　　</p>
-<p>大小戴，注礼记，述圣言，礼乐备。曰国风，曰雅颂，号四诗，当讽咏。 　　</p>
-<p>诗既亡，春秋作，寓褒贬，别善恶。三传者，有公羊，有左氏，有谷梁。 　　</p>
-<p>经既明，方读子，撮其要，记其事。五子者，有荀扬，文中子，及老庄。 　　</p>
-<p>经子通，读诸史，考世系，知终始。自羲农，至黄帝，号三皇，居上世。 　　</p>
-<p>唐有虞，号二帝，相揖逊，称盛世。夏有禹，商有汤，周文武，称三王。 　　</p>
-<p>夏传子，家天下，四百载，迁夏社。汤伐夏，国号商，六百载，至纣亡。 　　</p>
-<p>周武王，始诛纣，八百载，最长久。周辙东，王纲坠，逞干戈，尚游说。 　　</p>
-<p>始春秋，终战国，五霸强，七雄出。蠃秦氏，始兼并，传二世，楚汉争。 　　</p>
-<p>高祖兴，汉业建，至孝平，王莽篡。光武兴，为东汉，四百年，终于献。 　　</p>
-<p>魏蜀吴，争汉鼎，号三国，迄两晋。宋齐继，梁陈承，为南朝，都金陵。 　　</p>
-<p>北元魏，分东西，宇文周，与高齐。迨至隋，一土宇，不再传，失统绪。 　　</p>
-<p>唐高祖，起义师，除隋乱，创国基。二十传，三百载，梁灭之，国乃改。 　　</p>
-<p>梁唐晋，及汉周，称五代，皆有由。炎宋兴，受周禅。十八传，南北混。 　　</p>
-<p>辽与金，皆称帝，元灭金，绝宋世。舆图广，超前代，九十载，国祚废。 　　</p>
-<p>太祖兴，国大明，号洪武，都金陵。迨成祖，迁燕京，十六世，至崇祯。 　</p>
-<p>权阉肆，寇如林，李闯出，神器焚。清世祖，膺景命，靖四方，克大定。 　　</p>
-<p>由康雍，历乾嘉。民安富，治绩夸。道咸间，变乱起。始英法，扰都鄙。 　　</p>
-<p>同光后，宣统弱。传九帝，满清殁。革命兴，废帝制。立宪法，建民国。 　　</p>
-<p>古今史，全在兹。载治乱，知兴衰。史虽繁，读有次。史记一，汉书二。 　　</p>
-<p>后汉三，国志四。兼证经，参通鉴。读史者，考实录，通古今，若亲目。 　　</p>
-<p>口而诵，心而惟，朝于斯，夕于斯。昔仲尼，师项橐，古圣贤，尚勤学。 　　</p>
-<p>赵中令，读鲁论，彼既仕，学且勤。彼蒲编，削竹简，彼无书，且知勉。 　　</p>
-<p>头悬梁，锥刺股，彼不教，自勤苦。如囊萤，如映雪，家虽贫，学不辍。 　　</p>
-<p>如负薪，如挂角，身虽劳，犹苦卓。苏老泉，二十七，始发愤，读书籍。 　　</p>
-<p>彼既老，犹悔迟，尔小生，宜早思。若梁灏，八十二，对大廷，魁多士。 　　</p>
-<p>彼既成，众称异，尔小生，宜立志。莹八岁，能咏诗，泌七岁，能赋棋。 　　</p>
-<p>彼颖悟，人称奇，尔幼学，当效之。蔡文姬，能辨琴，谢道韫，能咏吟。 　　</p>
-<p>彼女子，且聪敏，尔男子，当自警。唐刘晏，方七岁，举神童，作正字。 　　</p>
-<p>彼虽幼，身已仕，尔幼学，勉而致。有为者，亦若是。 　　</p>
-<p>犬守夜，鸡司晨，苟不学，曷为人？蚕吐丝，蜂酿蜜，人不学，不如物。 　　</p>
-<p>幼而学，壮而行，上致君，下泽民。扬名声，显父母，光于前，裕于后。 　　</p>
-<p>人遗子，金满籯，我教子，惟一经。勤有功，戏无益，戒之哉，宜勉力。</p>
-<p>=====================<br>不知为何突然想看看三字经了，却惭愧的发现自己以前居然没看过完整版~~~</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;人之初，性本善，性相近，习相远。苟不教，性乃迁，教之道，贵以专。 　　&lt;/p&gt;
-&lt;p&gt;昔孟母，择邻处，子不学，断机杼。窦燕山，有义方，教五子，名俱扬。 　　&lt;/p&gt;
-&lt;p&gt;养不教，父之过，教不严，师之惰。子不学，非所宜，幼不学，老何为？ 　　&lt;/p&gt;
-&lt;p&gt;玉不琢，不成器，
-    
-    </summary>
-    
-      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
-    
-    
-      <category term="人文" scheme="http://yoursite.com/tags/%E4%BA%BA%E6%96%87/"/>
     
   </entry>
   
