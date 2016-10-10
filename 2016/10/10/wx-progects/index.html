@@ -4,29 +4,38 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>继承的陷阱 | 骚客</title>
+    <title>微信小程序开发实战 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="Objective-C本身并没有私有方法的概念。一个类中定义的方法–不管是类本身定义的还是Category中定义的–最终都会出现在objc_class结构体的objc_method_list链表中。
-在开发中，经常有些方法我们不希望暴露给外界，所以并不会在头文件中去声明，而是直接在.m文件中去实现，也许为了区分，还会为方法加上类似于”xx_”这样的前缀，如图1所示，以这种方式定义”私有方法“。
-但">
+    <meta name="description" content="国庆前夕，微信小程序开放了局部封测，各种自媒体疯狂的炒作，正真的热的不行。我甚至看到了一个公众号宣传要做小程序的培训，而且还只是一小时的课程，开口就两千大洋，当时我都想喷饭了，这是欺负那些没有编程经验的人的吧。趁着国庆有时间学习了一下微信小程序的API，参考一些资料，用微信小程序做了几个小项目，感觉和以前学的ReactNavative开发有很多相似之处。
+
+骚客计算器
+
+用微信小程序搭建的简易计算">
 <meta property="og:type" content="article">
-<meta property="og:title" content="继承的陷阱">
-<meta property="og:url" content="http://yoursite.com/2016/06/20/iOS-inherit-trap/index.html">
+<meta property="og:title" content="微信小程序开发实战">
+<meta property="og:url" content="http://yoursite.com/2016/10/10/wx-progects/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="Objective-C本身并没有私有方法的概念。一个类中定义的方法–不管是类本身定义的还是Category中定义的–最终都会出现在objc_class结构体的objc_method_list链表中。
-在开发中，经常有些方法我们不希望暴露给外界，所以并不会在头文件中去声明，而是直接在.m文件中去实现，也许为了区分，还会为方法加上类似于”xx_”这样的前缀，如图1所示，以这种方式定义”私有方法“。
-但">
-<meta property="og:updated_time" content="2016-09-02T02:00:36.000Z">
+<meta property="og:description" content="国庆前夕，微信小程序开放了局部封测，各种自媒体疯狂的炒作，正真的热的不行。我甚至看到了一个公众号宣传要做小程序的培训，而且还只是一小时的课程，开口就两千大洋，当时我都想喷饭了，这是欺负那些没有编程经验的人的吧。趁着国庆有时间学习了一下微信小程序的API，参考一些资料，用微信小程序做了几个小项目，感觉和以前学的ReactNavative开发有很多相似之处。
+
+骚客计算器
+
+用微信小程序搭建的简易计算">
+<meta property="og:image" content="http://oet7ffdgt.bkt.clouddn.com/wx-calculator.jpg">
+<meta property="og:image" content="http://oet7ffdgt.bkt.clouddn.com/wx-weather.jpg">
+<meta property="og:updated_time" content="2016-10-10T15:10:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="继承的陷阱">
-<meta name="twitter:description" content="Objective-C本身并没有私有方法的概念。一个类中定义的方法–不管是类本身定义的还是Category中定义的–最终都会出现在objc_class结构体的objc_method_list链表中。
-在开发中，经常有些方法我们不希望暴露给外界，所以并不会在头文件中去声明，而是直接在.m文件中去实现，也许为了区分，还会为方法加上类似于”xx_”这样的前缀，如图1所示，以这种方式定义”私有方法“。
-但">
+<meta name="twitter:title" content="微信小程序开发实战">
+<meta name="twitter:description" content="国庆前夕，微信小程序开放了局部封测，各种自媒体疯狂的炒作，正真的热的不行。我甚至看到了一个公众号宣传要做小程序的培训，而且还只是一小时的课程，开口就两千大洋，当时我都想喷饭了，这是欺负那些没有编程经验的人的吧。趁着国庆有时间学习了一下微信小程序的API，参考一些资料，用微信小程序做了几个小项目，感觉和以前学的ReactNavative开发有很多相似之处。
+
+骚客计算器
+
+用微信小程序搭建的简易计算">
+<meta name="twitter:image" content="http://oet7ffdgt.bkt.clouddn.com/wx-calculator.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -79,14 +88,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/06/20/iOS-inherit-trap/" title="继承的陷阱" itemprop="url">继承的陷阱</a>
+      <a href="/2016/10/10/wx-progects/" title="微信小程序开发实战" itemprop="url">微信小程序开发实战</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-20T04:16:35.000Z" itemprop="datePublished"> 发表于 2016-06-20</time>
+    <time datetime="2016-10-10T03:10:55.000Z" itemprop="datePublished"> 发表于 2016-10-10</time>
     
   </p>
 </header>
@@ -99,11 +108,24 @@
 		
 		</div>
 		
-		<p>Objective-C本身并没有私有方法的概念。一个类中定义的方法–不管是类本身定义的还是Category中定义的–最终都会出现在objc_class结构体的objc_method_list链表中。</p>
-<p>在开发中，经常有些方法我们不希望暴露给外界，所以并不会在头文件中去声明，而是直接在.m文件中去实现，也许为了区分，还会为方法加上类似于”xx_”这样的前缀，如图1所示，以这种方式定义”私有方法“。</p>
-<p>但这只是一种障眼法，在外部调用时，确实是看不到，如果我们直接调用这些方法，编译器会报错，但如果用performSelector:来调用，依然可以正常执行。</p>
-<p>上面这种问题通常可以避免。一个潜藏的问题是出现在继承体系里面。如果父类和子类的.m文件定义了两个同名的”私有方法“，则子类的方法会覆盖父类的方法，这样我们可能会在不经意间修改了父类的一些实现。</p>
-<p>在继承第三方非开源库中的类时，如果遇到这种情况，会是一种很淡疼的感觉，那样你只能修改自己的方法名了。</p>
+		<p>国庆前夕，微信小程序开放了局部封测，各种自媒体疯狂的炒作，正真的热的不行。我甚至看到了一个公众号宣传要做小程序的培训，而且还只是一小时的课程，开口就两千大洋，当时我都想喷饭了，这是欺负那些没有编程经验的人的吧。趁着国庆有时间学习了一下微信小程序的API，参考一些资料，用微信小程序做了几个小项目，感觉和以前学的ReactNavative开发有很多相似之处。</p>
+<ul>
+<li>骚客计算器</li>
+</ul>
+<p>用微信小程序搭建的简易计算器，一些计算逻辑可能还有一些问题，不过这不是重点，主要是通过这个项目练练手。里面涉及到的一些知识点：数据绑定、页面渲染、逻辑结构、事件响应、页面跳转等。        </p>
+<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-calculator.jpg" alt=""><br><br></center>
+
+
+
+<ul>
+<li>骚客天气</li>
+</ul>
+<p>用微信小程序搭建的简易天气界面，可以看到当天和未来三天的天气情况。里面涉及到的一些知识点：位置接口、网络通信、百度地图API、天气API、方法封装调用，Flex布局、模板处理、引用、列表渲染等。        </p>
+<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-weather.jpg" alt=""><br><br></center>        
+
+
+<p>后续还会写一些简单的小应用。        </p>
+<p>这些项目统一放在github上：戳这里，以后用微信小程序写的一些应用我也会统一放到【这里】。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -111,13 +133,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/技术/">技术</a>
+  <a class="article-category-link" href="/categories/微信小程序/">微信小程序</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a>
+  <span></span> <a href="/tags/wx/">wx</a>
   </div>
 
 </div>
@@ -126,7 +148,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2016/06/20/iOS-inherit-trap/" data-title="继承的陷阱 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2016/10/10/wx-progects/" data-title="微信小程序开发实战 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -139,19 +161,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/06/27/iOS-security-https/" title="iOS开发之HTTPS">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS开发之HTTPS</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/04/12/iOS-ChangeNavImg/"  title="Swift实现导航栏头像大小渐变和导航栏颜色渐变">
+<a href="/2016/09/28/iOS-weChat/"  title="微信聊天框架的搭建">
  <strong>下一篇：</strong><br/> 
- <span>Swift实现导航栏头像大小渐变和导航栏颜色渐变
+ <span>微信聊天框架的搭建
 </span>
 </a>
 </div>
@@ -160,7 +174,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/06/20/iOS-inherit-trap/" data-title="继承的陷阱" data-url="http://yoursite.com/2016/06/20/iOS-inherit-trap/"></div>
+	<div class="ds-thread" data-thread-key="2016/10/10/wx-progects/" data-title="微信小程序开发实战" data-url="http://yoursite.com/2016/10/10/wx-progects/"></div>
 </section>
 
 

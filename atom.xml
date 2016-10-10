@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-10-08T07:25:16.000Z</updated>
+  <updated>2016-10-10T15:10:28.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,46 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>微信小程序开发实战</title>
+    <link href="http://yoursite.com/2016/10/10/wx-progects/"/>
+    <id>http://yoursite.com/2016/10/10/wx-progects/</id>
+    <published>2016-10-10T03:10:55.000Z</published>
+    <updated>2016-10-10T15:10:28.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>国庆前夕，微信小程序开放了局部封测，各种自媒体疯狂的炒作，正真的热的不行。我甚至看到了一个公众号宣传要做小程序的培训，而且还只是一小时的课程，开口就两千大洋，当时我都想喷饭了，这是欺负那些没有编程经验的人的吧。趁着国庆有时间学习了一下微信小程序的API，参考一些资料，用微信小程序做了几个小项目，感觉和以前学的ReactNavative开发有很多相似之处。</p>
+<ul>
+<li>骚客计算器</li>
+</ul>
+<p>用微信小程序搭建的简易计算器，一些计算逻辑可能还有一些问题，不过这不是重点，主要是通过这个项目练练手。里面涉及到的一些知识点：数据绑定、页面渲染、逻辑结构、事件响应、页面跳转等。        </p>
+<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-calculator.jpg" alt=""><br><br></center>
+
+
+
+<ul>
+<li>骚客天气</li>
+</ul>
+<p>用微信小程序搭建的简易天气界面，可以看到当天和未来三天的天气情况。里面涉及到的一些知识点：位置接口、网络通信、百度地图API、天气API、方法封装调用，Flex布局、模板处理、引用、列表渲染等。        </p>
+<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-weather.jpg" alt=""><br><br></center>        
+
+
+<p>后续还会写一些简单的小应用。        </p>
+<p>这些项目统一放在github上：戳这里，以后用微信小程序写的一些应用我也会统一放到【这里】。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;国庆前夕，微信小程序开放了局部封测，各种自媒体疯狂的炒作，正真的热的不行。我甚至看到了一个公众号宣传要做小程序的培训，而且还只是一小时的课程，开口就两千大洋，当时我都想喷饭了，这是欺负那些没有编程经验的人的吧。趁着国庆有时间学习了一下微信小程序的API，参考一些资料，用微信
+    
+    </summary>
+    
+      <category term="微信小程序" scheme="http://yoursite.com/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/"/>
+    
+    
+      <category term="wx" scheme="http://yoursite.com/tags/wx/"/>
+    
+  </entry>
   
   <entry>
     <title>微信聊天框架的搭建</title>
@@ -1557,47 +1597,6 @@ typedef NS_OPTIONS(NSUInteger, NSRegularExpressionOptions) {
     
     
       <category term="regex" scheme="http://yoursite.com/tags/regex/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>读书系列-《别让情绪失控害了你》</title>
-    <link href="http://yoursite.com/2015/07/26/book-mood/"/>
-    <id>http://yoursite.com/2015/07/26/book-mood/</id>
-    <published>2015-07-26T09:59:12.000Z</published>
-    <updated>2016-08-26T04:17:19.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>沙场点兵，卧品书香！        </p>
-<p>昨天在公司看到这本书《别让情绪失控害了你》，感觉不错，今天上午躺在床上读了几章，获益匪浅！虽然有些大道理我们都懂，但是当我们在生活中真正遇到事情的时候，真正做到坐怀不乱的又有几人？！静下心来好好读书，想想发生在自己身上的一些事情，当时的做法和看法现在想来多半是不正确甚至是不理智的。        </p>
-<p>人非圣贤，孰能无过！我们都是在经历和错误中逐渐提高的，控制自己的情绪，修炼自己的素养，无需山崩于眼前我自岿然不动，但却要有长坂坡前一声吼的气势！      </p>
-<p>幸福是自找的，麻烦也是自找的。运气不会青睐悲观失意的人，当我们认为生活很不幸，那么我们就真的陷入了不幸之中。事实上，我们最大的敌人就是错误的发挥自己的想象力，我们总是觉得自己不幸福、不快乐，被忽视了，被议论了，被生活抛弃了，这些错觉，正是导致我们陷入无边无际的痛苦原因。        </p>
-<p>积极的行动可以带动观念的转变。只要将一个人的心态由恐惧转化为昂扬向上，就能克服任何障碍。只要一个的动作和表情表现出勇敢而非恐惧，他就能勇敢奋进起来。      </p>
-<p>保持心境平和，内心才会充满喜悦。在这个追名逐利浮躁的当下，能保持一个平常心，实属难能可贵！        </p>
-<p>入睡前花点时间想一下自己这一天都干了什么，这种习惯可以帮助我们更好地与人与己相处。但是入睡前盯着手机麻醉自己仿佛成了我们生活的规律。      </p>
-<p>学会正面思维，你可以反败为胜。人具有反败为胜的力量。同一个窗口，一个人看到泥泞满地，一个人看到的是星辰漫天，这便值得我们思考。        </p>
-<p>好事多磨！     </p>
-<p>学会乐观，多数担忧都是多余的！      </p>
-<p>不应该抱怨生活，你所寻求的安慰话语中，很少包含着你需要的东西。      </p>
-<p>从不浪费时间的人，没有功夫抱怨时间的不够！      </p>
-<p>世界并无好坏之分，只是我们如何去想！改变认知，就能管住情绪不失控。    </p>
-<blockquote>
-<p>好脑袋不如一个烂笔头，记录下此时此刻的感想感知，不断的鞭策自己，也希望对大家有所帮助。                    </p>
-</blockquote>
-<hr>
-<p>扫描下面二维码关注公众号，时不时的会有惊喜：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;沙场点兵，卧品书香！        &lt;/p&gt;
-&lt;p&gt;昨天在公司看到这本书《别让情绪失控害了你》，感觉不错，今天上午躺在床上读了几章，获益匪浅！虽然有些大道理我们都懂，但是当我们在生活中真正遇到事情的时候，真正做到坐怀不乱的又有几人？！静下心来好好读书，想想发生在自己身上的一
-    
-    </summary>
-    
-      <category term="读书笔记" scheme="http://yoursite.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
-    
-    
-      <category term="读书" scheme="http://yoursite.com/tags/%E8%AF%BB%E4%B9%A6/"/>
     
   </entry>
   
