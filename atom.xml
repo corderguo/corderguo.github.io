@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-10-10T15:19:34.000Z</updated>
+  <updated>2016-10-11T02:23:57.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,14 +20,14 @@
     <link href="http://yoursite.com/2016/10/10/wx-progects/"/>
     <id>http://yoursite.com/2016/10/10/wx-progects/</id>
     <published>2016-10-10T03:10:55.000Z</published>
-    <updated>2016-10-10T15:19:34.000Z</updated>
+    <updated>2016-10-11T02:23:57.000Z</updated>
     
     <content type="html"><![CDATA[<p>国庆前夕，微信小程序开放了局部封测，各种自媒体疯狂的炒作，正真的热的不行。我甚至看到了一个公众号宣传要做小程序的培训，而且还只是一小时的课程，开口就两千大洋，当时我都想喷饭了，这是欺负那些没有编程经验的人的吧。趁着国庆有时间学习了一下微信小程序的API，参考一些资料，用微信小程序做了几个小项目，感觉和以前学的ReactNavative开发有很多相似之处。</p>
 <ul>
 <li>骚客计算器</li>
 </ul>
 <p>用微信小程序搭建的简易计算器，一些计算逻辑可能还有一些问题，不过这不是重点，主要是通过这个项目练练手。里面涉及到的一些知识点：数据绑定、页面渲染、逻辑结构、事件响应、页面跳转等。        </p>
-<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-calculator.jpg" alt=""><br><br></center>
+<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-calculator.jpg" width="25%" height="25%"><br><br></center>
 
 
 
@@ -35,7 +35,7 @@
 <li>骚客天气</li>
 </ul>
 <p>用微信小程序搭建的简易天气界面，可以看到当天和未来三天的天气情况。里面涉及到的一些知识点：位置接口、网络通信、百度地图API、天气API、方法封装调用，Flex布局、模板处理、引用、列表渲染等。        </p>
-<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-weather.jpg" alt=""><br><br></center>        
+<center><br><br><img src="http://oet7ffdgt.bkt.clouddn.com/wx-weather.jpg" width="25%" height="25%"><br><br></center>        
 
 
 <p>后续还会写一些简单的小应用。        </p>
