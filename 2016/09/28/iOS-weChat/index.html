@@ -25,7 +25,7 @@
 做了两年IM相关工作了，去年是集成环信的SDK实现的IM功能，今年公司拥有自己的长连接服务器，于是从头自己定协议然后一步步实现了IM的整体功能，基本把微信IM有关的内容都实现了。最近开始整理过去的一">
 <meta property="og:image" content="http://img.blog.csdn.net/20160928230616321">
 <meta property="og:image" content="http://img.blog.csdn.net/20160928230519993">
-<meta property="og:updated_time" content="2016-10-12T07:44:56.000Z">
+<meta property="og:updated_time" content="2016-10-12T07:49:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信聊天框架的搭建">
 <meta name="twitter:description" content="XZ_WeChat高仿微信聊天框架的搭建，工程地址：https://github.com/corderguo/XZ_WeChat        
@@ -140,7 +140,8 @@
 <p>10月8日：添加了消息的拷贝、删除、撤回功能，由于转发功能需要用到数据库所以我只添加了转发的UI,等添加了数据库后再完善。<code>注意</code>这里的只有自己的消息并且是发送成功的消息才可以撤回，我这里限制的是<code>5分钟</code>内的消息可以撤回,超过规定时间不允许撤回。            </p>
 <p>10月12日：添加了系统消息，当消息撤回的时候聊天界面上提示一条<code>你撤回了一条消息</code>的提示。当多人聊天的时候，如果一方撤回了一条消息，系统应该给你发送一条指令，根据这条指令你识别出是哪一条消息被撤回了，然后删除这条消息，并且插入一条<code>谁谁撤回了一条消息</code>。</p>
 <p>10月12日：适配xcode8.0，解决bug，如果用xcode8.0的模拟器访问相册时崩溃，则换成真机即可，我也是在升级到xcode8.0后遇到的问题，问题如下：            </p>
-<pre><code class="objc">objc[<span class="number">6777</span>]: Class PLBuildVersion is implemented <span class="keyword">in</span> both /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/AssetsLibraryServices.framework/AssetsLibraryServices (<span class="number">0x1227c3910</span>) and /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/PhotoLibraryServices.framework/PhotoLibraryServices (<span class="number">0x1225ed210</span>). One of the two will be used. Which one is undefined.
+<pre><code class="objc">objc[<span class="number">6777</span>]: Class PLBuildVersion is implemented <span class="keyword">in</span> both /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.            sdk/System/Library/PrivateFrameworks/AssetsLibraryServices.framework/AssetsLibraryServices (<span class="number">0x1227c3910</span>) and             /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.                sdk/System/Library/PrivateFrameworks/PhotoLibraryServices.            framework/PhotoLibraryServices (<span class="number">0x1225ed210</span>).                 
+One of the two will be used. Which one is undefined.
 </code></pre>
 <p>奇怪的是我原项目中没有遇到该问题，而抽出来的这个聊天框架却遇到了问题，我猜想是我项目中使用了cocoapods来管理三方，而该聊天框架中我是直接导入的，稍后我会集成cocoapods，尝试问题的解决。大家若有解决方法可以给我留言，大家共同提高。</p>
 <p>如果你在学习过程中有什么问题可以和我留言，大家共同提高。如果该框架能帮助到你，欢迎star，你的关注是我最大的动力，谢谢！</p>
