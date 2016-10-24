@@ -4,32 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>iOS中关于死锁的一点总结 | 骚客</title>
+    <title>访问坏内存Bug定位解决 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="起因
-所谓死锁: 是指两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待的现象，若无外力作用，它们都将无法推进下去。        
-例如：     
-死锁是因为多线程访问共享资源，由于访问的顺序不当所造成的，通常是一个线程锁定了一个资源A，而又想去锁定资源B；在另一个线程中，锁定了资源B，而又想去锁定资源A以完成自身的操作，两个线程都想得到对方的资源，而不愿释放自己的资源，造成两个">
+    <meta name="description" content="当你刚接手一个项目的时候（对代码的内部结构还不清楚），如果出现一些莫名其妙的内存问题，而且也没有错误的log日志，这种问题有时候是比较难定位的，根本就不知道代码哪里出现了问题，今天刚好遇到了一个这样的问题，顺便总结一下。
+当对项目中的某一模块进行操作的时候遇到的错误是EXC_BREAKPOINT (code=1, subcode=…)而且没有任何错误log的打印。添加了全局断点还是没有定位到出错代">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS中关于死锁的一点总结">
-<meta property="og:url" content="http://yoursite.com/2016/07/23/iOS-gcd-deadlock/index.html">
+<meta property="og:title" content="访问坏内存Bug定位解决">
+<meta property="og:url" content="http://yoursite.com/2016/10/24/bugs-EXC_BREAKPOINT/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="起因
-所谓死锁: 是指两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待的现象，若无外力作用，它们都将无法推进下去。        
-例如：     
-死锁是因为多线程访问共享资源，由于访问的顺序不当所造成的，通常是一个线程锁定了一个资源A，而又想去锁定资源B；在另一个线程中，锁定了资源B，而又想去锁定资源A以完成自身的操作，两个线程都想得到对方的资源，而不愿释放自己的资源，造成两个">
-<meta property="og:updated_time" content="2016-09-12T10:29:35.000Z">
+<meta property="og:description" content="当你刚接手一个项目的时候（对代码的内部结构还不清楚），如果出现一些莫名其妙的内存问题，而且也没有错误的log日志，这种问题有时候是比较难定位的，根本就不知道代码哪里出现了问题，今天刚好遇到了一个这样的问题，顺便总结一下。
+当对项目中的某一模块进行操作的时候遇到的错误是EXC_BREAKPOINT (code=1, subcode=…)而且没有任何错误log的打印。添加了全局断点还是没有定位到出错代">
+<meta property="og:image" content="http://oet7ffdgt.bkt.clouddn.com/EXC_BRECKPOINT.png">
+<meta property="og:image" content="http://oet7ffdgt.bkt.clouddn.com/malloc1.jpg">
+<meta property="og:image" content="http://i.stack.imgur.com/qbfcb.png">
+<meta property="og:image" content="http://i.stack.imgur.com/wpolZ.png">
+<meta property="og:updated_time" content="2016-10-24T06:39:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS中关于死锁的一点总结">
-<meta name="twitter:description" content="起因
-所谓死锁: 是指两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待的现象，若无外力作用，它们都将无法推进下去。        
-例如：     
-死锁是因为多线程访问共享资源，由于访问的顺序不当所造成的，通常是一个线程锁定了一个资源A，而又想去锁定资源B；在另一个线程中，锁定了资源B，而又想去锁定资源A以完成自身的操作，两个线程都想得到对方的资源，而不愿释放自己的资源，造成两个">
+<meta name="twitter:title" content="访问坏内存Bug定位解决">
+<meta name="twitter:description" content="当你刚接手一个项目的时候（对代码的内部结构还不清楚），如果出现一些莫名其妙的内存问题，而且也没有错误的log日志，这种问题有时候是比较难定位的，根本就不知道代码哪里出现了问题，今天刚好遇到了一个这样的问题，顺便总结一下。
+当对项目中的某一模块进行操作的时候遇到的错误是EXC_BREAKPOINT (code=1, subcode=…)而且没有任何错误log的打印。添加了全局断点还是没有定位到出错代">
+<meta name="twitter:image" content="http://oet7ffdgt.bkt.clouddn.com/EXC_BRECKPOINT.png">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -82,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/07/23/iOS-gcd-deadlock/" title="iOS中关于死锁的一点总结" itemprop="url">iOS中关于死锁的一点总结</a>
+      <a href="/2016/10/24/bugs-EXC_BREAKPOINT/" title="访问坏内存Bug定位解决" itemprop="url">访问坏内存Bug定位解决</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2016-07-23T04:02:04.000Z" itemprop="datePublished"> 发表于 2016-07-23</time>
+    <time datetime="2016-10-24T06:39:05.000Z" itemprop="datePublished"> 发表于 2016-10-24</time>
     
   </p>
 </header>
@@ -98,47 +97,24 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GCD导致死锁的例子"><span class="toc-number">2.</span> <span class="toc-text">GCD导致死锁的例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><hr>
-<p>所谓死锁: 是指两个或两个以上的进程在执行过程中，因争夺资源而造成的一种互相等待的现象，若无外力作用，它们都将无法推进下去。        </p>
-<p>例如：     </p>
-<p>死锁是因为多线程访问共享资源，由于访问的顺序不当所造成的，通常是一个线程锁定了一个资源A，而又想去锁定资源B；在另一个线程中，锁定了资源B，而又想去锁定资源A以完成自身的操作，两个线程都想得到对方的资源，而不愿释放自己的资源，造成两个线程都在等待，而无法执行的情况。    </p>
-<h3 id="GCD导致死锁的例子"><a href="#GCD导致死锁的例子" class="headerlink" title="GCD导致死锁的例子"></a>GCD导致死锁的例子</h3><hr>
-<p>比如下面的这个会产生死锁的例子：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)viewDidLoad</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"1"</span>);</span><br><span class="line">    <span class="built_in">dispatch_sync</span>(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"2"</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"3"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>你可以自己先分析一下该程序产生死锁的原因。    </p>
-<p>我们首先要搞清楚<code>同步&amp;异步</code> <code>串行&amp;并发</code>这两组基本概念：    </p>
+		<p>当你刚接手一个项目的时候（对代码的内部结构还不清楚），如果出现一些莫名其妙的内存问题，而且也没有错误的log日志，这种问题有时候是比较难定位的，根本就不知道代码哪里出现了问题，今天刚好遇到了一个这样的问题，顺便总结一下。</p>
+<p>当对项目中的某一模块进行操作的时候遇到的错误是<code>EXC_BREAKPOINT (code=1, subcode=…)</code>而且没有任何错误log的打印。添加了<code>全局断点</code>还是没有定位到出错代码的位置，这时候就需要对xcode进行一些设置了。        </p>
+<p><img src="http://oet7ffdgt.bkt.clouddn.com/EXC_BRECKPOINT.png" alt="EXC_BRECKPOINT.png"></p>
+<p>xcode开启<code>僵尸模式</code>,如果遇到<code>The target process has no stack logs. Run it with the MallocStackLogging env</code>这种问题那么可以设置下<code>mallocstacklogging</code>为YES。</p>
+<p><img src="http://oet7ffdgt.bkt.clouddn.com/malloc1.jpg" alt="zombie"></p>
+<p>这个时候再对出问题的模块进行操作，会打印出<code>[testViewController retain]message sent to deallocated instance</code>的错误提示，这要就定位到了出问题的大体位置了,并且也知道了是坏内存访问的问题。</p>
+<p>但是这个控制器中的代码有上千行，这个时候如何定位呢，既然是内存问题，这里就用到了内存调试工具<code>Zombies</code>了。<br>打开该工具，运行项目，当出现<code>message sent to deallocated instance</code>时候，工具会提示<code>An Objective-C message was sent to a deallocated object(zombie) at address:0x8b3b200</code>，点击提示，工具会提示可能存在内存问题的地方，然后自己看一下定位的具体代码，就能发现出现问题的地方了。    </p>
+<p><img src="http://i.stack.imgur.com/qbfcb.png" alt=""></p>
+<p><img src="http://i.stack.imgur.com/wpolZ.png" alt="">        </p>
+<p>到这里你就应该定位到出问题代码的位置了，合理的利用调试工具，用助于我们高效率的开发。</p>
 <blockquote>
-<p>同步执行：比如dispatch_sync，这个函数会把一个block加入到指定的队列中，而且会一直等到执行完blcok，这个函数才返回。因此在block执行完之前，调用dispatch_sync方法的线程是阻塞的。        </p>
-<p>异步执行：一般使用dispatch_async，这个函数也会把一个block加入到指定的队列中，但是和同步执行不同的是，这个函数把block加入队列后不等block的执行就立刻返回了。</p>
+<p>今天是1024，程序员的节日，祝大家节日快乐。</p>
 </blockquote>
-<p>接下来是”串行和并行”：        </p>
-<blockquote>
-<p>串行队列：比如dispatch_get_main_queue,这个队列中所有任务，一定按照先来后到的顺序执行。不仅如此，还可以保证在执行某个任务时，在它前面进入队列的所有任务肯定执行完了。对于每一个不同的串行队列，系统会为这个队列建立唯一的线程来执行代码。            </p>
-<p>并发队列：比如dispatch_get_global_queue,这个队列中的任务也是按照先来后到的顺序开始执行，注意是开始，但是它们的执行结束时间是不确定的，取决于每个任务的耗时。对于n个并发队列，GCD不会创建对应的n个线程而是进行适当的优化。</p>
-</blockquote>
-<p>理解清楚上面的两组概念后我们再来分析上面例子产生死锁的原因：        </p>
-<p>该程序中在主线程中同步执行<code>dispatch_sync(queue,block)</code>任务，而该任务又被分发到了主线程<code>dispatch_get_main_queue()</code>中，这就产生了问题。程序在执行<code>dispatch_sync(queue,block)</code>时，会阻塞调用线程（在这里是主线程），等待block中的任务执行完后再返回阻塞线程继续进行执行，但是block中的任务在执行的时候又需要在主线程中执行，而现在主线程被阻塞，所以就会产生两者相互等待的情况，死锁就形成了。    </p>
-<p>下面对比着总结一下<code>dispatch_sync</code>和<code>dispatch_async</code>的执行流程：        </p>
-<p>（1）dispatch_sync的执行流程：</p>
-<ul>
-<li>将block添加到queue队列中</li>
-<li>阻塞调用线程，等待block（）执行结束，回调到调用线程。</li>
-</ul>
-<p>（2）dispatch_async的执行流程：    </p>
-<ul>
-<li>将block添加到queue队列中</li>
-<li>直接回到调用线程（不阻塞调用线程）,异步执行。</li>
-</ul>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
-<p>下面我总结一下关于死锁的一些注意事项：    </p>
-<ul>
-<li>异步执行一定不会产生死锁，因为异步的执行，block会立刻返回，不会阻塞线程。所以在我们开发过程中如果遇到死锁的问题，很大可能是同步执行的原因，这样可以帮助我们快速定位。</li>
-<li>不要把block任务同步派发到调用gcd所在线程的关联队列中。</li>
-</ul>
+<p>参考资料在<a href="http://stackoverflow.com/questions/11170614/viewcontroller-respondstoselector-message-sent-to-deallocated-instance-crash" target="_blank" rel="external">这里</a>，欢迎大家转载，请注明出处。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -152,7 +128,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/多线程/">多线程</a>
+  <span></span> <a href="/tags/bugs/">bugs</a>
   </div>
 
 </div>
@@ -161,7 +137,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2016/07/23/iOS-gcd-deadlock/" data-title="iOS中关于死锁的一点总结 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2016/10/24/bugs-EXC_BREAKPOINT/" data-title="访问坏内存Bug定位解决 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -174,19 +150,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/08/02/iOS-authorization/" title="iOS开发各种权限问题(相机、录音等)">
-  <strong>上一篇：</strong><br/>
-  <span>
-  iOS开发各种权限问题(相机、录音等)</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/07/11/iOS-cocoaPods-bugs/"  title="CocoaPods更新遇redefinition问题及其它问题汇总">
+<a href="/2016/10/10/wx-progects/"  title="微信小程序开发实战">
  <strong>下一篇：</strong><br/> 
- <span>CocoaPods更新遇redefinition问题及其它问题汇总
+ <span>微信小程序开发实战
 </span>
 </a>
 </div>
@@ -195,7 +163,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/07/23/iOS-gcd-deadlock/" data-title="iOS中关于死锁的一点总结" data-url="http://yoursite.com/2016/07/23/iOS-gcd-deadlock/"></div>
+	<div class="ds-thread" data-thread-key="2016/10/24/bugs-EXC_BREAKPOINT/" data-title="访问坏内存Bug定位解决" data-url="http://yoursite.com/2016/10/24/bugs-EXC_BREAKPOINT/"></div>
 </section>
 
 
@@ -205,7 +173,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#起因"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GCD导致死锁的例子"><span class="toc-number">2.</span> <span class="toc-text">GCD导致死锁的例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol>
+ 
  
   </div>
 
