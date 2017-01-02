@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-01-02T09:53:14.000Z</updated>
+  <updated>2017-01-02T10:07:08.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,15 +16,13 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
+    <title>2016年度总结</title>
     <link href="http://yoursite.com/2017/01/02/life-2016summary/"/>
     <id>http://yoursite.com/2017/01/02/life-2016summary/</id>
-    <published>2017-01-02T08:02:33.000Z</published>
-    <updated>2017-01-02T09:53:14.000Z</updated>
+    <published>2017-01-02T09:59:10.000Z</published>
+    <updated>2017-01-02T10:07:08.000Z</updated>
     
-    <content type="html"><![CDATA[<hr>
-<p>title: 2016年度总结<br>date: 2017-01-02 17:49:10<br>categories: 生活</p>
-<h2 id="tags-情感"><a href="#tags-情感" class="headerlink" title="tags: 情感"></a>tags: 情感</h2><p>今天在撸代码的时候，点了一下时间上的日历，日期已经变成2017年了，心弦莫名的被触动，那个意犹未尽的2016就这样再也回不来了。也许再过一段时间，你就忘了曾经的那个2016年自己走过的街道、流过汗水、做过的事情、遇见的人，想抓却又抓不住。</p>
+    <content type="html"><![CDATA[<p>今天在撸代码的时候，点了一下时间上的日历，日期已经变成2017年了，心弦莫名的被触动，那个意犹未尽的2016就这样再也回不来了。也许再过一段时间，你就忘了曾经的那个2016年自己走过的街道、流过汗水、做过的事情、遇见的人，想抓却又抓不住。</p>
 <p>回首2016年，这一年是自己心态改变最大的一年，做事和考虑问题的方式和以前有了很大的不同。</p>
 <p>这一年，由于工作原因和几个好朋友分开住了，所幸离得不是很远，每个星期都能聚聚，一起谈谈理想，扯扯人生，很幸运有这帮志同道合的朋友。</p>
 <p>关于运动，今年坚持的还不错，从年初开始直到进入冬天，每周末至少会去奥森跑10公里或者去干部学院打一下午篮球。今年夏天还办了一张游泳卡，学会了游泳，游完泳后再去打篮球，也是累的不行。可惜进入冬天后，运动的次数明显是减少了，身体状态也不如以前了，引以为鉴。</p>
@@ -39,12 +37,15 @@
     
     <summary type="html">
     
-      &lt;hr&gt;
-&lt;p&gt;title: 2016年度总结&lt;br&gt;date: 2017-01-02 17:49:10&lt;br&gt;categories: 生活&lt;/p&gt;
-&lt;h2 id=&quot;tags-情感&quot;&gt;&lt;a href=&quot;#tags-情感&quot; class=&quot;headerlink&quot; title=&quot;tag
+      &lt;p&gt;今天在撸代码的时候，点了一下时间上的日历，日期已经变成2017年了，心弦莫名的被触动，那个意犹未尽的2016就这样再也回不来了。也许再过一段时间，你就忘了曾经的那个2016年自己走过的街道、流过汗水、做过的事情、遇见的人，想抓却又抓不住。&lt;/p&gt;
+&lt;p&gt;回首2016年，这一
     
     </summary>
     
+      <category term="生活" scheme="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+      <category term="情感" scheme="http://yoursite.com/tags/%E6%83%85%E6%84%9F/"/>
     
   </entry>
   
