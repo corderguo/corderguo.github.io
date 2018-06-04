@@ -11,22 +11,22 @@
     
 
     
-    <meta name="description" content="iOS逆向解密
-学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
-Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。">
+    <meta name="description" content="学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
+Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    
+在逆向工">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS逆向解密">
 <meta property="og:url" content="http://yoursite.com/2018/06/04/iOS-hacking/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="iOS逆向解密
-学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
-Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。">
-<meta property="og:updated_time" content="2018-06-04T06:30:48.999Z">
+<meta property="og:description" content="学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
+Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    
+在逆向工">
+<meta property="og:updated_time" content="2018-06-04T06:40:43.137Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS逆向解密">
-<meta name="twitter:description" content="iOS逆向解密
-学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
-Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。">
+<meta name="twitter:description" content="学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
+Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    
+在逆向工">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -95,12 +95,11 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS逆向解密"><span class="toc-number">1.</span> <span class="toc-text">iOS逆向解密</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">1.2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">1.3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">1.4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">1.5.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
 		
 		</div>
 		
-		<h1 id="iOS逆向解密"><a href="#iOS逆向解密" class="headerlink" title="iOS逆向解密"></a>iOS逆向解密</h1><hr>
-<p>学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。</p>
+		<p>学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。</p>
 <h2 id="Mac远程登录iPhone"><a href="#Mac远程登录iPhone" class="headerlink" title="Mac远程登录iPhone"></a>Mac远程登录iPhone</h2><p>iOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    </p>
 <p>在逆向工程中，我们经常会通过命令行来操纵iPhone。为了能够让Mac终端中的命令行能作用在iPhone上，我们得让Mac和iPhone建立连接。连接有两种方式：<code>wifi连接</code>和<code>usb连接</code>。</p>
 <blockquote>
@@ -219,7 +218,7 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS逆向解密"><span class="toc-number">1.</span> <span class="toc-text">iOS逆向解密</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">1.2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">1.3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">1.4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">1.5.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
  
   </div>
 
@@ -509,7 +508,7 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 
-var disqus_shortname = 'guozai';
+var disqus_shortname = 'xianzhunag guo';
 
 (function(){
   var dsq = document.createElement('script');
