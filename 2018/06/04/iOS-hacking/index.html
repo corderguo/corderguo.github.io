@@ -1,0 +1,588 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>iOS逆向解密 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="iOS逆向解密
+学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
+Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS逆向解密">
+<meta property="og:url" content="http://yoursite.com/2018/06/04/iOS-hacking/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="iOS逆向解密
+学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
+Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。">
+<meta property="og:updated_time" content="2018-06-04T06:30:48.999Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS逆向解密">
+<meta name="twitter:description" content="iOS逆向解密
+学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
+Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/06/04/iOS-hacking/" title="iOS逆向解密" itemprop="url">iOS逆向解密</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2018-06-04T04:02:04.000Z" itemprop="datePublished"> 发表于 2018-06-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS逆向解密"><span class="toc-number">1.</span> <span class="toc-text">iOS逆向解密</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">1.2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">1.3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">1.4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">1.5.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="iOS逆向解密"><a href="#iOS逆向解密" class="headerlink" title="iOS逆向解密"></a>iOS逆向解密</h1><hr>
+<p>学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。</p>
+<h2 id="Mac远程登录iPhone"><a href="#Mac远程登录iPhone" class="headerlink" title="Mac远程登录iPhone"></a>Mac远程登录iPhone</h2><p>iOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    </p>
+<p>在逆向工程中，我们经常会通过命令行来操纵iPhone。为了能够让Mac终端中的命令行能作用在iPhone上，我们得让Mac和iPhone建立连接。连接有两种方式：<code>wifi连接</code>和<code>usb连接</code>。</p>
+<blockquote>
+<p>先在越狱软件上安装ssh插件OpenSSH ,命令行下和应用交互的插件Cycript        </p>
+<p>让越狱手机和mac电脑在同一个局域网下(为了能够通过ssh服务从mac电脑访问手机)</p>
+<p>在mac的命令行终端 通过ssh服务登录手机 输入<code>ssh root@手机ip</code>。默认情况下的root密码是alpine。root密码可以自己修改。        </p>
+<p>然后在手机上运行程序，在mac终端上利用ps -A 查看手机当前运行的进程，找到进程id后便可以利用cycript进行一些列操作。例如：进入当前运行着的微信进程的cycript状态<code>cycript -p WeChat</code></p>
+</blockquote>
+<p>采用<code>wifi连接</code>有时候会出现卡顿延迟的现象，所以我通常采用<code>usb连接</code>。</p>
+<blockquote>
+<p>Mac上有个服务程序usbmuxd（它会开机自动启动），可以将Mac的数据通过USB传输到iPhone        </p>
+<p> 我使用了两个脚本进行登录：    </p>
+<ul>
+<li><p><code>python ~/iOS/tcprelay.py -t 22:10010</code>进行断后的映射</p>
+</li>
+<li><p><code>ssh -p 10010 root@localhost</code> usb的登录</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="Cycript的使用"><a href="#Cycript的使用" class="headerlink" title="Cycript的使用"></a>Cycript的使用</h2><p>Cycript是Objective-C++、ES6（JavaScript）、Java等语法的混合物，可以用来探索、修改、调试正在运行的Mac\iOS APP。官网：<a href="http://www.cycript.org/" target="_blank" rel="external">http://www.cycript.org</a></p>
+<p>比如一些简单的使用：  </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 微信进程</span></span><br><span class="line">cycript -p WeChat</span><br><span class="line"><span class="comment">// 获得沙盒路径</span></span><br><span class="line"><span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>,<span class="built_in">NSUserDomainMask</span>,<span class="literal">YES</span>)[<span class="number">0</span>]</span><br><span class="line"><span class="comment">// 打印当前页面view的层级</span></span><br><span class="line"><span class="built_in">UIApp</span>.keyWindow.recursiveDescription().toString()</span><br></pre></td></tr></table></figure>
+<p>主要搭配<code>Reveal</code>使用，从<code>Reveal</code>中获得某个界面或者<code>view</code>所属的类或控制器，然后拿到该类或控制器利用cycript进行调试。比如，知道了一个<code>view</code>对应的类为<code>testView</code>,想把该<code>view</code>从当前界面移除，达到不显示的效果：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[testView removeFromSuperview];</span><br></pre></td></tr></table></figure>
+<h2 id="代码Hook分析"><a href="#代码Hook分析" class="headerlink" title="代码Hook分析"></a>代码Hook分析</h2><p>如果要逆向App的某个功能少不了代码的分析。</p>
+<ol>
+<li><p>通过上面的分析，找到某个<code>view</code>对应的类后，就需要导出该类对应的头文件进行具体的分析了。        </p>
+</li>
+<li><p>首先找到App的二进制文件（Mach-O类型），（使用iFunBox把该文件导出到Mac上）然后使用class-dump工具导出其中的所有头文件，这些头文件中可以看到其中的属性和方法。<code>class-dump  -H  Mach-O文件路径  -o  头文件存放目录</code></p>
+</li>
+<li><p>如果要查看<code>Mach-O</code>文件完整信息，建议用<code>MachOView</code>。<code>otool -l</code>打印所有的 <code>Load Commands</code>，建议搭配<code>grep</code>进行正则过滤。<code>otool -L</code> 可以查看使用的库文件。</p>
+</li>
+<li><p>头文件分析完毕后，就可以利用<code>theos</code>进行越越代码的开发了，编译生成Tweak插件(<code>deb</code>格式)。</p>
+<blockquote>
+<p>利用<code>nic.pl</code>指令，选择<code>iphone/tweak</code>，创建一个tweak工程。</p>
+<p>在这个tweak工程中编辑<code>Tweak.xm</code>文件，编写自己的越狱代码。</p>
+<p>开发完成后利用<code>make package</code>打包和<code>make install</code>安装到手机。重启应用，你会发现对应的功能已经根据hook的代码改变了。</p>
+<p>原理：iOS在越狱后，会默认安装一个名叫<code>mobilesubstrate</code>的动态库，它的作用是提供一个系统级的入侵管道，所有的<code>tweak</code>都可以依赖它来进行开发。在目标程序启动时根据规则把指定目录的第三方的动态库加载进去，第三方的动态库也就是我们写的破解程序，从而达到修改内存中代码逻辑的目的。</p>
+</blockquote>
+</li>
+<li><p>有时候想看某个类中的某个方法的实现以及调用逻辑，就需要用到<code>Hopper Disassembler</code>工具。</p>
+</li>
+</ol>
+<h2 id="砸壳-脱壳"><a href="#砸壳-脱壳" class="headerlink" title="砸壳(脱壳)"></a>砸壳(脱壳)</h2><p>如果使用越狱手机直接从<code>pp助手</code>下载下来的部分应用免去了我们自己脱壳的过程。但是如果是从App Store下载下来的应用，App Store已经为该应用进行了加密，再使用<code>class-dump</code>是无法导出头文件的，这是时候就需要对APP进行脱壳操作了。</p>
+<p>脱壳工具有两种，<code>Clutch</code> 和 <code>dumpdecrypted</code></p>
+<p><code>Clutch</code> :     </p>
+<blockquote>
+<p>在Mac终端登陆到iPhone后，利用Clutch脱壳</p>
+<p><code>Clutch -i</code>    列举手机中已安装的应用中加密的应用。</p>
+<p><code>Clutch -d  应用bundleid</code> 对加密的应用脱壳，脱壳成功后会生产新的<code>Match-O</code>文件。对这个新的文件进行<code>class-dump</code>操作即可。</p>
+</blockquote>
+<p>有时候使用<code>Clutch</code>脱壳，会出现失败的情况，比如脱壳微信的时候就会出现错误。这个时候就需要使用<code>dumpdecrypted</code>：    </p>
+<blockquote>
+<p>终端进入<code>dumpdecrypted.dylib</code>所在的目录 <code>var/root</code></p>
+<p>使用环境变量 <code>DYLD_INSERT_LIBRARIES</code> 将 <code>dylib</code> 注入到需要脱壳的可执行文件（可执行文件路径可以通过<code>ps -A</code>查看获取）</p>
+<p>执行命令 <code>DYLD_INSERT_LIBRARIES=dumpdecrypted.dylib 可执行文件路径</code> 即可完成脱壳操作。</p>
+</blockquote>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>了解以上逆向的流程后，你可以实现一些有趣的功能，比如:视频客户端去广告，修改微信运动步数，防止微信消息测回，微信自动抢红包等功能。同时，也会在自己客户端的开发过程中更注重信息的安全保护。研究逆向，一定要善于利用各种工具，并且做好不断失败的准备，愈挫愈勇，终会成功。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/逆向/">逆向</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2018/06/04/iOS-hacking/" data-title="iOS逆向解密 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/07/15/life-alone/"  title="半梦半醒之间">
+ <strong>下一篇：</strong><br/> 
+ <span>半梦半醒之间
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#iOS逆向解密"><span class="toc-number">1.</span> <span class="toc-text">iOS逆向解密</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">1.2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">1.3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">1.4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">1.5.</span> <span class="toc-text">结语</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Trivial/" title="Trivial">Trivial<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/微信小程序/" title="微信小程序">微信小程序<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>24</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/资讯/" title="资讯">资讯<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/ACM/" style="font-size: 16.67px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 13.33px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 13.33px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 13.33px;">security</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 16.67px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a> <a href="/tags/逆向/" style="font-size: 10px;">逆向</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5970082832&verifier=2b92bb86&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方......
+ <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/corderguo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/6653679" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:guoxianzhuang@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+		<br>
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+
+
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    $('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'guozai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260049497'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1260049497' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

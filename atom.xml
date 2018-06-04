@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-07-15T14:18:37.000Z</updated>
+  <updated>2018-06-04T06:30:48.999Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,89 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>iOS逆向解密</title>
+    <link href="http://yoursite.com/2018/06/04/iOS-hacking/"/>
+    <id>http://yoursite.com/2018/06/04/iOS-hacking/</id>
+    <published>2018-06-04T04:02:04.000Z</published>
+    <updated>2018-06-04T06:30:48.999Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="iOS逆向解密"><a href="#iOS逆向解密" class="headerlink" title="iOS逆向解密"></a>iOS逆向解密</h1><hr>
+<p>学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。</p>
+<h2 id="Mac远程登录iPhone"><a href="#Mac远程登录iPhone" class="headerlink" title="Mac远程登录iPhone"></a>Mac远程登录iPhone</h2><p>iOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    </p>
+<p>在逆向工程中，我们经常会通过命令行来操纵iPhone。为了能够让Mac终端中的命令行能作用在iPhone上，我们得让Mac和iPhone建立连接。连接有两种方式：<code>wifi连接</code>和<code>usb连接</code>。</p>
+<blockquote>
+<p>先在越狱软件上安装ssh插件OpenSSH ,命令行下和应用交互的插件Cycript        </p>
+<p>让越狱手机和mac电脑在同一个局域网下(为了能够通过ssh服务从mac电脑访问手机)</p>
+<p>在mac的命令行终端 通过ssh服务登录手机 输入<code>ssh root@手机ip</code>。默认情况下的root密码是alpine。root密码可以自己修改。        </p>
+<p>然后在手机上运行程序，在mac终端上利用ps -A 查看手机当前运行的进程，找到进程id后便可以利用cycript进行一些列操作。例如：进入当前运行着的微信进程的cycript状态<code>cycript -p WeChat</code></p>
+</blockquote>
+<p>采用<code>wifi连接</code>有时候会出现卡顿延迟的现象，所以我通常采用<code>usb连接</code>。</p>
+<blockquote>
+<p>Mac上有个服务程序usbmuxd（它会开机自动启动），可以将Mac的数据通过USB传输到iPhone        </p>
+<p> 我使用了两个脚本进行登录：    </p>
+<ul>
+<li><p><code>python ~/iOS/tcprelay.py -t 22:10010</code>进行断后的映射</p>
+</li>
+<li><p><code>ssh -p 10010 root@localhost</code> usb的登录</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="Cycript的使用"><a href="#Cycript的使用" class="headerlink" title="Cycript的使用"></a>Cycript的使用</h2><p>Cycript是Objective-C++、ES6（JavaScript）、Java等语法的混合物，可以用来探索、修改、调试正在运行的Mac\iOS APP。官网：<a href="http://www.cycript.org/" target="_blank" rel="external">http://www.cycript.org</a></p>
+<p>比如一些简单的使用：  </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 微信进程</span></span><br><span class="line">cycript -p WeChat</span><br><span class="line"><span class="comment">// 获得沙盒路径</span></span><br><span class="line"><span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>,<span class="built_in">NSUserDomainMask</span>,<span class="literal">YES</span>)[<span class="number">0</span>]</span><br><span class="line"><span class="comment">// 打印当前页面view的层级</span></span><br><span class="line"><span class="built_in">UIApp</span>.keyWindow.recursiveDescription().toString()</span><br></pre></td></tr></table></figure>
+<p>主要搭配<code>Reveal</code>使用，从<code>Reveal</code>中获得某个界面或者<code>view</code>所属的类或控制器，然后拿到该类或控制器利用cycript进行调试。比如，知道了一个<code>view</code>对应的类为<code>testView</code>,想把该<code>view</code>从当前界面移除，达到不显示的效果：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[testView removeFromSuperview];</span><br></pre></td></tr></table></figure>
+<h2 id="代码Hook分析"><a href="#代码Hook分析" class="headerlink" title="代码Hook分析"></a>代码Hook分析</h2><p>如果要逆向App的某个功能少不了代码的分析。</p>
+<ol>
+<li><p>通过上面的分析，找到某个<code>view</code>对应的类后，就需要导出该类对应的头文件进行具体的分析了。        </p>
+</li>
+<li><p>首先找到App的二进制文件（Mach-O类型），（使用iFunBox把该文件导出到Mac上）然后使用class-dump工具导出其中的所有头文件，这些头文件中可以看到其中的属性和方法。<code>class-dump  -H  Mach-O文件路径  -o  头文件存放目录</code></p>
+</li>
+<li><p>如果要查看<code>Mach-O</code>文件完整信息，建议用<code>MachOView</code>。<code>otool -l</code>打印所有的 <code>Load Commands</code>，建议搭配<code>grep</code>进行正则过滤。<code>otool -L</code> 可以查看使用的库文件。</p>
+</li>
+<li><p>头文件分析完毕后，就可以利用<code>theos</code>进行越越代码的开发了，编译生成Tweak插件(<code>deb</code>格式)。</p>
+<blockquote>
+<p>利用<code>nic.pl</code>指令，选择<code>iphone/tweak</code>，创建一个tweak工程。</p>
+<p>在这个tweak工程中编辑<code>Tweak.xm</code>文件，编写自己的越狱代码。</p>
+<p>开发完成后利用<code>make package</code>打包和<code>make install</code>安装到手机。重启应用，你会发现对应的功能已经根据hook的代码改变了。</p>
+<p>原理：iOS在越狱后，会默认安装一个名叫<code>mobilesubstrate</code>的动态库，它的作用是提供一个系统级的入侵管道，所有的<code>tweak</code>都可以依赖它来进行开发。在目标程序启动时根据规则把指定目录的第三方的动态库加载进去，第三方的动态库也就是我们写的破解程序，从而达到修改内存中代码逻辑的目的。</p>
+</blockquote>
+</li>
+<li><p>有时候想看某个类中的某个方法的实现以及调用逻辑，就需要用到<code>Hopper Disassembler</code>工具。</p>
+</li>
+</ol>
+<h2 id="砸壳-脱壳"><a href="#砸壳-脱壳" class="headerlink" title="砸壳(脱壳)"></a>砸壳(脱壳)</h2><p>如果使用越狱手机直接从<code>pp助手</code>下载下来的部分应用免去了我们自己脱壳的过程。但是如果是从App Store下载下来的应用，App Store已经为该应用进行了加密，再使用<code>class-dump</code>是无法导出头文件的，这是时候就需要对APP进行脱壳操作了。</p>
+<p>脱壳工具有两种，<code>Clutch</code> 和 <code>dumpdecrypted</code></p>
+<p><code>Clutch</code> :     </p>
+<blockquote>
+<p>在Mac终端登陆到iPhone后，利用Clutch脱壳</p>
+<p><code>Clutch -i</code>    列举手机中已安装的应用中加密的应用。</p>
+<p><code>Clutch -d  应用bundleid</code> 对加密的应用脱壳，脱壳成功后会生产新的<code>Match-O</code>文件。对这个新的文件进行<code>class-dump</code>操作即可。</p>
+</blockquote>
+<p>有时候使用<code>Clutch</code>脱壳，会出现失败的情况，比如脱壳微信的时候就会出现错误。这个时候就需要使用<code>dumpdecrypted</code>：    </p>
+<blockquote>
+<p>终端进入<code>dumpdecrypted.dylib</code>所在的目录 <code>var/root</code></p>
+<p>使用环境变量 <code>DYLD_INSERT_LIBRARIES</code> 将 <code>dylib</code> 注入到需要脱壳的可执行文件（可执行文件路径可以通过<code>ps -A</code>查看获取）</p>
+<p>执行命令 <code>DYLD_INSERT_LIBRARIES=dumpdecrypted.dylib 可执行文件路径</code> 即可完成脱壳操作。</p>
+</blockquote>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>了解以上逆向的流程后，你可以实现一些有趣的功能，比如:视频客户端去广告，修改微信运动步数，防止微信消息测回，微信自动抢红包等功能。同时，也会在自己客户端的开发过程中更注重信息的安全保护。研究逆向，一定要善于利用各种工具，并且做好不断失败的准备，愈挫愈勇，终会成功。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;iOS逆向解密&quot;&gt;&lt;a href=&quot;#iOS逆向解密&quot; class=&quot;headerlink&quot; title=&quot;iOS逆向解密&quot;&gt;&lt;/a&gt;iOS逆向解密&lt;/h1&gt;&lt;hr&gt;
+&lt;p&gt;学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="逆向" scheme="http://yoursite.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>半梦半醒之间</title>
@@ -1040,98 +1123,6 @@ One of the two will be used. Which one is undefined.
     
       &lt;blockquote&gt;
 &lt;p&gt;github地址: &lt;a href=&quot;https://github.com/corderguo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/corderguo&lt;/a&gt;&lt;br&gt;本文地址: &lt;a
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>离屏渲染探究</title>
-    <link href="http://yoursite.com/2015/11/28/iOS-offScreen/"/>
-    <id>http://yoursite.com/2015/11/28/iOS-offScreen/</id>
-    <published>2015-11-28T02:02:04.000Z</published>
-    <updated>2016-07-11T10:11:28.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>本文地址: <a href="http://coderperson.com/2015/11/28/iOS-offScreen/" target="_blank" rel="external">http://coderperson.com/2015/11/28/iOS-offScreen/</a><br>欢迎转载，请注明出处，谢谢。    </p>
-</blockquote>
-<h2 id="概念学习"><a href="#概念学习" class="headerlink" title="概念学习"></a>概念学习</h2><p>OpenGL中，GPU屏幕渲染有以下两种方式：</p>
-<ul>
-<li>On-Screen Rendering    </li>
-</ul>
-<p>意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。</p>
-<ul>
-<li>Off-Screen Rendering        </li>
-</ul>
-<p>意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。</p>
-<h2 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h2><p>GPU渲染机制：</p>
-<p>CPU 计算好显示内容提交到 GPU，GPU<br>渲染完成后将渲染结果放入帧缓冲区，随后视频控制器会按照 VSync<br>信号逐行读取帧缓冲区的数据，经过可能的数模转换传递给显示器显示。</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>当使用圆角，阴影，遮罩的时候，图层属性的混合体被指定为在未预合成之前不能直接在屏幕中绘制，所以就需要屏幕外渲染被唤起。</p>
-<p>屏幕外渲染并不意味着软件绘制，但是它意味着图层必须在被显示之前在一个屏幕外上下文中被渲染（不论CPU还是GPU）。</p>
-<h2 id="性能优劣"><a href="#性能优劣" class="headerlink" title="性能优劣"></a>性能优劣</h2><p>相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：</p>
-<ul>
-<li><p>创建新缓冲区<br>要想进行离屏渲染，首先要创建一个新的缓冲区。</p>
-</li>
-<li><p>上下文切换<br>离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。</p>
-</li>
-</ul>
-<p>注意：触发离屏渲染后，上面两步会发生在每一帧，如果在界面的滚动过程中有大量的离屏渲染发生时会严重影响帧率。</p>
-<h2 id="另一种特殊的“离屏渲染”"><a href="#另一种特殊的“离屏渲染”" class="headerlink" title="另一种特殊的“离屏渲染”"></a>另一种特殊的“离屏渲染”</h2><p>按照之前的说法，如果将不在GPU的当前屏幕缓冲区中进行的渲染都称为离屏渲染，那么就还有另一种特殊的“离屏渲染”方式：CPU渲染。</p>
-<p>如果我们重写了drawRect方法，并且使用任何Core Graphics的技术进行了绘制操作，就涉及到了CPU渲染。整个渲染过程由CPU在App内同步地完成，渲染得到的bitmap最后再交由GPU用于显示。</p>
-<h2 id="离屏渲染的触发机制"><a href="#离屏渲染的触发机制" class="headerlink" title="离屏渲染的触发机制"></a>离屏渲染的触发机制</h2><ul>
-<li>shouldRasterize（光栅化）</li>
-<li>masks（遮罩）</li>
-<li>shadows（阴影）</li>
-<li>edge antialiasing（抗锯齿）</li>
-<li>group opacity（不透明）</li>
-<li>复杂形状设置圆角等</li>
-<li>渐变</li>
-</ul>
-<p>其中shouldRasterize（光栅化）是比较特别的一种：<br>光栅化概念：将图转化为一个个栅格组成的图象。<br>光栅化特点：每个元素对应帧缓冲区中的一像素。</p>
-<p>shouldRasterize = YES在其他属性触发离屏渲染的同时，会将光栅化后的内容缓存起来，如果对应的layer及其sublayers没有发生改变，在下一帧的时候可以直接复用。shouldRasterize = YES，这将隐式的创建一个位图，各种阴影遮罩等效果也会保存到位图中并缓存起来，从而减少渲染的频度（不是矢量图）。</p>
-<p>相当于光栅化是把GPU的操作转到CPU上了，生成位图缓存，直接读取复用。</p>
-<p>当你使用光栅化时，你可以开启“Color Hits Green and Misses Red”来检查该场景下光栅化操作是否是一个好的选择。绿色表示缓存被复用，红色表示缓存在被重复创建。</p>
-<p>如果光栅化的层变红得太频繁那么光栅化对优化可能没有多少用处。位图缓存从内存中删除又重新创建得太过频繁，红色表明缓存重建得太迟。可以针对性的选择某个较小而较深的层结构进行光栅化，来尝试减少渲染时间。</p>
-<blockquote>
-<p>注意：   </p>
-</blockquote>
-<p>对于经常变动的内容,这个时候不要开启,否则会造成性能的浪费</p>
-<p>例如我们日程经常打交道的TableViewCell,因为TableViewCell的重绘是很频繁的（因为Cell的复用）,如果Cell的内容不断变化,则Cell需要不断重绘,如果此时设置了cell.layer可光栅化。则会造成大量的离屏渲染,降低图形性能。</p>
-<h2 id="官方优化"><a href="#官方优化" class="headerlink" title="官方优化"></a>官方优化</h2><p>iOS 9.0 之前UIimageView跟UIButton设置圆角都会触发离屏渲染</p>
-<p>iOS 9.0 之后UIButton设置圆角会触发离屏渲染，而UIImageView里png图片设置圆角不会触发离屏渲染了，如果设置其他阴影效果之类的还是会触发离屏渲染的。</p>
-<p>这可能是苹果也意识到离屏渲染会产生性能问题，所以能不产生离屏渲染的地方苹果也就不用离屏渲染了。</p>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>UIImage加载图片方式一般有两种:</p>
-<p>A：imagedNamed初始化</p>
-<p>B：imageWithContentsOfFile初始化<br>二者不同之处在于,imageNamed默认加载图片成功后会内存中缓存图片,这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象.如果缓存中没有找到相应的图片对象,则从指定地方加载图片然后缓存对象，并返回这个图片对象.</p>
-<p>而imageWithContentsOfFile则仅只加载图片,不缓存.</p>
-<p>大量使用imageNamed方式会在不需要缓存的地方额外增加开销CPU的时间来做这件事.当应用程序需要加载一张比较大的图片并且使用一次性，那么其实是没有必要去缓存这个图片的，用imageWithContentsOfFile是最为经济的方式,这样不会因为UIImage元素较多情况下，CPU会被逐个分散在不必要缓存上浪费过多时间.</p>
-<p>使用场景需要编程时，应该根据实际应用场景加以区分，UIimage虽小，但使用元素较多问题会有所凸显.</p>
-<h2 id="如何提高性能"><a href="#如何提高性能" class="headerlink" title="如何提高性能"></a>如何提高性能</h2><ol>
-<li>当我们需要圆角效果时，可以使用一张中间透明图片蒙上去</li>
-<li>使用ShadowPath指定layer阴影效果路径</li>
-<li>使用异步进行layer渲染（Facebook开源的异步绘制框架AsyncDisplayKit）</li>
-<li>设置layer的opaque值为YES，减少复杂图层合成</li>
-<li>尽量使用不包含透明（alpha）通道的图片资源</li>
-<li>尽量设置layer的大小值为整形值</li>
-<li>直接让美工把图片切成圆角进行显示，这是效率最高的一种方案</li>
-<li>很多情况下用户上传图片进行显示，可以让服务端处理圆角</li>
-<li>使用代码手动生成圆角Image设置到要显示的View上，利用UIBezierPath（CoreGraphics框架）画出来圆角图片</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当项目中需要离屏渲染的地方不多时，性能的影响并不是很大，基本也能保持在60fps左右，但<br>是一旦超过一定数目的圆角，滑动起来就会有明显的卡顿现象。所以，没必要为了不影响体验的情况下强行进行优化，这样做效果并不是很明显。只有当需要优化的时候采取一定的优化方案，才能得到最大的收益。            </p>
-<hr>
-<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：              </p>
-<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;本文地址: &lt;a href=&quot;http://coderperson.com/2015/11/28/iOS-offScreen/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://coderperson.com/2015/
     
     </summary>
     

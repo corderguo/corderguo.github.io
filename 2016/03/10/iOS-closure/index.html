@@ -219,10 +219,12 @@
 </nav>
 
 	
-<section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/03/10/iOS-closure/" data-title="Swift中闭包详解" data-url="http://yoursite.com/2016/03/10/iOS-closure/"></div>
-</section>
 
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -264,7 +266,7 @@
 		  
 		
 		  
-			<li><a href="/categories/技术/" title="技术">技术<sup>23</sup></a></li>
+			<li><a href="/categories/技术/" title="技术">技术<sup>24</sup></a></li>
 		  
 		
 		  
@@ -287,7 +289,7 @@
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/ACM/" style="font-size: 16.67px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 13.33px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 13.33px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 13.33px;">security</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 16.67px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+       <a href="/tags/ACM/" style="font-size: 16.67px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 13.33px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 13.33px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 13.33px;">security</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 16.67px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a> <a href="/tags/逆向/" style="font-size: 10px;">逆向</a>
     </div>
   </div>
 
@@ -517,18 +519,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"guozai"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'guozai';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 
