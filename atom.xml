@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-05T08:53:12.162Z</updated>
+  <updated>2018-06-05T09:03:09.331Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <link href="http://yoursite.com/2018/06/05/iOS-logify/"/>
     <id>http://yoursite.com/2018/06/05/iOS-logify/</id>
     <published>2018-06-05T04:02:04.000Z</published>
-    <updated>2018-06-05T08:53:12.162Z</updated>
+    <updated>2018-06-05T09:03:09.331Z</updated>
     
     <content type="html"><![CDATA[<p>根据上一篇文章的介绍，我们将App的头文件使用 <code>class-dump</code> 导出后，然后利用 <code>theos</code> 创建逆向的工程，编写 <code>hook</code> 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 <code>logify</code> 来跟踪函数调用，从而定位到我们需要的函数。</p>
-<p><code>logify</code> 是 <code>theos</code> 的一个组件，􏱚􏰢􏱨􏰀􏱌􏱩􏰛􏰜􏱪􏱫􏱬􏱭􏱮􏱯􏱰􏱱􏱲􏰯􏱳􏱴􏱵􏰘可以将一个头文件快速转换成已经包含打印信息的xm文件。当然如果某个类中的方法很少，你完全可以自己手动添加 <code>NSLog</code> 的打印信息，但是某个文件中的方法很多的时候，收到给每个方法添加日志信息，会浪费很多很多时间，<code>logify</code> 便是一个不错的工具。</p>
+<p><code>logify</code> 是 <code>theos</code> 的一个组件，<code>logify</code> 可以将一个头文件快速转换成已经包含打印信息的xm文件。当然如果某个类中的方法很少，你完全可以自己手动添加 <code>NSLog</code> 的打印信息，但是某个文件中的方法很多的时候，收到给每个方法添加日志信息，会浪费很多很多时间，<code>logify</code> 便是一个不错的工具。</p>
 <p>我们以微信的聊天界面为例，假如在当前界面我收到红包消息的时候，我想确定是响应了哪个方法，方便分析抢红包的后续操作。</p>
 <h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>我们利用 <code>Reveal</code> 确定出了群聊界面的控制器名称为 <code>BaseMsgContentViewController</code> 并且利用 <code>class-dump</code> 将头文件导出，这个类中的方法特别多，接下来我们利用 <code>logify</code> 把该文件快速转换成已经包含打印信息的xm文件。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 导出已添加日志信息的xm文件</span></span><br><span class="line">logify.pl BaseMsgContentViewController.h &gt; Tweak.xm</span><br></pre></td></tr></table></figure>
@@ -38,7 +38,6 @@
 </ul>
 <p>根据自己编译的时候报的具体错误，进行适当的修改即可。</p>
 <h3 id="日志查看"><a href="#日志查看" class="headerlink" title="日志查看"></a>日志查看</h3><p><code>theos</code> 工程重新打包安装成功后，重新打开微信的聊天界面，然后打开 <code>Xcode -&gt; Window -&gt; Devices and Simulators</code> 即可跟踪方法的调用。</p>
-<p>􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙</p>
 ]]></content>
     
     <summary type="html">
