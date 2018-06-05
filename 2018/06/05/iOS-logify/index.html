@@ -4,35 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>微信聊天框架的搭建 | 骚客</title>
+    <title>iOS逆向之logify跟踪方法调用 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="XZ_WeChat高仿微信聊天框架的搭建，工程地址：https://github.com/corderguo/XZ_WeChat        
-效果图展示：            
-        
-做了两年IM相关工作了，去年是集成环信的SDK实现的IM功能，今年公司拥有自己的长连接服务器，于是从头自己定协议然后一步步实现了IM的整体功能，基本把微信IM有关的内容都实现了。最近开始整理过去的一">
+    <meta name="description" content="根据上一篇文章的介绍，我们将App的头文件使用 class-dump 导出后，然后利用 theos 创建逆向的工程，编写 hook 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 logify 来跟踪函数调用，从而定位到我们需要的函数。
+logify 是 theos 的一个组件，􏱚􏰢􏱨􏰀􏱌􏱩􏰛􏰜􏱪􏱫􏱬􏱭􏱮􏱯􏱰􏱱􏱲">
 <meta property="og:type" content="article">
-<meta property="og:title" content="微信聊天框架的搭建">
-<meta property="og:url" content="http://yoursite.com/2016/09/28/iOS-weChat/index.html">
+<meta property="og:title" content="iOS逆向之logify跟踪方法调用">
+<meta property="og:url" content="http://yoursite.com/2018/06/05/iOS-logify/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="XZ_WeChat高仿微信聊天框架的搭建，工程地址：https://github.com/corderguo/XZ_WeChat        
-效果图展示：            
-        
-做了两年IM相关工作了，去年是集成环信的SDK实现的IM功能，今年公司拥有自己的长连接服务器，于是从头自己定协议然后一步步实现了IM的整体功能，基本把微信IM有关的内容都实现了。最近开始整理过去的一">
-<meta property="og:image" content="http://img.blog.csdn.net/20160928230616321">
-<meta property="og:image" content="http://img.blog.csdn.net/20160928230519993">
-<meta property="og:updated_time" content="2018-03-07T05:54:08.000Z">
+<meta property="og:description" content="根据上一篇文章的介绍，我们将App的头文件使用 class-dump 导出后，然后利用 theos 创建逆向的工程，编写 hook 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 logify 来跟踪函数调用，从而定位到我们需要的函数。
+logify 是 theos 的一个组件，􏱚􏰢􏱨􏰀􏱌􏱩􏰛􏰜􏱪􏱫􏱬􏱭􏱮􏱯􏱰􏱱􏱲">
+<meta property="og:updated_time" content="2018-06-05T08:53:12.162Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="微信聊天框架的搭建">
-<meta name="twitter:description" content="XZ_WeChat高仿微信聊天框架的搭建，工程地址：https://github.com/corderguo/XZ_WeChat        
-效果图展示：            
-        
-做了两年IM相关工作了，去年是集成环信的SDK实现的IM功能，今年公司拥有自己的长连接服务器，于是从头自己定协议然后一步步实现了IM的整体功能，基本把微信IM有关的内容都实现了。最近开始整理过去的一">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160928230616321">
+<meta name="twitter:title" content="iOS逆向之logify跟踪方法调用">
+<meta name="twitter:description" content="根据上一篇文章的介绍，我们将App的头文件使用 class-dump 导出后，然后利用 theos 创建逆向的工程，编写 hook 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 logify 来跟踪函数调用，从而定位到我们需要的函数。
+logify 是 theos 的一个组件，􏱚􏰢􏱨􏰀􏱌􏱩􏰛􏰜􏱪􏱫􏱬􏱭􏱮􏱯􏱰􏱱􏱲">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -85,14 +76,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/09/28/iOS-weChat/" title="微信聊天框架的搭建" itemprop="url">微信聊天框架的搭建</a>
+      <a href="/2018/06/05/iOS-logify/" title="iOS逆向之logify跟踪方法调用" itemprop="url">iOS逆向之logify跟踪方法调用</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2016-09-28T13:52:50.000Z" itemprop="datePublished"> 发表于 2016-09-28</time>
+    <time datetime="2018-06-05T04:02:04.000Z" itemprop="datePublished"> 发表于 2018-06-05</time>
     
   </p>
 </header>
@@ -101,60 +92,27 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#步骤"><span class="toc-number">1.</span> <span class="toc-text">步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#错误解决"><span class="toc-number">2.</span> <span class="toc-text">错误解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志查看"><span class="toc-number">3.</span> <span class="toc-text">日志查看</span></a></li></ol>
 		
 		</div>
 		
-		<p><code>XZ_WeChat</code>高仿微信聊天框架的搭建，工程地址：<a href="https://github.com/corderguo/XZ_WeChat" target="_blank" rel="external">https://github.com/corderguo/XZ_WeChat</a>        </p>
-<p>效果图展示：            </p>
-<p><img src="http://img.blog.csdn.net/20160928230616321" alt="1"><br><img src="http://img.blog.csdn.net/20160928230519993" alt="2">        </p>
-<p>做了两年IM相关工作了，去年是集成环信的SDK实现的IM功能，今年公司拥有自己的长连接服务器，于是从头自己定协议然后一步步实现了IM的整体功能，基本把微信IM有关的内容都实现了。最近开始整理过去的一些知识，于是先从聊天框架下手，整理出这个简易的聊天框架，方便大家学习交流。</p>
-<p>该框架摘除了本地缓存的功能（这部分内容太多了），预留好缓存的方法，使得该框架尽可能的简洁实用，方便大家学习，我也会逐渐把该框架完善起来。    </p>
-<p>由于作者的电脑环境被折腾坏了，不能安装cocoapods来管理一些用到的三方，所以直接导入进了该框架，这一点大家不要学习。</p>
-<p>该框架目前支持的消息类型：文本消息（包含表情），图片消息，语音消息，视频消息，文件消息(pdf,word,excel,ppt,png,html等格式)。</p>
-<p>如果你想展示文件消息，你需要把文件拷贝到沙盒的<code>/Library/Caches/Chat/File</code>目录下,由于我以前是从PC端发送文件到手机端进行的展示，所以目前只能你手动拷贝了。</p>
-<p>项目中展示的视频已经转成了<code>mp4</code>类型，而且也经过了压缩，语音也转换成了<code>amr</code>格式，节省流量的同时，可以和安卓端兼容。</p>
-<p>你能从该框架学习到什么：        </p>
+		<p>根据上一篇文章的介绍，我们将App的头文件使用 <code>class-dump</code> 导出后，然后利用 <code>theos</code> 创建逆向的工程，编写 <code>hook</code> 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 <code>logify</code> 来跟踪函数调用，从而定位到我们需要的函数。</p>
+<p><code>logify</code> 是 <code>theos</code> 的一个组件，􏱚􏰢􏱨􏰀􏱌􏱩􏰛􏰜􏱪􏱫􏱬􏱭􏱮􏱯􏱰􏱱􏱲􏰯􏱳􏱴􏱵􏰘可以将一个头文件快速转换成已经包含打印信息的xm文件。当然如果某个类中的方法很少，你完全可以自己手动添加 <code>NSLog</code> 的打印信息，但是某个文件中的方法很多的时候，收到给每个方法添加日志信息，会浪费很多很多时间，<code>logify</code> 便是一个不错的工具。</p>
+<p>我们以微信的聊天界面为例，假如在当前界面我收到红包消息的时候，我想确定是响应了哪个方法，方便分析抢红包的后续操作。</p>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>我们利用 <code>Reveal</code> 确定出了群聊界面的控制器名称为 <code>BaseMsgContentViewController</code> 并且利用 <code>class-dump</code> 将头文件导出，这个类中的方法特别多，接下来我们利用 <code>logify</code> 把该文件快速转换成已经包含打印信息的xm文件。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 导出已添加日志信息的xm文件</span></span><br><span class="line">logify.pl BaseMsgContentViewController.h &gt; Tweak.xm</span><br></pre></td></tr></table></figure>
+<p>然后创建 <code>theos</code>工程，用我们刚才生成的 <code>Tweak</code> 替换刚才创建的 <code>theos</code> 项目的<code>Tweak.xm</code>。然后重新编译打包安装。</p>
+<h3 id="错误解决"><a href="#错误解决" class="headerlink" title="错误解决"></a>错误解决</h3><p><code>logify.pl</code> 生产的xm文件，有很多时候是编译不通过的，需要进行一些处理。</p>
 <ul>
-<li>聊天框架的搭建</li>
-<li>表情键盘的实现</li>
-<li>语音相关的知识</li>
-<li>视频相关的知识</li>
-<li>文件相关的功能</li>
-<li>转场动画相关的知识</li>
-<li>数据模型和尺寸模型分离</li>
-<li>你能清楚的了解到在实战项目中IM的实现    </li>
+<li>删除 <code>__weak</code></li>
+<li>删除 <code>inout</code></li>
+<li>删除协议 ,或者在头部声明一下协议，<code>@protocol XXXDelegate</code></li>
+<li>删除 <code>HBLogDebug(@&quot; = 0x%x&quot;, (unsigned int)r)</code></li>
+<li>替换类名为 <code>void *</code> ，比如将 <code>XXPerson *</code> 替换为 <code>void *</code> 因为都是指针类型。或者在头部声明一下，<code>@class XXPerson</code></li>
 </ul>
-<p>目前该框架这是初步，我还有好多功能没有加入进去，后续会慢慢加入，包括：        </p>
-<ul>
-<li>消息的转发、拷贝、撤回</li>
-<li>文章的分享</li>
-<li>订阅号的功能</li>
-<li>红包的功能</li>
-<li>本地缓存的功能(其实很多功能都要基于数据库的，我把数据库去除掉后，很多功能就一块去除了)</li>
-<li>草稿箱的功能</li>
-<li>等等等还有好多好多</li>
-</ul>
-<hr>
-<p><strong>更新日志</strong>：            </p>
-<p>10月8日：添加了消息的拷贝、删除、撤回功能，由于转发功能需要用到数据库所以我只添加了转发的UI,等添加了数据库后再完善。<code>注意</code>这里的只有自己的消息并且是发送成功的消息才可以撤回，我这里限制的是<code>5分钟</code>内的消息可以撤回,超过规定时间不允许撤回。            </p>
-<p>10月12日：添加了系统消息，当消息撤回的时候聊天界面上提示一条<code>你撤回了一条消息</code>的提示。当多人聊天的时候，如果一方撤回了一条消息，系统应该给你发送一条指令，根据这条指令你识别出是哪一条消息被撤回了，然后删除这条消息，并且插入一条<code>谁谁撤回了一条消息</code>。</p>
-<p>10月12日：适配xcode8.0，解决bug，如果用xcode8.0的模拟器访问相册时崩溃，则换成真机即可，我也是在升级到xcode8.0后遇到的问题，问题如下：            </p>
-<pre><code class="objc">objc[<span class="number">6777</span>]: Class PLBuildVersion is implemented 
-<span class="keyword">in</span> both /Applications/Xcode.        
-app/Contents/Developer/Platforms/iPhoneSimulator.            
-platform/Developer/SDKs/iPhoneSimulator.            
-sdk/System/Library/PrivateFrameworks/AssetsLibraryServices.
-framework/AssetsLibraryServices (<span class="number">0x1227c3910</span>) and        
-/Applications/Xcode.app/Contents/Developer/Platforms
-/iPhoneSimulator.platform/Developer/SDKs
-/iPhoneSimulator.    
-sdk/System/Library/PrivateFrameworks/PhotoLibraryServices.
-framework/PhotoLibraryServices (<span class="number">0x1225ed210</span>).                 
-One of the two will be used. Which one is undefined.
-</code></pre>
-<p>奇怪的是我原项目中没有遇到该问题，而抽出来的这个聊天框架却遇到了问题，我猜想是我项目中使用了cocoapods来管理三方，而该聊天框架中我是直接导入的，稍后我会集成cocoapods，尝试问题的解决。大家若有解决方法可以给我留言，大家共同提高。</p>
-<p>如果你在学习过程中有什么问题可以和我留言，大家共同提高。如果该框架能帮助到你，欢迎star，你的关注是我最大的动力，谢谢！</p>
+<p>根据自己编译的时候报的具体错误，进行适当的修改即可。</p>
+<h3 id="日志查看"><a href="#日志查看" class="headerlink" title="日志查看"></a>日志查看</h3><p><code>theos</code> 工程重新打包安装成功后，重新打开微信的聊天界面，然后打开 <code>Xcode -&gt; Window -&gt; Devices and Simulators</code> 即可跟踪方法的调用。</p>
+<p>􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -168,7 +126,7 @@ One of the two will be used. Which one is undefined.
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/WeChat/">WeChat</a>
+  <span></span> <a href="/tags/逆向/">逆向</a>
   </div>
 
 </div>
@@ -177,7 +135,7 @@ One of the two will be used. Which one is undefined.
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2016/09/28/iOS-weChat/" data-title="微信聊天框架的搭建 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2018/06/05/iOS-logify/" data-title="iOS逆向之logify跟踪方法调用 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -190,19 +148,11 @@ One of the two will be used. Which one is undefined.
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/10/10/wx-progects/" title="微信小程序开发实战">
-  <strong>上一篇：</strong><br/>
-  <span>
-  微信小程序开发实战</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/09/02/iOS-security-encrypt/"  title="iOS之安全加密">
+<a href="/2018/06/04/iOS-hacking/"  title="iOS逆向解密">
  <strong>下一篇：</strong><br/> 
- <span>iOS之安全加密
+ <span>iOS逆向解密
 </span>
 </a>
 </div>
@@ -223,7 +173,7 @@ One of the two will be used. Which one is undefined.
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#步骤"><span class="toc-number">1.</span> <span class="toc-text">步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#错误解决"><span class="toc-number">2.</span> <span class="toc-text">错误解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志查看"><span class="toc-number">3.</span> <span class="toc-text">日志查看</span></a></li></ol>
  
   </div>
 

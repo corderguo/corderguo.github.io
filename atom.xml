@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-04T09:46:13.118Z</updated>
+  <updated>2018-06-05T08:53:12.162Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,45 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>iOS逆向之logify跟踪方法调用</title>
+    <link href="http://yoursite.com/2018/06/05/iOS-logify/"/>
+    <id>http://yoursite.com/2018/06/05/iOS-logify/</id>
+    <published>2018-06-05T04:02:04.000Z</published>
+    <updated>2018-06-05T08:53:12.162Z</updated>
+    
+    <content type="html"><![CDATA[<p>根据上一篇文章的介绍，我们将App的头文件使用 <code>class-dump</code> 导出后，然后利用 <code>theos</code> 创建逆向的工程，编写 <code>hook</code> 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 <code>logify</code> 来跟踪函数调用，从而定位到我们需要的函数。</p>
+<p><code>logify</code> 是 <code>theos</code> 的一个组件，􏱚􏰢􏱨􏰀􏱌􏱩􏰛􏰜􏱪􏱫􏱬􏱭􏱮􏱯􏱰􏱱􏱲􏰯􏱳􏱴􏱵􏰘可以将一个头文件快速转换成已经包含打印信息的xm文件。当然如果某个类中的方法很少，你完全可以自己手动添加 <code>NSLog</code> 的打印信息，但是某个文件中的方法很多的时候，收到给每个方法添加日志信息，会浪费很多很多时间，<code>logify</code> 便是一个不错的工具。</p>
+<p>我们以微信的聊天界面为例，假如在当前界面我收到红包消息的时候，我想确定是响应了哪个方法，方便分析抢红包的后续操作。</p>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>我们利用 <code>Reveal</code> 确定出了群聊界面的控制器名称为 <code>BaseMsgContentViewController</code> 并且利用 <code>class-dump</code> 将头文件导出，这个类中的方法特别多，接下来我们利用 <code>logify</code> 把该文件快速转换成已经包含打印信息的xm文件。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 导出已添加日志信息的xm文件</span></span><br><span class="line">logify.pl BaseMsgContentViewController.h &gt; Tweak.xm</span><br></pre></td></tr></table></figure>
+<p>然后创建 <code>theos</code>工程，用我们刚才生成的 <code>Tweak</code> 替换刚才创建的 <code>theos</code> 项目的<code>Tweak.xm</code>。然后重新编译打包安装。</p>
+<h3 id="错误解决"><a href="#错误解决" class="headerlink" title="错误解决"></a>错误解决</h3><p><code>logify.pl</code> 生产的xm文件，有很多时候是编译不通过的，需要进行一些处理。</p>
+<ul>
+<li>删除 <code>__weak</code></li>
+<li>删除 <code>inout</code></li>
+<li>删除协议 ,或者在头部声明一下协议，<code>@protocol XXXDelegate</code></li>
+<li>删除 <code>HBLogDebug(@&quot; = 0x%x&quot;, (unsigned int)r)</code></li>
+<li>替换类名为 <code>void *</code> ，比如将 <code>XXPerson *</code> 替换为 <code>void *</code> 因为都是指针类型。或者在头部声明一下，<code>@class XXPerson</code></li>
+</ul>
+<p>根据自己编译的时候报的具体错误，进行适当的修改即可。</p>
+<h3 id="日志查看"><a href="#日志查看" class="headerlink" title="日志查看"></a>日志查看</h3><p><code>theos</code> 工程重新打包安装成功后，重新打开微信的聊天界面，然后打开 <code>Xcode -&gt; Window -&gt; Devices and Simulators</code> 即可跟踪方法的调用。</p>
+<p>􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙􏰊􏰋􏰌􏰍􏰎􏰏􏰐􏰑􏰒􏰓􏰔􏰕􏰖􏰁􏰗􏰘􏰙􏰚􏰛􏰑􏰜􏰝􏰞􏰟􏰁􏰠􏰡􏰢􏰁􏰣􏰟􏰇􏰤􏰥􏰋􏰙</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;根据上一篇文章的介绍，我们将App的头文件使用 &lt;code&gt;class-dump&lt;/code&gt; 导出后，然后利用 &lt;code&gt;theos&lt;/code&gt; 创建逆向的工程，编写 &lt;code&gt;hook&lt;/code&gt; 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="逆向" scheme="http://yoursite.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>iOS逆向解密</title>
@@ -1036,92 +1075,6 @@ One of the two will be used. Which one is undefined.
       &lt;h1 id=&quot;StaticPage&quot;&gt;&lt;a href=&quot;#StaticPage&quot; class=&quot;headerlink&quot; title=&quot;StaticPage&quot;&gt;&lt;/a&gt;StaticPage&lt;/h1&gt;&lt;ul&gt;
 &lt;li&gt;静态页面大杀器，利用该库三行代码就能搞定通用静态页面&lt;/li&gt;
 
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Swift中闭包详解</title>
-    <link href="http://yoursite.com/2016/03/10/iOS-closure/"/>
-    <id>http://yoursite.com/2016/03/10/iOS-closure/</id>
-    <published>2016-03-10T11:12:50.000Z</published>
-    <updated>2016-07-02T04:41:26.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>github地址: <a href="https://github.com/corderguo" target="_blank" rel="external">https://github.com/corderguo</a><br>本文地址: <a href="http://coderperson.com/2016/03/10/iOS-closure/" target="_blank" rel="external">http://coderperson.com/2016/03/10/iOS-closure/</a><br>欢迎转载，请注明出处，谢谢。</p>
-</blockquote>
-<h1 id="闭包的概念"><a href="#闭包的概念" class="headerlink" title="闭包的概念"></a>闭包的概念</h1><p>Swift 中闭包的概念就像是Objective-C中的block。OC中的block类似于匿名函数，闭包是用来定义函数， 同时闭包可以嵌套和作为参数传递。 在 Swift 中，函数也只不过是一种特殊的闭包         </p>
-<h3 id="闭包与Block的对比"><a href="#闭包与Block的对比" class="headerlink" title="闭包与Block的对比"></a>闭包与Block的对比</h3><p>作用：</p>
-<ul>
-<li>Block是用来保存一段代码，在需要的时候执行 </li>
-<li>闭包也是用来保存一段代码，在需要的时候执行</li>
-<li>一般都是用来做耗时操作；</li>
-</ul>
-<p>风格：      </p>
-<p>我们首先回顾一下OC中的Block写法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 定义block</span><br><span class="line">@property (nonatomic, copy) void(^myBlock)();</span><br><span class="line">// 定义block</span><br><span class="line">self.myBlock = ^&#123;</span><br><span class="line">// 具体的回调操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用block</span><br><span class="line">self.myBlock();</span><br></pre></td></tr></table></figure></p>
-<p>通过回顾，我们可以想起来Block的定义格式为：     </p>
-<p>Block格式：返回值类型(^block名称)(参数列表) </p>
-<p>有的时候我们忘记了Block的书写格式，或者嫌这样写麻烦，我们可以直接在Xcode中敲inlineBlock<br>然后回车，系统会直接提醒你Block的样式；     </p>
-<p>Swift中闭包的基本格式：         </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    (形参列表) -&gt; (返回值)</span><br><span class="line">    <span class="keyword">in</span></span><br><span class="line">    需要执行的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其实这些格式我们都没必要专门去记忆，我们可以直接敲系统的带有闭包或者Block的函数，然后就一目了然了；      </p>
-<h4 id="闭包的几种格式"><a href="#闭包的几种格式" class="headerlink" title="闭包的几种格式"></a>闭包的几种格式</h4><p>第一种情况：        </p>
-<ul>
-<li>将闭包通过实参传递给函数</li>
-<li>如果闭包是函数的最后一个参数，那么闭包可以写到函数{}的后面</li>
-<li>如果函数只接受一个参数，并且这个参数是闭包，那么()可以省略</li>
-</ul>
-<p>例如下面这三种写法是一样的：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 定义函数，参数为闭包</span><br><span class="line">func loadData(finished: () -&gt; ()) &#123;</span><br><span class="line">    //  操作</span><br><span class="line">&#125;</span><br><span class="line">// 调用（这是默认写法）</span><br><span class="line">loadData &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">// 或者写成</span><br><span class="line">loadData (&#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">// 还可以写成</span><br><span class="line"><span class="function"><span class="title">loadData</span></span>() &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>第二种情况：闭包的简写  </p>
-<ul>
-<li>如果闭包没有参数也没有返回值，那么 in 之前的东西可以删除，包括 in</li>
-</ul>
-<p>例如上面闭包，还可以写成下面的形式：    </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loadData &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>其实这些格式，你在开发中只需要掌握一种即可，或者你只需要记住闭包的定义，然后敲回车，系统会为你补齐格式；</p>
-<h3 id="闭包的循环引用问题"><a href="#闭包的循环引用问题" class="headerlink" title="闭包的循环引用问题"></a>闭包的循环引用问题</h3><blockquote>
-<p>关于闭包中的 self 问题 </p>
-</blockquote>
-<p>在Swift开发中，有一个原则就是能不写self就不写self，但是在闭包中必须写上self；   </p>
-<p>这是因为闭包是用来保存一段代码，而且系统也不知道这段代码具体的调用时间，所以为了保证闭包中的对象不被释放，需要 self 进行一次强引用；这其实和Block中的原理差不多。   </p>
-<p>所以以后看到self基本上都和闭包有关系。（这也是闭包中循环引用来源的原因）</p>
-<p>下面我举一个简单的关于闭包循环引用的例子：      </p>
-<p>你定义了两个控制器：OneController和TwoController，OneController只是负责push出TwoController,我们在TwoController中进行一些关于闭包的操作，然后在pop返回的时候查看该控制器是否被销毁了，来验证闭包是否发生了循环引用问题；<br>在TwoController中我们只需要简单写一些代码即可：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 定义一个闭包的属性 </span><br><span class="line">var finished: (() -&gt; ())?</span><br><span class="line">// 定义一个函数，参数为闭包</span><br><span class="line"> func loadData(finished: () -&gt; ()) &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"调用了"</span>)</span><br><span class="line">        self.finished = finished</span><br><span class="line">        finished();</span><br><span class="line">    &#125;</span><br><span class="line">// 函数调用</span><br><span class="line">loadData &#123; () -&gt; () <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"回调了"</span>)</span><br><span class="line">            // 这句又强引用self，导致循环引用</span><br><span class="line">            self.view.backgroundColor = UIColor.redColor()</span><br><span class="line">        &#125;</span><br><span class="line">// 判断是否被销毁了</span><br><span class="line">deinit &#123;</span><br><span class="line">       <span class="built_in">print</span>(<span class="string">"控制器被销毁了"</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>当我们执行以上代码，并且从TwoController返回到OneController时，TwoController的deinit方法没有被调用，表明TwoController没有被销毁，闭包存在了循环引用的问题；     </p>
-<p>这是因为：控制器通过闭包属性引用闭包，而闭包中又强引用着self(控制器),所以导致了循环引用的问题；        </p>
-<blockquote>
-<p>OC中关于循环引用的解决方案</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__weak typeof(self) weakSelf = self;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Swift中关于循环引用的解决方案</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weak var weakSelf = self</span><br></pre></td></tr></table></figure>
-<p>那么原先代码中只需要把self改成weakSelf即可</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 由于weakSelf为可选类型，这里必须保证有值，所以加上！号</span><br><span class="line">weakSelf!.view.backgroundColor = UIColor.redColor()</span><br></pre></td></tr></table></figure>
-<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><blockquote>
-<p>关于定义闭包属性的问题      </p>
-</blockquote>
-<p>在Swift中，如果在某个类中定义一个属性，那么这个属性必须要初始化，否者会报错，如果暂时不想初始化，那么可以在后面写上一个 ? 号       </p>
-<p>但是在定义闭包的属性时，一定要注意，以下这种写法是最常见的一种错误写法：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/** 当前写法代表闭包的返回值可以是nil，而不是初始化的闭包 */</span><br><span class="line">var finished: () -&gt; ()?</span><br><span class="line"></span><br><span class="line">/** 正确写法：需要在整个闭包的后面加问号 */</span><br><span class="line">var finished: (() -&gt; ())?</span><br></pre></td></tr></table></figure>
-<hr>
-<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：      </p>
-<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;github地址: &lt;a href=&quot;https://github.com/corderguo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/corderguo&lt;/a&gt;&lt;br&gt;本文地址: &lt;a
     
     </summary>
     
