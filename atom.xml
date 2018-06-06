@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-06T07:36:23.480Z</updated>
+  <updated>2018-06-06T07:45:42.282Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,12 +20,14 @@
     <link href="http://yoursite.com/2018/06/06/iOS-hacking-lldb/"/>
     <id>http://yoursite.com/2018/06/06/iOS-hacking-lldb/</id>
     <published>2018-06-06T04:02:04.000Z</published>
-    <updated>2018-06-06T07:36:23.480Z</updated>
+    <updated>2018-06-06T07:45:42.282Z</updated>
     
     <content type="html"><![CDATA[<p>有时候想更了解别人App的调用流程，就需要在App运行的时候进行动态调试。动态调试指的是将程序运行起来，通过下断点、打印等方式，查看参数、返回值、函数调用流程等。</p>
 <h2 id="Xcode的动态调试原理"><a href="#Xcode的动态调试原理" class="headerlink" title="Xcode的动态调试原理"></a>Xcode的动态调试原理</h2><p>首先了解一下 <code>Xcode</code> 编译和调试器的发展。<code>Xcode</code> 中的编译器发展历程：<code>GCC</code> -&gt; <code>LLVM</code>,调试器的发展历程：<code>GDB</code> -&gt; <code>LLDB</code> 。</p>
 <p><code>Xcode</code> 调试安装到手机上的应用的原理：<code>Xcode</code> 通过 <code>LLDB</code> 调试器把调试指令发送到手机上的 <code>debugserver</code>, <code>debugserver</code> 再与相应的 <code>APP</code> 进行交互，达到调试的效果。</p>
-<p><code>debugserver</code> 一开始是存放在Mac的Xcode里面,路径： <code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/De viceSupport/9.1/DeveloperDiskImage.dmg/usr/bin/debugserver</code> 当 <code>Xcode</code> 识别到手机设备时，<code>Xcode</code> 会自动将 <code>debugserver</code> 安装到手机上。</p>
+<p><code>debugserver</code> 一开始是存放在Mac的Xcode里面,路径： </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Xcode.app/Contents/Developer/Platforms</span><br><span class="line">/iPhoneOS.platform/DeviceSupport</span><br><span class="line">/<span class="number">9.1</span>/DeveloperDiskImage.dmg</span><br><span class="line">/usr/bin/debugserver</span><br></pre></td></tr></table></figure>
+<p>当 <code>Xcode</code> 识别到手机设备时，<code>Xcode</code> 会自动将 <code>debugserver</code> 安装到手机上。</p>
 <p><code>Xcode</code> 调试的局限性：一般情况下，只能调试通过 <code>Xcode</code> 安装的APP，无法调试其它APP。</p>
 <h3 id="给debugserver赋予权限"><a href="#给debugserver赋予权限" class="headerlink" title="给debugserver赋予权限"></a>给debugserver赋予权限</h3><p>默认情况下 <code>/Developer/usr/bin/debugserver</code> 缺少一定的权限，只能调试通过Xcode安装的App，如果希望调试其它App，需要对 <code>debugserver</code> 重新签名，签上可以调试其它App的权限。</p>
 <p>需要的两个权限为：<code>get-task-allow</code> 和 <code>task_for_pid-allow</code></p>
@@ -35,7 +37,7 @@
 <p><code>debugserver.entitlements</code> 这个文件其实是个 <code>plist</code> 文件，在这个文件中加上上面提到的两个权限后，再通过 <code>ldid</code> 命令对文件重新签名。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ldid -Sdebugserver.entitlements debugserver</span><br></pre></td></tr></table></figure>
 <p>然后将已经签好权限的 <code>debugserver</code> 放到 <code>/usr/bin</code> 目录，便于找到 <code>debugserver</code> 指令。</p>
-<h3 id="debugserver附加到某个APP进程"><a href="#debugserver附加到某个APP进程" class="headerlink" title="debugserver附加到某个APP进程"></a>debugserver附加到某个APP进程</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ debugserver *:􏰲􏱎􏴤 -a 􏲢􏱢</span><br></pre></td></tr></table></figure>
+<h3 id="debugserver附加到某个APP进程"><a href="#debugserver附加到某个APP进程" class="headerlink" title="debugserver附加到某个APP进程"></a>debugserver附加到某个APP进程</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ debugserver *:端口号 -a 进程</span><br></pre></td></tr></table></figure>
 <ul>
 <li>*:端口号：使用iPhone的某个端口启动debugserver服务（不是保留端口）</li>
 <li>-a进程：输入APP的进程信息（进程ID或者进程名称）</li>
