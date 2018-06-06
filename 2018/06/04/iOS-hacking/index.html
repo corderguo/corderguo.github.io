@@ -21,7 +21,7 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
 <meta property="og:description" content="学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
 Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    
 在逆向工">
-<meta property="og:updated_time" content="2018-06-04T09:46:13.118Z">
+<meta property="og:updated_time" content="2018-06-06T06:31:58.350Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS逆向解密">
 <meta name="twitter:description" content="学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。
@@ -95,7 +95,7 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">3.</span> <span class="toc-text">代码Hook分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#theos的常用语法"><span class="toc-number">3.1.</span> <span class="toc-text">theos的常用语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
 		
 		</div>
 		
@@ -143,6 +143,24 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
 <li><p>有时候想看某个类中的某个方法的实现以及调用逻辑，就需要用到<code>Hopper Disassembler</code>工具。</p>
 </li>
 </ol>
+<h3 id="theos的常用语法"><a href="#theos的常用语法" class="headerlink" title="theos的常用语法"></a>theos的常用语法</h3><ul>
+<li><p>%hook ,%end : hook一个类的开始和结束</p>
+</li>
+<li><p>%log：打印方法调用详情</p>
+</li>
+<li><p>HBDebugLog：跟NSLog类似</p>
+</li>
+<li><p>%new：添加一个新的方法的时候使用</p>
+</li>
+<li><p>%orig：函数原来的代码逻辑</p>
+</li>
+<li><p>%ctor：在加载动态库时调用</p>
+</li>
+<li><p>logify.pl：可以将一个头文件快速转换成已经包含打印信息的xm文件</p>
+</li>
+<li><p>如果有额外的资源文件（比如图片），放到项目的layout文件夹中，对应着手机的根路径/</p>
+</li>
+</ul>
 <h2 id="砸壳-脱壳"><a href="#砸壳-脱壳" class="headerlink" title="砸壳(脱壳)"></a>砸壳(脱壳)</h2><p>如果使用越狱手机直接从<code>pp助手</code>下载下来的部分应用免去了我们自己脱壳的过程。但是如果是从App Store下载下来的应用，App Store已经为该应用进行了加密，再使用<code>class-dump</code>是无法导出头文件的，这是时候就需要对APP进行脱壳操作了。</p>
 <p>脱壳工具有两种，<code>Clutch</code> 和 <code>dumpdecrypted</code></p>
 <p><code>Clutch</code> :     </p>
@@ -226,7 +244,7 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">3.</span> <span class="toc-text">代码Hook分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac远程登录iPhone"><span class="toc-number">1.</span> <span class="toc-text">Mac远程登录iPhone</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cycript的使用"><span class="toc-number">2.</span> <span class="toc-text">Cycript的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码Hook分析"><span class="toc-number">3.</span> <span class="toc-text">代码Hook分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#theos的常用语法"><span class="toc-number">3.1.</span> <span class="toc-text">theos的常用语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#砸壳-脱壳"><span class="toc-number">4.</span> <span class="toc-text">砸壳(脱壳)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">5.</span> <span class="toc-text">结语</span></a></li></ol>
  
   </div>
 
@@ -260,7 +278,7 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
 		  
 		
 		  
-			<li><a href="/categories/技术/" title="技术">技术<sup>25</sup></a></li>
+			<li><a href="/categories/技术/" title="技术">技术<sup>26</sup></a></li>
 		  
 		
 		  
@@ -283,7 +301,7 @@ Mac远程登录iPhoneiOS和Mac OS X都是基于Darwin（苹果的一个基于Uni
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/ACM/" style="font-size: 16.67px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 13.33px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 13.33px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 13.33px;">security</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 16.67px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a> <a href="/tags/逆向/" style="font-size: 13.33px;">逆向</a>
+       <a href="/tags/ACM/" style="font-size: 17.5px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 12.5px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 12.5px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 17.5px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a> <a href="/tags/逆向/" style="font-size: 15px;">逆向</a>
     </div>
   </div>
 

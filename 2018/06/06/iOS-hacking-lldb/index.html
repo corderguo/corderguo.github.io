@@ -4,31 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>再见-百度空间 | 骚客</title>
+    <title>iOS逆向之动态调试 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！    
-还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早已被岁月磨平了棱角，一些年少轻狂的豪情壮志只能随着百度空间一样深深的埋在心里了！    
-有些">
+    <meta name="description" content="有时候想更了解别人App的调用流程，就需要在App运行的时候进行动态调试。动态调试指的是将程序运行起来，通过下断点、打印等方式，查看参数、返回值、函数调用流程等。
+Xcode的动态调试原理首先了解一下 Xcode 编译和调试器的发展。Xcode 中的编译器发展历程：GCC -&amp;gt; LLVM,调试器的发展历程：GDB -&amp;gt; LLDB 。
+Xcode 调试安装到手机上的应用的原理：Xcode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="再见-百度空间">
-<meta property="og:url" content="http://yoursite.com/2015/05/26/byeyouth/index.html">
+<meta property="og:title" content="iOS逆向之动态调试">
+<meta property="og:url" content="http://yoursite.com/2018/06/06/iOS-hacking-lldb/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！    
-还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早已被岁月磨平了棱角，一些年少轻狂的豪情壮志只能随着百度空间一样深深的埋在心里了！    
-有些">
-<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-06-24T16:24:12.000Z">
+<meta property="og:description" content="有时候想更了解别人App的调用流程，就需要在App运行的时候进行动态调试。动态调试指的是将程序运行起来，通过下断点、打印等方式，查看参数、返回值、函数调用流程等。
+Xcode的动态调试原理首先了解一下 Xcode 编译和调试器的发展。Xcode 中的编译器发展历程：GCC -&amp;gt; LLVM,调试器的发展历程：GDB -&amp;gt; LLDB 。
+Xcode 调试安装到手机上的应用的原理：Xcode">
+<meta property="og:updated_time" content="2018-06-06T07:36:23.480Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="再见-百度空间">
-<meta name="twitter:description" content="头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！    
-还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早已被岁月磨平了棱角，一些年少轻狂的豪情壮志只能随着百度空间一样深深的埋在心里了！    
-有些">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta name="twitter:title" content="iOS逆向之动态调试">
+<meta name="twitter:description" content="有时候想更了解别人App的调用流程，就需要在App运行的时候进行动态调试。动态调试指的是将程序运行起来，通过下断点、打印等方式，查看参数、返回值、函数调用流程等。
+Xcode的动态调试原理首先了解一下 Xcode 编译和调试器的发展。Xcode 中的编译器发展历程：GCC -&amp;gt; LLVM,调试器的发展历程：GDB -&amp;gt; LLDB 。
+Xcode 调试安装到手机上的应用的原理：Xcode">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -81,14 +79,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/05/26/byeyouth/" title="再见-百度空间" itemprop="url">再见-百度空间</a>
+      <a href="/2018/06/06/iOS-hacking-lldb/" title="iOS逆向之动态调试" itemprop="url">iOS逆向之动态调试</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2015-05-26T09:59:10.000Z" itemprop="datePublished"> 发表于 2015-05-26</time>
+    <time datetime="2018-06-06T04:02:04.000Z" itemprop="datePublished"> 发表于 2018-06-06</time>
     
   </p>
 </header>
@@ -97,34 +95,51 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Xcode的动态调试原理"><span class="toc-number">1.</span> <span class="toc-text">Xcode的动态调试原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#给debugserver赋予权限"><span class="toc-number">1.1.</span> <span class="toc-text">给debugserver赋予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debugserver附加到某个APP进程"><span class="toc-number">1.2.</span> <span class="toc-text">debugserver附加到某个APP进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac远程连接iPhone上的debugserver服务"><span class="toc-number">1.3.</span> <span class="toc-text">Mac远程连接iPhone上的debugserver服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用的LLDB指令"><span class="toc-number">1.4.</span> <span class="toc-text">常用的LLDB指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ASLR"><span class="toc-number">1.5.</span> <span class="toc-text">ASLR</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">2.</span> <span class="toc-text">结语</span></a></li></ol>
 		
 		</div>
 		
-		<p>头一段时间就知道百度空间要关闭了，但是还能打开，现在已经真的不能用了！陪伴了我四年的百度空间也总算是走到了尽头，有伤感，有惆怅，有不舍，更有无奈！    </p>
-<p>还记得当时在上面更新ACM时的激情和疯狂，青春的脚印和奋斗气息在上面展现的淋漓尽致。还记得当时以题会友，结交了好多ACM爱好者，时光荏苒，现在的自己早已被岁月磨平了棱角，一些年少轻狂的豪情壮志只能随着百度空间一样深深的埋在心里了！    </p>
-<p>有些时候自己就在想，很多事情就像是旅行一样，当你决定要出发的时候，最困难的那部分其实已经完成了。        </p>
-<p>我不能在这里变老。我要在变老之前，做一些到了80岁还会微笑的事情。        </p>
-<p>我想，一个人最好的样子就是平静一点，哪怕一个人生活，穿越一个又一个城市，走过一条又一条街道，仰望一片又一片星空，见证一次又一次别离。然后在别人质疑你的时候，你可以问心无愧的说，虽然每一步走的很慢，但是我不曾退缩过。        </p>
-<p>我们都是生活中的一粒尘埃，都在拼命的在风雨中奔跑，都在努力的要摆脱自己的平凡。为了自己，为了家人，更为了不让那些关心自己的人失望！        </p>
-<p>我们应该感谢平凡，因为平凡，所以才想要不平凡！     </p>
-<p>2014年是自己走弯路走的最远的一年，颓废，消极，漫无目的如行尸走肉一般，忘了本初！忘了家人寄托在自己身上的希望！忘了曾经许下的誓言！忘了一切一切……        </p>
-<p>人生正因为未知而精彩，正因为没有回退路，所以我们才不断的前行！我没有抱怨那一年颓废的自己，这是自己的选择。我为自己昂头走向2015而骄傲！    </p>
-<p>人的一生中，最光辉的一天并非是功成名就的那天，而是从悲叹与绝望中产生对人生的挑战，以勇敢迈向意志的那天！        </p>
-<p>很多事情，不是我们看到希望才去坚持，而是我们坚持了才会看到希望！        </p>
-<p>星竹林前学佛语，兰若花下埋古经！坚持你所选择的，即便遍体鳞伤，何言悔！    </p>
-<p>今朝高戰星空梦，我笑我哭亦自在。他日若遂凌云志，不笑不哭也不闹！    </p>
-<p>这便是大自在！        </p>
-<p>每当夜幕降临，走在灯红酒绿纸醉金迷的街道，你是否会被这个浮夸的社会所感染！天下攘攘，皆为利往！天下熙熙，皆为利来！保持本心，给自己留一点纯净的空间。        </p>
-<p>我抬头仰望星空，不是为了摘取流星，而是为了自己心中那个永不屈服的梦想！        </p>
-<p>不要抱怨生活对你的不公，尊严不是别人给的，而是靠自己争取的！今日低头做事，明日抬头相见，有梦想而又能为之奋斗的人永远是最幸福的！        </p>
-<p>忽然想起网络上的两篇文章《我奋斗了18年仅仅为了和你坐在一起喝杯咖啡》《我奋斗了18年不只是为了和你坐在一起喝杯咖啡》，写的很好，推荐大家去看看。    </p>
-<p>当手指碰到键盘，思绪便天马行空不可收拾，忽然有感而发便东拉西扯了一些闲话，谨以此文祭奠曾经的岁月！    </p>
-<p>再见，百度空间！    </p>
-<p>再见，年少轻狂的自己！        </p>
-<p>再见，青春！           </p>
-<hr>
-<p>扫描下面二维码关注公众号，时不时的会有惊喜：<br><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+		<p>有时候想更了解别人App的调用流程，就需要在App运行的时候进行动态调试。动态调试指的是将程序运行起来，通过下断点、打印等方式，查看参数、返回值、函数调用流程等。</p>
+<h2 id="Xcode的动态调试原理"><a href="#Xcode的动态调试原理" class="headerlink" title="Xcode的动态调试原理"></a>Xcode的动态调试原理</h2><p>首先了解一下 <code>Xcode</code> 编译和调试器的发展。<code>Xcode</code> 中的编译器发展历程：<code>GCC</code> -&gt; <code>LLVM</code>,调试器的发展历程：<code>GDB</code> -&gt; <code>LLDB</code> 。</p>
+<p><code>Xcode</code> 调试安装到手机上的应用的原理：<code>Xcode</code> 通过 <code>LLDB</code> 调试器把调试指令发送到手机上的 <code>debugserver</code>, <code>debugserver</code> 再与相应的 <code>APP</code> 进行交互，达到调试的效果。</p>
+<p><code>debugserver</code> 一开始是存放在Mac的Xcode里面,路径： <code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/De viceSupport/9.1/DeveloperDiskImage.dmg/usr/bin/debugserver</code> 当 <code>Xcode</code> 识别到手机设备时，<code>Xcode</code> 会自动将 <code>debugserver</code> 安装到手机上。</p>
+<p><code>Xcode</code> 调试的局限性：一般情况下，只能调试通过 <code>Xcode</code> 安装的APP，无法调试其它APP。</p>
+<h3 id="给debugserver赋予权限"><a href="#给debugserver赋予权限" class="headerlink" title="给debugserver赋予权限"></a>给debugserver赋予权限</h3><p>默认情况下 <code>/Developer/usr/bin/debugserver</code> 缺少一定的权限，只能调试通过Xcode安装的App，如果希望调试其它App，需要对 <code>debugserver</code> 重新签名，签上可以调试其它App的权限。</p>
+<p>需要的两个权限为：<code>get-task-allow</code> 和 <code>task_for_pid-allow</code></p>
+<p>iPhone上的 <code>/Developer</code> 目录是只读的，无法直接对 <code>/Developer/usr/bin/debugserver</code> 文件签名，需要先把 <code>debugserver</code> 复制到Mac。</p>
+<p>通过 <code>ldid</code> 命令导出文件以前的签名权限:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ldid -e debugserver &gt; debugserver.entitlements</span><br></pre></td></tr></table></figure>
+<p><code>debugserver.entitlements</code> 这个文件其实是个 <code>plist</code> 文件，在这个文件中加上上面提到的两个权限后，再通过 <code>ldid</code> 命令对文件重新签名。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ldid -Sdebugserver.entitlements debugserver</span><br></pre></td></tr></table></figure>
+<p>然后将已经签好权限的 <code>debugserver</code> 放到 <code>/usr/bin</code> 目录，便于找到 <code>debugserver</code> 指令。</p>
+<h3 id="debugserver附加到某个APP进程"><a href="#debugserver附加到某个APP进程" class="headerlink" title="debugserver附加到某个APP进程"></a>debugserver附加到某个APP进程</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ debugserver *:􏰲􏱎􏴤 -a 􏲢􏱢</span><br></pre></td></tr></table></figure>
+<ul>
+<li>*:端口号：使用iPhone的某个端口启动debugserver服务（不是保留端口）</li>
+<li>-a进程：输入APP的进程信息（进程ID或者进程名称）</li>
+</ul>
+<h3 id="Mac远程连接iPhone上的debugserver服务"><a href="#Mac远程连接iPhone上的debugserver服务" class="headerlink" title="Mac远程连接iPhone上的debugserver服务"></a>Mac远程连接iPhone上的debugserver服务</h3><p>启动LLDB：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在终端输入</span></span><br><span class="line">$ lldb</span><br></pre></td></tr></table></figure>
+<p>连接debugserver服务</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) process connect connect:<span class="comment">//手机IP地址:debugserver服务端口号</span></span><br></pre></td></tr></table></figure>
+<p>使用LLDB的c命令让程序先继续运行</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(lldb) c</span><br></pre></td></tr></table></figure>
+<p>到此，就可以远程调试别人的App了。</p>
+<h3 id="常用的LLDB指令"><a href="#常用的LLDB指令" class="headerlink" title="常用的LLDB指令"></a>常用的LLDB指令</h3><ul>
+<li>给ViewController的test方法设置断点</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">breakpoint set -n <span class="string">"-[ViewController test]"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看指令用户使用 <code>help</code> 指令： <code>help breakpoint</code> 等。</li>
+<li>打印线程的堆栈信息： <code>thread backtrace</code></li>
+</ul>
+<p>很多命令不在这里赘述，请参考：<a href="http://lldb.llvm.org/lldb-gdb.html" target="_blank" rel="external">http://lldb.llvm.org/lldb-gdb.html</a></p>
+<h3 id="ASLR"><a href="#ASLR" class="headerlink" title="ASLR"></a>ASLR</h3><p>获取 <code>ASLR</code> 的偏移量：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">image list -o -f</span><br></pre></td></tr></table></figure>
+<p>打印结果的第二列前面的地址就是我们需要的 <code>ASLR</code> 的偏移量offset。</p>
+<p>假如我们想给某个类中的test方法添加断点，那么通过 <code>Hooper</code> 工具找到该方法的第一个内存地址,假如为0x010101，然后地址加上我们得到的 <code>ASLR</code> 的偏移量就是该方法的实际地址。然后通过该地址给方法下断点。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">breakpoint set -o <span class="number">0x010101</span>+offset</span><br></pre></td></tr></table></figure>
+<p>到此就给该方法添加了断点，之后当程序调用该方法的时候，会停在该断点出。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>练习 <code>lldb</code> 的各种指令时，推荐先在 <code>Xcode</code> 上练习各种用法，因为会有提示和直观的输出结果，更容易我们理解。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -132,13 +147,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/生活/">生活</a>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/情感/">情感</a>
+  <span></span> <a href="/tags/逆向/">逆向</a>
   </div>
 
 </div>
@@ -147,7 +162,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/05/26/byeyouth/" data-title="再见-百度空间 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2018/06/06/iOS-hacking-lldb/" data-title="iOS逆向之动态调试 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -160,19 +175,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/06/08/iOS-runtime-messageForwarding/" title="深入理解Object-C消息转发机制">
-  <strong>上一篇：</strong><br/>
-  <span>
-  深入理解Object-C消息转发机制</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/04/17/life-poem-dynasty/"  title="山河拱手,为君一笑">
+<a href="/2018/06/05/iOS-logify/"  title="iOS逆向之logify跟踪方法调用">
  <strong>下一篇：</strong><br/> 
- <span>山河拱手,为君一笑
+ <span>iOS逆向之logify跟踪方法调用
 </span>
 </a>
 </div>
@@ -193,7 +200,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Xcode的动态调试原理"><span class="toc-number">1.</span> <span class="toc-text">Xcode的动态调试原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#给debugserver赋予权限"><span class="toc-number">1.1.</span> <span class="toc-text">给debugserver赋予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#debugserver附加到某个APP进程"><span class="toc-number">1.2.</span> <span class="toc-text">debugserver附加到某个APP进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac远程连接iPhone上的debugserver服务"><span class="toc-number">1.3.</span> <span class="toc-text">Mac远程连接iPhone上的debugserver服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用的LLDB指令"><span class="toc-number">1.4.</span> <span class="toc-text">常用的LLDB指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ASLR"><span class="toc-number">1.5.</span> <span class="toc-text">ASLR</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">2.</span> <span class="toc-text">结语</span></a></li></ol>
  
   </div>
 
