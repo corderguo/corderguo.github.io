@@ -19,7 +19,7 @@ logify 是 theos 的一个组件，logify 可以将一个头文件快速转换�
 <meta property="og:site_name" content="骚客">
 <meta property="og:description" content="根据上一篇文章的介绍，我们将App的头文件使用 class-dump 导出后，然后利用 theos 创建逆向的工程，编写 hook 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 logify 来跟踪函数调用，从而定位到我们需要的函数。
 logify 是 theos 的一个组件，logify 可以将一个头文件快速转换成已经包含打印信息的xm文件。">
-<meta property="og:updated_time" content="2018-06-05T09:04:23.505Z">
+<meta property="og:updated_time" content="2018-06-07T10:33:58.501Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS逆向之logify跟踪方法调用">
 <meta name="twitter:description" content="根据上一篇文章的介绍，我们将App的头文件使用 class-dump 导出后，然后利用 theos 创建逆向的工程，编写 hook 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 logify 来跟踪函数调用，从而定位到我们需要的函数。
@@ -112,6 +112,15 @@ logify 是 theos 的一个组件，logify 可以将一个头文件快速转换�
 </ul>
 <p>根据自己编译的时候报的具体错误，进行适当的修改即可。</p>
 <h3 id="日志查看"><a href="#日志查看" class="headerlink" title="日志查看"></a>日志查看</h3><p><code>theos</code> 工程重新打包安装成功后，重新打开微信的聊天界面，然后打开 <code>Xcode -&gt; Window -&gt; Devices and Simulators</code> 即可跟踪方法的调用。</p>
+<p><code>Xcode9.0</code> 之后该方法已经不方便查看了，使用 <code>syslog</code> 来实时查看日志。</p>
+<p>在手机上安装两个插件：</p>
+<ul>
+<li>syslogd to/var/log/syslog : 记录log        </li>
+<li>Core Utilities : 使用 <code>tail</code> 命令        </li>
+</ul>
+<p>比如查看微信的日志：    </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -f /var/log/syslog | grep WeChat</span><br></pre></td></tr></table></figure>
+<p>好了，接下来就可以根据实时查看微信的日志了，分析方法调用逻辑就一目了然了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
