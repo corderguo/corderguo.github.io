@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-02T08:55:00.083Z</updated>
+  <updated>2018-10-02T09:11:29.753Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,127 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>利用python实现自动化打包</title>
+    <link href="http://yoursite.com/2018/09/29/iOS-auto_packaging/"/>
+    <id>http://yoursite.com/2018/09/29/iOS-auto_packaging/</id>
+    <published>2018-09-29T11:12:59.000Z</published>
+    <updated>2018-10-02T09:11:29.753Z</updated>
+    
+    <content type="html"><![CDATA[<p>频繁的手动打包是一项耗时耗力的工程，而且是一项重复性的劳动，因此实现打包的自动化是非常必要的。通过自动化打包可以实现一键打包，并上传到fir或蒲公英等第三方平台。</p>
+<h2 id="xcodebuild"><a href="#xcodebuild" class="headerlink" title="xcodebuild"></a>xcodebuild</h2><p>当我们通过<code>Archive</code>手动打包的时候，<code>Xcode</code>本身是通过调用<code>xcodebuild</code>命令来实现打包的过程。</p>
+<p><code>xcodebuild</code>是苹果提供的用于打包项目或者工程的命令，可以通过<code>man xcodebuild</code>命令查看它的介绍。</p>
+<blockquote>
+<p>NAME        </p>
+<p>xcodebuild – build Xcode projects and workspaces</p>
+<p>DESCRIPTION</p>
+<p>xcodebuild builds one or more targets contained in an Xcode project, or builds a scheme contained in an Xcode workspace or Xcode project.</p>
+<p>Usage</p>
+<p>To build an Xcode project, run xcodebuild from the directory containing your project (i.e. the<br>     directory containing the name.xcodeproj package). If you have multiple projects in the this<br>     directory you will need to use -project to indicate which project should be built.  By default,<br>     xcodebuild builds the first target listed in the project, with the default build configuration.<br>     The order of the targets is a property of the project and is the same for all users of the<br>     project.<br>To build an Xcode workspace, you must pass both the -workspace and -scheme options to define the<br>     build.  The parameters of the scheme will control which targets are built and how they are built,<br>     although you may pass other options to xcodebuild to override some parameters of the scheme.<br>     There are also several options that display info about the installed version of Xcode or about projects or workspaces in the local directory, but which do not initiate an action.  These<br>     include -list, -showBuildSettings, -showdestinations, -showsdks, -usage, and -version.</p>
+</blockquote>
+<p>总结一下：</p>
+<ul>
+<li>需要在包含 <code>name.xcodeproj</code> 的目录下执行 <code>xcodebuild</code> 命令，且如果该目录下有多个 projects，那么需要使用 <code>-project</code> 指定需要 build 的项目。</li>
+<li>在不指定 <code>build</code> 的 <code>target</code> 的时候，默认情况下会 build project 下的<code>第一个</code>target</li>
+<li>当 build workspace 时，需要同时指定 <code>-workspace</code> 和 <code>-scheme</code> 参数，scheme 参数控制了哪些 targets 会被 build 以及以怎样的方式 build。</li>
+<li>有一些诸如 <code>-list, -showBuildSettings, -showsdks</code> 的参数可以查看项目或者工程的信息，不会对 build action 造成任何影响，放心使用。</li>
+</ul>
+<p>那么，xcodebuild 究竟如何使用呢？ 继续看文档:</p>
+<p>&gt;</p>
+<blockquote>
+<p>SYNOPSIS</p>
+<p>xcodebuild [-project name.xcodeproj][[-target targetname] … | -alltargets]<br>                [-configuration configurationname][-sdk [sdkfullpath | sdkname]] [action …]<br>                [buildsetting=value …] [-userdefault=value …]</p>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>xcodebuild [-project name.xcodeproj] -scheme schemename [[-destination destinationspecifier] …]<br>                [-destination-timeout value] [-configuration configurationname]<br>                [-sdk [sdkfullpath | sdkname]] [action …] [buildsetting=value …]<br>                [-userdefault=value …]</p>
+<p>xcodebuild -workspace name.xcworkspace -scheme schemename<br>                [[-destination destinationspecifier] …][-destination-timeout value]<br>                [-configuration configurationname] [-sdk [sdkfullpath | sdkname]] [action …]<br>                [buildsetting=value …] [-userdefault=value …]</p>
+<p>xcodebuild -version [-sdk [sdkfullpath | sdkname]] [infoitem]</p>
+<p>xcodebuild -showsdks</p>
+<p>xcodebuild -exportArchive -archivePath xcarchivepath -exportPath destinationpath<br>                -exportOptionsPlist path</p>
+<p>等等</p>
+</blockquote>
+<p>挑几个常用的形式介绍一下：</p>
+<ul>
+<li><code>xcodebuild -showsdks</code>: 列出 Xcode 所有可用的 SDKs。</li>
+<li><code>xcodebuild -showBuildSettings</code>: 查看当前工程 build setting 的配置参数。</li>
+<li><code>xcodebuild [-project name.xcodeproj] [[-target targetname] ... | -alltargets] build</code>: 会 build 指定 project，其中 -target 和 -configuration 参数可以使用 xcodebuild -list 获得，-sdk 参数可由 xcodebuild -showsdks 获得。</li>
+<li><code>xcodebuild -workspace name.xcworkspace -scheme schemename build</code>:build 指定 workspace，当我们使用 CocoaPods 来管理第三方库时，会生成 xcworkspace 文件，这样就会用到这种打包方式。</li>
+</ul>
+<p>##打包过程</p>
+<p><code>开始打包</code>—-&gt;<code>archive文件</code>—-&gt;<code>ipa包</code></p>
+<p>####生成archive文件</p>
+<p>首先看一下生成<code>archive文件</code>的命令：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">xcodebuild archive -workspace 项目名称.xcworkspace </span><br><span class="line">                   -scheme 项目名称 </span><br><span class="line">                   -configuration 构建配置 </span><br><span class="line">                   -archivePath archive包存储路径 </span><br><span class="line">                    CODE_SIGN_IDENTITY=证书 </span><br><span class="line">                    PROVISIONING_PROFILE=描述文件UUID</span><br></pre></td></tr></table></figure>
+<ul>
+<li>workspace 这个就是项目名</li>
+<li>scheme 可以通过xcodebuild -list获取</li>
+<li>configration 一些参数，也可以通过xcodebuild -list获取，一般使用Debug、Release</li>
+<li>archivePath archive后的路径</li>
+<li>CODE_SIGN_IDENTITY 证书的Inentity</li>
+<li>PROVISIONING_PROFILE 描述文件UUID</li>
+</ul>
+<p>如果使用Xcode的自动管理证书功能，则<code>CODE_SIGN_IDENTITY</code>和<code>CODE_SIGN_IDENTITY</code>参数不需要添加。</p>
+<p>####生成ipa文件</p>
+<p>同样看一下生成ipa文件的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">xcodebuild -exportArchive -archivePath archive文件的地址.xcarchive </span><br><span class="line">                          -exportPath 导出的文件夹地址 </span><br><span class="line">                          -exportOptionsPlist exprotOptionsPlist.plist </span><br><span class="line">                          CODE_SIGN_IDENTITY=证书 </span><br><span class="line">                          PROVISIONING_PROFILE=描述文件UUID</span><br></pre></td></tr></table></figure>
+<p>官方解释：</p>
+<p>&gt;</p>
+<blockquote>
+<p>Exports the archive MyMobileApp.xcarchive to the path ExportDestination using the<br>              options specified in export.plist.</p>
+</blockquote>
+<p>同样，如果你不需要的指定证书和Provisioning文件，可以把上面的两个参数去掉，它会根据你的Xcode配置去匹配。</p>
+<p><code>exportOptionsPlist</code>这个参数，对应一个plist文件,用来配置一些打包时需要配置的选项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">    &lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span><br><span class="line">    &lt;plist version=&quot;1.0&quot;&gt;</span><br><span class="line">    &lt;dict&gt;</span><br><span class="line">        &lt;key&gt;teamID&lt;/key&gt;</span><br><span class="line">        &lt;string&gt;UA21BCDJHK3&lt;/string&gt; //TeamID</span><br><span class="line">        &lt;key&gt;method&lt;/key&gt;</span><br><span class="line">        &lt;string&gt;ad-hoc&lt;/string&gt; //ad-hoc打包</span><br><span class="line">        &lt;key&gt; compileBitcode&lt;/key&gt; //是否编译bitcode</span><br><span class="line">        &lt;false/&gt;</span><br><span class="line">    &lt;/dict&gt;</span><br><span class="line">    &lt;/plist&gt;</span><br></pre></td></tr></table></figure>
+<p><code>exportOptionsPlist.plist</code>可配置的字段，可以使用<code>xcodebuild --help</code>命令查看。</p>
+<p>至此你已经能通过命令生成ipa包了。</p>
+<p>##上传第三方平台</p>
+<p>一般第三方平台都会开放上传app包的API，这里以咱们使用的<code>fir</code>平台为例：</p>
+<p>查看<code>fir</code>的文档，可以在<code>文档</code>中看到<code>发布应用</code>的选项卡，其中有获取上传凭证的API：</p>
+<p>&gt;</p>
+<blockquote>
+<p>POST <a href="http://api.fir.im/apps" target="_blank" rel="external">http://api.fir.im/apps</a></p>
+</blockquote>
+<p>上传文件的API:</p>
+<p>&gt;</p>
+<blockquote>
+<p>POST upload_url</p>
+</blockquote>
+<p>然后按文档格式，配置指定的参数即可。</p>
+<p>然后利用<code>python</code>将刚才生产的ipa包，上传到fir平台即可。</p>
+<p>##上传到AppStore</p>
+<p>利用<code>altool</code>: Application Loader命令行工具可以验证并上传应用程序的二进制文件到AppStore。</p>
+<p>##脚本化</p>
+<p>综合以上过程，利用<code>python</code>实现脚本工具，完成一键打包并上传fir。</p>
+<p>工具代码如下,可以在此基础代码的基础上增加更多功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import requests</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#Release Debug</span><br><span class="line">CONFIGURATION = &quot;Debug&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def desktopPath():</span><br><span class="line">    return os.path.join(os.path.expanduser(&quot;~&quot;), &apos;Desktop&apos;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#清除临时文件</span><br><span class="line">def cleanArchiveFile(archivePath):</span><br><span class="line">	cleanCmd = &quot;rm -r %s&quot; %(archivePath)</span><br><span class="line">	os.system(cleanCmd)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#上传到第三方平台</span><br><span class="line">def uploadIpaToPlatform(ipaPath):</span><br><span class="line"></span><br><span class="line">    #需要的参数</span><br><span class="line">    upload_url = &quot;xxxx&quot;</span><br><span class="line">    bundle_id = &quot;xxxx&quot;</span><br><span class="line">    api_token = &quot;xxxx&quot;</span><br><span class="line"></span><br><span class="line">    #获取上传凭证（上传地址）</span><br><span class="line">    data = &#123;&apos;type&apos;: &apos;ios&apos;, &apos;bundle_id&apos;: bundle_id,</span><br><span class="line">        &apos;api_token&apos;: api_token&#125;</span><br><span class="line"></span><br><span class="line">    response = requests.post(url = upload_url, data = data)</span><br><span class="line">    json = response.json()</span><br><span class="line">    binaryDict = (json[&quot;cert&quot;][&quot;binary&quot;])</span><br><span class="line"></span><br><span class="line">    print &apos;====&apos; + ipaPath + &apos;=====&apos; + binaryDict[&apos;upload_url&apos;]</span><br><span class="line"></span><br><span class="line">    f = open(ipaPath, &apos;rb&apos;)</span><br><span class="line">    file_binary = &#123;&apos;file&apos;: f&#125;</span><br><span class="line">    param = &#123;&quot;key&quot;:binaryDict[&apos;key&apos;],&quot;token&quot;:binaryDict[&apos;token&apos;]&#125;</span><br><span class="line">    #上传ipa    </span><br><span class="line">    req = requests.post(url=binaryDict[&apos;upload_url&apos;],files=file_binary,data=param,verify=False)</span><br><span class="line">    f.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#build过程</span><br><span class="line">def xcbuild():</span><br><span class="line"></span><br><span class="line">	#初始化</span><br><span class="line">	#工程名字</span><br><span class="line">	workspace = &quot;test.xcworkspace&quot;</span><br><span class="line">	scheme = &quot;test&quot;</span><br><span class="line"></span><br><span class="line">	# exportOptions.plist文件路径；根据自己的实际情况改变</span><br><span class="line">	plistPath = &apos;./../../build/exportOptions.plist&apos;</span><br><span class="line"></span><br><span class="line">	#桌面路径</span><br><span class="line">	deskPath = desktopPath()</span><br><span class="line"></span><br><span class="line">	#archive文件导出路径</span><br><span class="line">	archivePath = deskPath + &apos;/&apos; + scheme + &apos;.xcarchive&apos;</span><br><span class="line"></span><br><span class="line">	#导出ipa文件所在文件名</span><br><span class="line">	currentT = time.strftime(&apos;%Y-%m-%d-%H-%M-%S&apos;,time.localtime(time.time()))</span><br><span class="line">	ipaDirName = scheme + currentT</span><br><span class="line"></span><br><span class="line">	#ipa文件路径</span><br><span class="line">	ipaPath = deskPath + &apos;/&apos; + ipaDirName</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	# 生成archive文件的命令</span><br><span class="line">	archiveCmd = &quot;xcodebuild archive -workspace %s -scheme %s -configuration %s -archivePath %s&quot; %(workspace,scheme,CONFIGURATION,archivePath)</span><br><span class="line">	#python执行命令</span><br><span class="line">	os.system(archiveCmd)</span><br><span class="line">	#生成.ipa包的命令</span><br><span class="line">	exportCmd = &quot;xcodebuild -exportArchive -archivePath %s -exportOptionsPlist %s -exportPath %s&quot; %(archivePath,plistPath,ipaPath)</span><br><span class="line">	os.system(exportCmd)</span><br><span class="line"></span><br><span class="line">	#上传fir</span><br><span class="line">	uploadIpaToPlatform(ipaPath + &apos;/&apos; + scheme + &apos;.ipa&apos;)</span><br><span class="line"></span><br><span class="line">	#清除临时文件</span><br><span class="line">	cleanArchiveFile(archivePath)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line"></span><br><span class="line">	#判断输入的参数</span><br><span class="line">	if len(sys.argv) &gt; 1:</span><br><span class="line">		config = sys.argv[1]</span><br><span class="line">		global CONFIGURATION</span><br><span class="line">		if sys.argv[1]==&apos;Release&apos; or sys.argv[1]==&apos;RELEASE&apos;:</span><br><span class="line">			CONFIGURATION = &apos;Release&apos;</span><br><span class="line">		elif sys.argv[1]==&apos;Debug&apos; or sys.argv[1]==&apos;DEBUG&apos;:</span><br><span class="line">			CONFIGURATION = &apos;Debug&apos;</span><br><span class="line"></span><br><span class="line">	#build过程</span><br><span class="line">	xcbuild()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">	main()</span><br></pre></td></tr></table></figure>
+<p>为了不污染项目，该脚本和plist文件并没有放到项目工程目录中，而是把py文件设置成了全局可用，<code>exportOptionsPlist.plist</code>文件放到单独的目录，在脚本文件中引用即可。</p>
+<p>使用的时候只需在工程目录敲命令:</p>
+<p>如果打<code>Debug</code>包：</p>
+<p><code>python build.py</code> </p>
+<p>如果打<code>Release</code>包:</p>
+<p><code>python build.py Release</code></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;频繁的手动打包是一项耗时耗力的工程，而且是一项重复性的劳动，因此实现打包的自动化是非常必要的。通过自动化打包可以实现一键打包，并上传到fir或蒲公英等第三方平台。&lt;/p&gt;
+&lt;h2 id=&quot;xcodebuild&quot;&gt;&lt;a href=&quot;#xcodebuild&quot; class=&quot;he
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+      <category term="ACM" scheme="http://yoursite.com/tags/ACM/"/>
+    
+  </entry>
+  
+  <entry>
     <title>最短路径算法</title>
     <link href="http://yoursite.com/2018/09/21/acm-dijkstra/"/>
     <id>http://yoursite.com/2018/09/21/acm-dijkstra/</id>
     <published>2018-09-21T11:12:59.000Z</published>
-    <updated>2018-10-02T08:55:00.083Z</updated>
+    <updated>2018-10-02T08:57:54.034Z</updated>
     
     <content type="html"><![CDATA[<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
 <p> 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。</p>
@@ -1042,85 +1158,6 @@ One of the two will be used. Which one is undefined.
     
     
       <category term="Swift" scheme="http://yoursite.com/tags/Swift/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS中block的Strong-Weak Dance的思考</title>
-    <link href="http://yoursite.com/2016/03/24/iOS-block-strong-weak-dance/"/>
-    <id>http://yoursite.com/2016/03/24/iOS-block-strong-weak-dance/</id>
-    <published>2016-03-24T02:10:18.000Z</published>
-    <updated>2016-08-25T09:57:40.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><hr>
-<p>在使用 Block 时，除了使用 __weak 修饰符避免循环引用外，还有一点经常容易忘记。苹果把它称为：“Strong-Weak Dance”。        </p>
-<h3 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h3><hr>
-<p>这是一种 强引用 –&gt; 弱引用 –&gt; 强引用 的变换过程。在弄明白为什么要如此大费周章之前，我们首先来看看一般的写法会有什么问题。        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__weak MyViewController *wself = self;</span><br><span class="line">self.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    [wself.property removeObserver: wself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>这种写法可以避免循环引用，但是我们要考虑这样的问题：    </p>
-<p><strong>假设 block 被放在子线程中执行，而且执行过程中 self 在主线程被释放了。由于 wself 是一个弱引用，因此会自动变为 nil。而在 KVO 中，这会导致崩溃。</strong>    </p>
-<h3 id="Strong-Weak-Dance"><a href="#Strong-Weak-Dance" class="headerlink" title="Strong-Weak Dance"></a>Strong-Weak Dance</h3><hr>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__weak MyViewController *wself = self;</span><br><span class="line">self.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    __strong __typeof(wself) sself = wself; // 强引用一次</span><br><span class="line">    [sself.property removeObserver: sself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>这样一来，self 所指向对象的引用计数变成 2，即使主线程中的 self 因为超出作用于而释放，对象的引用计数依然为 1，避免了对象的销毁。        </p>
-<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><hr>
-<p>在和小伙伴的讨论过程中，他提出了几个问题。虽然都不难，但是有利于把各种知识融会贯通起来。</p>
-<p>1.Q：下面这行代码，将一个弱引用的指针赋值给强引用的指针，可以起到强引用效果么？</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__strong __typeof(wself) sself = wself;</span><br></pre></td></tr></table></figure>
-<p>A：会的。引用计数描述的是对象而不是指针。这句话的意思是：        </p>
-<blockquote>
-<p>sself 强引用 wself 指向的那个对象</p>
-</blockquote>
-<p>因此对象的引用计数会增加一个。</p>
-<p>2.Q：block 内部定义了sself，会不会因此强引用了 sself？<br>A：不会。block 只有截获外部变量时，才会引用它。如果是内部新建一个，则没有任何问题。<br>3.Q：如果在 block 内部没有强引用，而是通过 if 判断，是不是也可以，比如这样写：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> __weak MyViewController *wself = self;</span><br><span class="line">wself.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    <span class="keyword">if</span> (wself) &#123; // 只有当 wself 不为 nil 时，才执行以下代码</span><br><span class="line">        [wself.property removeObserver: wself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>A：不可以！考虑到多线程执行，也许在判断的时候，self 还没释放，但是执行 self 里面的代码时，就刚好释放了。</p>
-<p>4.Q：那按照这个说法，block 内部强引用也没用啊。也许 block 执行以前，self 就释放了。</p>
-<p>A：有用！如果在 block 执行以前，self 就释放了，那么 block 的引用计数降为 0，所以自己就会被释放。这样它根本就不会被执行。另外，如果执行一个为 nil 的闭包会导致崩溃。        </p>
-<p>5.Q：如果在执行 block 的过程中，block 被释放了怎么办？        </p>
-<p>A：简单来说，block 还会继续执行，但是它捕获的指针会具有不确定的值，详细内容请参考<a href="http://stackoverflow.com/questions/12272783/what-happens-when-a-block-is-set-to-nil-during-its-execution" target="_blank" rel="external">这篇文章</a>    </p>
-<h3 id="strongify-和-weakify"><a href="#strongify-和-weakify" class="headerlink" title="@strongify 和 @weakify"></a>@strongify 和 @weakify</h3><hr>
-<p>这是<a href="https://github.com/ReactiveCocoa/ReactiveCocoa" target="_blank" rel="external">ReactiveCocoa</a> 中定义的一个宏。一般可以这样使用：    </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@weakify(self);</span><br><span class="line">self.completionHandler = ^(NSInteger result) &#123;</span><br><span class="line">    @strongify(self);</span><br><span class="line">    [self.property removeObserver: sself <span class="keyword">for</span>KeyPath:@<span class="string">"pathName"</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>本文并非分析它们的实现原理，所以就简单解释两点：        </p>
-<ol>
-<li><p>这里的“@”没有任何用处，仅表示强调，这个宏实际上包含了一个空的 AutoreleasePool，这也就是为什么一定要加上“@”。        </p>
-</li>
-<li><p>它的原理还是和之前一样，生成了一段形如 __weak MyViewController *wself = self; 这种格式的代码：</p>
-</li>
-</ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#define rac_strongify_(INDEX, VAR) \\</span></span><br><span class="line">__strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);</span><br></pre></td></tr></table></figure>
-<h3 id="Swift-中的情况"><a href="#Swift-中的情况" class="headerlink" title="Swift 中的情况"></a>Swift 中的情况</h3><hr>
-<p>在 Swift 中也有 Strong-Weak Dance 的概念。最简单的方法就是直接沿用 OC 的思路：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.completionHandler = &#123; [weak self] <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">let</span> strongSelf = self &#123;</span><br><span class="line">        /// ....</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>这种写法的缺点在于，我们不能写 if let self = self，因此需要重新定义一个变量 strongSelf，命名方式显得不够优雅。            </p>
-<p>除此以外还可以使用 Swift 标准库提供的函数 withExtendedLifetime：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.completionHandler = &#123; [weak self] <span class="keyword">in</span></span><br><span class="line">    withExtendedLifetime(self) &#123;</span><br><span class="line">        /// ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>这种写法的缺点在于，self 依然是可选类型的，还需要把它解封后才能使用。        </p>
-<p>最后，还有一种解决方案是自定义 withExtendedLifetime函数：            </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">extension Optional &#123;</span><br><span class="line">    func withExtendedLifetime(body: T -&gt; Void) &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">let</span> strongSelf = self &#123;</span><br><span class="line">            body(strongSelf)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>至于这种写法是否更加优雅，就见仁见智了：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.completionHandler = &#123; [weak self] <span class="keyword">in</span></span><br><span class="line">    self.withExtendedLifetime &#123;</span><br><span class="line">        /// 这里用 <span class="variable">$0</span> 表示 self</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="关于YYKit中block的细节"><a href="#关于YYKit中block的细节" class="headerlink" title="关于YYKit中block的细节"></a>关于YYKit中block的细节</h3><hr>
-<p>下面是YYCache中的一段代码：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (void)_trimRecursively &#123;</span><br><span class="line">    __weak typeof(self) _self = self;</span><br><span class="line">    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_autoTrimInterval * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^&#123;</span><br><span class="line">        __strong typeof(_self) self = _self;</span><br><span class="line">        <span class="keyword">if</span> (!self) <span class="built_in">return</span>;</span><br><span class="line">        [self _trimInBackground];</span><br><span class="line">        [self _trimRecursively];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>思考：         </p>
-<p>如果直接引用 strong self，那 block 创建时就会立刻强引用了 self；而如果先用 weak 引用，则 block 创建时对 self 是弱引用，而直到 block 开始执行时，self 才会被强引用。    </p>
-<p>如果 block 提交到 queue 但还未执行的时候，整个 Cache 对象被释放了，那这时 weak self 就会变为 nil 了，而后 block 执行的时候 if (!self) return; 就会成立了。            </p>
-<p>非常严谨！！！</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><hr>
-<p><a href="http://www.jianshu.com/p/4ec18161d790" target="_blank" rel="external">http://www.jianshu.com/p/4ec18161d790</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;在使用 Block 时，除了使用 __weak 修饰符避免循环引用外，还有一点经常容易忘记。苹果把它称为：“Strong-Weak
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="block" scheme="http://yoursite.com/tags/block/"/>
     
   </entry>
   
