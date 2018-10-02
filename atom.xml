@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-02T08:34:46.866Z</updated>
+  <updated>2018-10-02T08:50:56.614Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2018/09/21/acm-dijkstra/"/>
     <id>http://yoursite.com/2018/09/21/acm-dijkstra/</id>
     <published>2018-09-21T11:12:59.000Z</published>
-    <updated>2018-10-02T08:34:46.866Z</updated>
+    <updated>2018-10-02T08:50:56.614Z</updated>
     
     <content type="html"><![CDATA[<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
 <p> 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。</p>
