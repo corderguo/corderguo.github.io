@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-02T08:50:56.614Z</updated>
+  <updated>2018-10-02T08:55:00.083Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2018/09/21/acm-dijkstra/"/>
     <id>http://yoursite.com/2018/09/21/acm-dijkstra/</id>
     <published>2018-09-21T11:12:59.000Z</published>
-    <updated>2018-10-02T08:50:56.614Z</updated>
+    <updated>2018-10-02T08:55:00.083Z</updated>
     
     <content type="html"><![CDATA[<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
 <p> 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。</p>
@@ -46,7 +46,7 @@
 </ol>
 <p><code>Tip</code>:<br>通常在编码过程中，以一个二维数组<code>map[][]</code>来表示整张图，以一个一维数组<code>dist[]</code>来表示源点到各个顶点的当前最短路径，以一个一维数组<code>set[]</code>来标识当前顶点是否已经被并入到集合<code>S</code>中，即当前顶点的最短路径已经求出。</p>
 <p><code>执行动画</code>:</p>
-<p><img src="/Users/guoxianzhuang/Desktop/dij.gif" alt="dijkstra_img"></p>
+<p><img src="https://corderguo.github.io/images/dijkstra.gif" alt="dijkstra_img"></p>
 <h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>由上述讲解可以写出如下Dijkstra算法代码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">// 图的存储在 MGraph  g.n为顶点数量 g.edges[][]为边的权值</span><br><span class="line">// v为源点</span><br><span class="line">// dist[] 保存源点到各个顶点的当前最短路径</span><br><span class="line">void Dijkstra(MGraph g, int v, int dist[]) &#123;</span><br><span class="line">    int set[maxSize];</span><br><span class="line">    int min,i,j,u;</span><br><span class="line">    // 初始化</span><br><span class="line">    for(i = 0;i&lt;g.n;i++) &#123;</span><br><span class="line">        dist[i] = g.edges[v][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    set[v] = 1;</span><br><span class="line">    </span><br><span class="line">    for(i = 0;i &lt; g.n; i++ ) &#123;</span><br><span class="line">        min = INF;</span><br><span class="line">        // 这个循环每次从剩余顶点中选出一个顶点，通往这个顶点的路径在通往所有剩余顶点的路径中是长度最短的</span><br><span class="line">        for (j = 0;j&lt; g.n;j++) &#123;</span><br><span class="line">            if(set[h] == 0 &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                u = j;</span><br><span class="line">                min = dist[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        // 以刚并入的顶点作为中间点，对所有通往剩余顶点的路径进行检测</span><br><span class="line">        for (j = 0;j &lt; g.n;j++) &#123;</span><br><span class="line">            if (set[j]==0&amp;&amp;dist[u]+g.edges[u][j]&lt;dist[j]) &#123;</span><br><span class="line">                dist[j] = dist[u]+g.edges[u][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><p>例如经典的题目<a href="http://acm.hdu.edu.cn/showproblem.php?pid=1874" target="_blank" rel="external">HDU1874</a>。</p>
