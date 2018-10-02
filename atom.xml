@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-06T07:45:42.282Z</updated>
+  <updated>2018-09-25T04:29:03.772Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,75 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://yoursite.com/2018/09/24/acm-dijkstra/"/>
+    <id>http://yoursite.com/2018/09/24/acm-dijkstra/</id>
+    <published>2018-09-24T03:30:20.348Z</published>
+    <updated>2018-09-25T04:29:03.772Z</updated>
+    
+    <content type="html"><![CDATA[<center>迪杰斯特拉算法</center>
+
+<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
+<p> 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。</p>
+<p>现实中很多抽象的例子都可以转化成类似这样的问题，这类问题统一称为求<code>最短路径</code>的问题。</p>
+<h2 id="最短路径的解决算法"><a href="#最短路径的解决算法" class="headerlink" title="最短路径的解决算法"></a>最短路径的解决算法</h2><ul>
+<li>Floyd<br>求多源、无负权边的最短路。用矩阵记录图。时效性较差，时间复杂度<code>O(V^3)</code>。</li>
+<li>Dijkstra<br>求单源、无负权的最短路。时效性较好，时间复杂度<code>O(V^2)</code>。</li>
+<li>Bellman-Ford<br>求单源最短路，可以判断有无负权回路。通过不断构建以源点为根的最短路径树，不断扩展。</li>
+<li>SPFA<br>可以用于存在负数边权的图，算法时间效率是不稳定的，即它对于不同的图所需要的时间有很大的差别。<code>SPFA</code>算法是在<code>Bellman-Ford</code>算法的基础上进行优化而来。</li>
+</ul>
+<h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2><h5 id="定义概览"><a href="#定义概览" class="headerlink" title="定义概览"></a>定义概览</h5><p><code>Dijkstra</code>(迪杰斯特拉)算法是典型的单源最短路径算法，用于计算一个节点到其他所有节点的最短路径。主要特点是以起始点为中心向外层层扩展，直到扩展到终点为止。<code>Dijkstra</code>算法是很有代表性的最短路径算法，在很多专业课程中都作为基本内容有详细的介绍，如数据结构，图论，运筹学等等。注意该算法要求图中不存在负权边。</p>
+<h5 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h5><p><code>算法思想</code>：设<code>G=(V,E)</code>是一个带权有向图，把图中顶点集合<code>V</code>分成两组，第一组为已求出最短路径的顶点集合（用<code>S</code>表示，初始时<code>S</code>中只有一个源点，以后每求得一条最短路径 , 就将加入到集合<code>S</code>中，直到全部顶点都加入到<code>S</code>中，算法就结束了），第二组为其余未确定最短路径的顶点集合（用<code>U</code>表示），按最短路径长度的递增次序依次把第二组的顶点加入<code>S</code>中。在加入的过程中，总保持从源点<code>v</code>到<code>S</code>中各顶点的最短路径长度不大于从源点<code>v</code>到<code>U</code>中任何顶点的最短路径长度。此外，每个顶点对应一个距离，<code>S</code>中的顶点的距离就是从<code>v</code>到此顶点的最短路径长度，<code>U</code>中的顶点的距离，是从<code>v</code>到此顶点只包括<code>S</code>中的顶点为中间顶点的当前最短路径长度。</p>
+<p><code>算法步骤</code>：</p>
+<ol>
+<li><p>初始时，<code>S</code>只包含源点，即<code>S＝{v}</code>，<code>v</code>的距离为<code>0</code>。<code>U</code>包含除<code>v</code>外的其他顶点，即:<code>U={其余顶点}</code>，若<code>v</code>与<code>U</code>中顶点<code>u</code>有边，则<code>&lt;u,v&gt;</code>正常有权值，若<code>u</code>不是<code>v</code>的出边邻接点，则<code>&lt;u,v&gt;</code>权值为<code>∞</code>。</p>
+</li>
+<li><p>从U中选取一个距离<code>v</code>最小的顶点<code>k</code>，把<code>k</code>，加入<code>S</code>中（该选定的距离就是<code>v</code>到<code>k</code>的最短路径长度）。</p>
+</li>
+<li><p>以<code>k</code>为新考虑的中间点，修改<code>U</code>中各顶点的距离；若从源点<code>v</code>到顶点<code>u</code>的距离（经过顶点<code>k</code>）比原来距离（不经过顶点k）短，则修改顶点u的距离值，修改后的距离值为顶点<code>k</code>的距离加上<code>&lt;k,u&gt;</code>边上的权。</p>
+</li>
+<li><p>重复步骤 <code>2</code> 和 <code>3</code> 直到所有顶点都包含在 <code>S</code> 中。</p>
+</li>
+</ol>
+<p><code>Tip</code>:<br>通常在编码过程中，以一个二维数组<code>map[][]</code>来表示整张图，以一个一维数组<code>dist[]</code>来表示源点到各个顶点的当前最短路径，以一个一维数组<code>set[]</code>来标识当前顶点是否已经被并入到集合<code>S</code>中，即当前顶点的最短路径已经求出。</p>
+<p><code>执行动画</code>:</p>
+<p><img src="/Users/guoxianzhuang/Desktop/dij.gif" alt="dijkstra_img"></p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>由上述讲解可以写出如下Dijkstra算法代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">// 图的存储在 MGraph  g.n为顶点数量 g.edges[][]为边的权值</span><br><span class="line">// v为源点</span><br><span class="line">// dist[] 保存源点到各个顶点的当前最短路径</span><br><span class="line">void Dijkstra(MGraph g, int v, int dist[]) &#123;</span><br><span class="line">    int set[maxSize];</span><br><span class="line">    int min,i,j,u;</span><br><span class="line">    // 初始化</span><br><span class="line">    for(i = 0;i&lt;g.n;i++) &#123;</span><br><span class="line">        dist[i] = g.edges[v][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    set[v] = 1;</span><br><span class="line">    </span><br><span class="line">    for(i = 0;i &lt; g.n; i++ ) &#123;</span><br><span class="line">        min = INF;</span><br><span class="line">        // 这个循环每次从剩余顶点中选出一个顶点，通往这个顶点的路径在通往所有剩余顶点的路径中是长度最短的</span><br><span class="line">        for (j = 0;j&lt; g.n;j++) &#123;</span><br><span class="line">            if(set[h] == 0 &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                u = j;</span><br><span class="line">                min = dist[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        // 以刚并入的顶点作为中间点，对所有通往剩余顶点的路径进行检测</span><br><span class="line">        for (j = 0;j &lt; g.n;j++) &#123;</span><br><span class="line">            if (set[j]==0&amp;&amp;dist[u]+g.edges[u][j]&lt;dist[j]) &#123;</span><br><span class="line">                dist[j] = dist[u]+g.edges[u][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><p>例如经典的题目<a href="http://acm.hdu.edu.cn/showproblem.php?pid=1874" target="_blank" rel="external">HDU1874</a>。</p>
+<p><code>问题描述</code>：            </p>
+<p>某省自从实行了很多年的畅通工程计划后，终于修建了很多路。不过路多了也不好，每次要从一个城镇到另一个城镇时，都有许多种道路方案可以选择，而某些方案要比另一些方案行走的距离要短很多。这让行人很困扰。<br>现在，已知起点和终点，请你计算出要从起点到终点，最短需要行走多少距离。</p>
+<p><code>Input</code>:    </p>
+<p>本题目包含多组数据，请处理到文件结束。<br>每组数据第一行包含两个正整数N和M(0&lt;N&lt;200,0&lt;M&lt;1000)，分别代表现有城镇的数目和已修建的道路的数目。城镇分别以0～N-1编号。<br>接下来是M行道路信息。每一行有三个整数A,B,X(0&lt;=A,B&lt;N,A!=B,0&lt;X&lt;10000),表示城镇A和城镇B之间有一条长度为X的双向道路。<br>再接下一行有两个整数S,T(0&lt;=S,T&lt;N)，分别代表起点和终点。            </p>
+<p><code>Output</code>:            </p>
+<p>对于每组数据，请在一行里输出最短需要行走的距离。如果不存在从S到T的路线，就输出-1.</p>
+<p><code>解析</code>：</p>
+<p>这是典型的求解最短路径的问题，可以把城镇转换成图中的点，道路转换成图中的有权边，然后根据构造出的这张图，求解源点到各个点的最短路径即可。</p>
+<p><code>代码</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;stdio.h&quot;</span><br><span class="line">#define MAX_INT 10000</span><br><span class="line">//</span><br><span class="line">int set[202];</span><br><span class="line">int map[202][202];</span><br><span class="line">int dis[202];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void Dijkstra(int start , int n) &#123;</span><br><span class="line">    </span><br><span class="line">    // 初始化</span><br><span class="line">    for (int i = 0; i&lt;n; i ++) &#123;</span><br><span class="line">        dis[i] = map[start][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    set[start] = 1;</span><br><span class="line">    </span><br><span class="line">    for (int j = 0 ; j &lt; n; j ++) &#123;</span><br><span class="line">        </span><br><span class="line">        // 找当前最短路径</span><br><span class="line">        int temp = MAX_INT;</span><br><span class="line">        int u = start;</span><br><span class="line">        for (int i = 0; i &lt; n; i ++) &#123;</span><br><span class="line">            if (set[i] == 0 &amp;&amp; dis[i] &lt; temp) &#123;</span><br><span class="line">                temp = dis[i];</span><br><span class="line">                u = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        </span><br><span class="line">        // 以u为中间点更新最短路径</span><br><span class="line">        for (int i = 0 ; i &lt; n; i ++) &#123;</span><br><span class="line">            if (set[i] == 0 &amp;&amp; dis[u] + map[u][i] &lt; dis[i]) &#123;</span><br><span class="line">                dis[i] = dis[u] + map[u][i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    int n,m;</span><br><span class="line">    int a,b,c;</span><br><span class="line">    while (scanf(&quot;%d %d&quot;,&amp;n,&amp;m) != EOF) &#123;</span><br><span class="line">        // 图的初始化</span><br><span class="line">        for (int i = 0; i &lt; n; i ++) &#123;</span><br><span class="line">            for (int j = 0; j &lt; n; j ++) &#123;</span><br><span class="line">                if (i == j) &#123;</span><br><span class="line">                    map[i][j] = 0;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    map[i][j] = MAX_INT;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        while (m--) &#123;</span><br><span class="line">            scanf(&quot;%d%d%d&quot;,&amp;a,&amp;b,&amp;c);</span><br><span class="line">            if (c &lt; map[a][b]) &#123;</span><br><span class="line">                map[a][b] = map[b][a] = c;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        int start , end;</span><br><span class="line">        scanf(&quot;%d%d&quot;,&amp;start,&amp;end);</span><br><span class="line">        Dijkstra(start, n);</span><br><span class="line">        if (dis[end] == MAX_INT) &#123;</span><br><span class="line">            printf(&quot;-1\n&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;%d\n&quot;,dis[end]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>几个变形题目，可以当做练习：</p>
+<p><a href="http://acm.hdu.edu.cn/diy/contest_show.php?cid=34192" target="_blank" rel="external">练习题</a></p>
+<p>password:123</p>
+<p>###路径<br>经过以上步骤，我们已经求出了源点到各个顶点的最短路径的值，如果此时需要知道该最短路径所上所经过的点，该如何解决呢？</p>
+<p>此时我们可以用一个一维数组<code>path[]</code>来保存最短路径上所经过的订单。<br>比如：<code>path[Vi]</code>中保存从源点到<code>Vi</code>的最短路径上<code>Vi</code>的前一个顶点，假设最短路径上的顶点序列为<code>V0,V1,V2,V3,...,Vi-1,Vi</code> 则<code>path[Vi]=Vi-1</code>。</p>
+<p><code>path[]</code>测初态为：假设<code>V0</code>为源点，如果<code>V0</code>到<code>Vi</code>有边，则<code>path[Vi]=V0</code>,否则<code>path[Vi]=-1</code>。<br>在上面的步骤中，每一次更新最短路径的值的时候，同时更新<code>path[]</code>的值，直到所有的顶点的最短路径更新完毕，<code>path[]</code>中也就保存了每个最短路径所经历的顶点，这是一个<code>树形结构</code>。</p>
+<p>#####代码</p>
+<p>在上面的代码上做一些修改,增加了<code>path[]</code>数组：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 图的存储在 MGraph  g.n为顶点数量 g.edges[][]为边的权值</span><br><span class="line">// v为源点</span><br><span class="line">// dist[] 保存源点到各个顶点的当前最短路径</span><br><span class="line">// path[] 保存从源点到`Vi`的最短路径上`Vi`的前一个顶点</span><br><span class="line">void Dijkstra(MGraph g, int v, int dist[], int path[]) &#123;</span><br><span class="line">    int set[maxSize];</span><br><span class="line">    int min,i,j,u;</span><br><span class="line">    // 初始化</span><br><span class="line">    for(i = 0;i&lt;g.n;i++) &#123;</span><br><span class="line">        dist[i] = g.edges[v][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">        // path[] 初始化</span><br><span class="line">        if (g.edges[v][i] &lt; INF) &#123;</span><br><span class="line">        	path[i] = v;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">        	path[i] = -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    set[v] = 1;</span><br><span class="line">    path[v] = -1;</span><br><span class="line">    </span><br><span class="line">    for(i = 0;i &lt; g.n; i++ ) &#123;</span><br><span class="line">        min = INF;</span><br><span class="line">        // 这个循环每次从剩余顶点中选出一个顶点，通往这个顶点的路径在通往所有剩余顶点的路径中是长度最短的</span><br><span class="line">        for (j = 0;j&lt; g.n;j++) &#123;</span><br><span class="line">            if(set[h] == 0 &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                u = j;</span><br><span class="line">                min = dist[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        // 以刚并入的顶点作为中间点，对所有通往剩余顶点的路径进行检测</span><br><span class="line">        for (j = 0;j &lt; g.n;j++) &#123;</span><br><span class="line">            if (set[j]==0&amp;&amp;dist[u]+g.edges[u][j]&lt;dist[j]) &#123;</span><br><span class="line">                dist[j] = dist[u]+g.edges[u][j];</span><br><span class="line">                path[j] = u;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;center&gt;迪杰斯特拉算法&lt;/center&gt;
+
+&lt;h2 id=&quot;引入&quot;&gt;&lt;a href=&quot;#引入&quot; class=&quot;headerlink&quot; title=&quot;引入&quot;&gt;&lt;/a&gt;引入&lt;/h2&gt;&lt;p&gt;假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>iOS逆向之动态调试</title>
@@ -1053,76 +1122,6 @@ One of the two will be used. Which one is undefined.
     
     
       <category term="block" scheme="http://yoursite.com/tags/block/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>React Native开发环境配置</title>
-    <link href="http://yoursite.com/2016/03/20/reactNative-configure/"/>
-    <id>http://yoursite.com/2016/03/20/reactNative-configure/</id>
-    <published>2016-03-20T02:11:11.000Z</published>
-    <updated>2016-08-26T02:46:57.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="环境需求"><a href="#环境需求" class="headerlink" title="环境需求"></a>环境需求</h3><hr>
-<p>1.安装Homebrew:        </p>
-<p>Homebrew是OS X的套件(包)管理器，我们可以通过它获取并且安装很多组件<br>安装方式:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span><br></pre></td></tr></table></figure>
-<p>2.安装npm 和 Node.js:        </p>
-<p> Node.js最好安装4.0及其以上更高版本，node安装成功后npm自动也就有了，直接下载安装Node.js，网址：<a href="https://nodejs.org/en/download/" target="_blank" rel="external">https://nodejs.org/en/download/</a>        </p>
-<p>3.安装WatchMan:</p>
-<p>该插件用于监控bug文件和文件变化 ，并且可以触发指定的操作.        </p>
-<p>安装方式:        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install watchman</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：在Max OS X 10.11（El Capitan)版本中，homebrew在安装软件时可能会碰到/usr/local目录不可写的权限问题。可以使用下面的命令修复：    </p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown -R `whoami` /usr/<span class="built_in">local</span></span><br></pre></td></tr></table></figure>
-<p>4.安装Flow:</p>
-<p>flow是一个JavaScript的静态类型检查器，建议安装它，以方便找出代码中可能存在的类型错误.            </p>
-<p>安装方式:                </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install flow</span><br></pre></td></tr></table></figure>
-<h3 id="React-Native安装"><a href="#React-Native安装" class="headerlink" title="React Native安装"></a>React Native安装</h3><hr>
-<p>1.安装React Native：                    </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g react-native-cli</span><br></pre></td></tr></table></figure>
-<p>iOS开发环境需求:Xcode 7 及其以上更高版本.</p>
-<h3 id="React-Native的第一个应用"><a href="#React-Native的第一个应用" class="headerlink" title="React Native的第一个应用"></a>React Native的第一个应用</h3><hr>
-<p>1.执行命令,生成一个工程：    </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">react-native init 项目名称</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意:由于众所周知的网络原因，需要等待一段时间（具体视网络情况而定）。react-native命令行从npm官方源拖代码时会遇上麻烦，可以将npm仓库源替换为国内镜像：    </p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npm.taobao.org</span><br><span class="line">npm config <span class="built_in">set</span> disturl https://npm.taobao.org/dist</span><br></pre></td></tr></table></figure>
-<p>2.目录结构分析:    </p>
-<p>a）默认生成android和ios两个平台的原生项目；            </p>
-<p>b）其中，index.android.js和index.ios.js文件为Android和iOS的空壳应用文件；</p>
-<p>c）此外，node_modules文件夹，是为Node.js存放和管理npm包资源，也包含React Native框架文件。    </p>
-<h3 id="管理React-Native库的版本"><a href="#管理React-Native库的版本" class="headerlink" title="管理React Native库的版本"></a>管理React Native库的版本</h3><hr>
-<p>1.查看本地的React Native库的版本                               </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">react-native --version</span><br></pre></td></tr></table></figure>
-<p>2.更新本地的React Native的版本                   </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update -g react-native-cli</span><br></pre></td></tr></table></figure>
-<p>3.查询react-native的npm包最新版本                    </p>
-<p>npm包地址 ：<a href="https://www.npmjs.com/package/react-native" target="_blank" rel="external">https://www.npmjs.com/package/react-native</a>         </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm info react-native</span><br></pre></td></tr></table></figure>
-<p>4.升级或者降级npm包的版本：                        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save react-native@0.18</span><br></pre></td></tr></table></figure>
-<p>5.更新项目templates文件（可选）：                 </p>
-<p>新的npm包会包含更新在运行react-native init命令生成的一些动态文件，例如init创建项目的时候会生成iOS和Android的子项目，我们可以通过以下的命令进行获取最新的代码         </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">react-native upgrade</span><br></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;环境需求&quot;&gt;&lt;a href=&quot;#环境需求&quot; class=&quot;headerlink&quot; title=&quot;环境需求&quot;&gt;&lt;/a&gt;环境需求&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;1.安装Homebrew:        &lt;/p&gt;
-&lt;p&gt;Homebrew是OS X的套件(包)管理器，我们可以通
-    
-    </summary>
-    
-      <category term="ReactNative" scheme="http://yoursite.com/categories/ReactNative/"/>
-    
-    
-      <category term="RN" scheme="http://yoursite.com/tags/RN/"/>
     
   </entry>
   
