@@ -1,0 +1,582 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>最短路径算法 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="引入假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？
+ 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。
+现实中很多抽象的例子都可以转化成类似这样的问题，这类问题统一称为求最短路径的问题。
+最短路径的解决算法
+Floyd求多源、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最短路径算法">
+<meta property="og:url" content="http://yoursite.com/2018/09/21/acm-dijkstra/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="引入假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？
+ 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。
+现实中很多抽象的例子都可以转化成类似这样的问题，这类问题统一称为求最短路径的问题。
+最短路径的解决算法
+Floyd求多源、">
+<meta property="og:image" content="http://yoursite.com/Users/guoxianzhuang/Desktop/dij.gif">
+<meta property="og:updated_time" content="2018-10-02T08:34:46.866Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最短路径算法">
+<meta name="twitter:description" content="引入假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？
+ 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。
+现实中很多抽象的例子都可以转化成类似这样的问题，这类问题统一称为求最短路径的问题。
+最短路径的解决算法
+Floyd求多源、">
+<meta name="twitter:image" content="http://yoursite.com/Users/guoxianzhuang/Desktop/dij.gif">
+
+    
+    <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/09/21/acm-dijkstra/" title="最短路径算法" itemprop="url">最短路径算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2018-09-21T11:12:59.000Z" itemprop="datePublished"> 发表于 2018-09-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引入"><span class="toc-number">1.</span> <span class="toc-text">引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最短路径的解决算法"><span class="toc-number">2.</span> <span class="toc-text">最短路径的解决算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dijkstra算法"><span class="toc-number">3.</span> <span class="toc-text">Dijkstra算法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#定义概览"><span class="toc-number">3.0.0.1.</span> <span class="toc-text">定义概览</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#算法描述"><span class="toc-number">3.0.0.2.</span> <span class="toc-text">算法描述</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码"><span class="toc-number">3.0.1.</span> <span class="toc-text">代码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例题"><span class="toc-number">4.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#路径"><span class="toc-number">4.1.</span> <span class="toc-text">路径</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#代码-1"><span class="toc-number">4.1.0.1.</span> <span class="toc-text">代码</span></a></li></ol></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
+<p> 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。</p>
+<p>现实中很多抽象的例子都可以转化成类似这样的问题，这类问题统一称为求<code>最短路径</code>的问题。</p>
+<h2 id="最短路径的解决算法"><a href="#最短路径的解决算法" class="headerlink" title="最短路径的解决算法"></a>最短路径的解决算法</h2><ul>
+<li>Floyd<br>求多源、无负权边的最短路。用矩阵记录图。时效性较差，时间复杂度<code>O(V^3)</code>。</li>
+<li>Dijkstra<br>求单源、无负权的最短路。时效性较好，时间复杂度<code>O(V^2)</code>。</li>
+<li>Bellman-Ford<br>求单源最短路，可以判断有无负权回路。通过不断构建以源点为根的最短路径树，不断扩展。</li>
+<li>SPFA<br>可以用于存在负数边权的图，算法时间效率是不稳定的，即它对于不同的图所需要的时间有很大的差别。<code>SPFA</code>算法是在<code>Bellman-Ford</code>算法的基础上进行优化而来。</li>
+</ul>
+<h2 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h2><h5 id="定义概览"><a href="#定义概览" class="headerlink" title="定义概览"></a>定义概览</h5><p><code>Dijkstra</code>(迪杰斯特拉)算法是典型的单源最短路径算法，用于计算一个节点到其他所有节点的最短路径。主要特点是以起始点为中心向外层层扩展，直到扩展到终点为止。<code>Dijkstra</code>算法是很有代表性的最短路径算法，在很多专业课程中都作为基本内容有详细的介绍，如数据结构，图论，运筹学等等。注意该算法要求图中不存在负权边。</p>
+<h5 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h5><p><code>算法思想</code>：设<code>G=(V,E)</code>是一个带权有向图，把图中顶点集合<code>V</code>分成两组，第一组为已求出最短路径的顶点集合（用<code>S</code>表示，初始时<code>S</code>中只有一个源点，以后每求得一条最短路径 , 就将加入到集合<code>S</code>中，直到全部顶点都加入到<code>S</code>中，算法就结束了），第二组为其余未确定最短路径的顶点集合（用<code>U</code>表示），按最短路径长度的递增次序依次把第二组的顶点加入<code>S</code>中。在加入的过程中，总保持从源点<code>v</code>到<code>S</code>中各顶点的最短路径长度不大于从源点<code>v</code>到<code>U</code>中任何顶点的最短路径长度。此外，每个顶点对应一个距离，<code>S</code>中的顶点的距离就是从<code>v</code>到此顶点的最短路径长度，<code>U</code>中的顶点的距离，是从<code>v</code>到此顶点只包括<code>S</code>中的顶点为中间顶点的当前最短路径长度。</p>
+<p><code>算法步骤</code>：</p>
+<ol>
+<li><p>初始时，<code>S</code>只包含源点，即<code>S＝{v}</code>，<code>v</code>的距离为<code>0</code>。<code>U</code>包含除<code>v</code>外的其他顶点，即:<code>U={其余顶点}</code>，若<code>v</code>与<code>U</code>中顶点<code>u</code>有边，则<code>&lt;u,v&gt;</code>正常有权值，若<code>u</code>不是<code>v</code>的出边邻接点，则<code>&lt;u,v&gt;</code>权值为<code>∞</code>。</p>
+</li>
+<li><p>从U中选取一个距离<code>v</code>最小的顶点<code>k</code>，把<code>k</code>，加入<code>S</code>中（该选定的距离就是<code>v</code>到<code>k</code>的最短路径长度）。</p>
+</li>
+<li><p>以<code>k</code>为新考虑的中间点，修改<code>U</code>中各顶点的距离；若从源点<code>v</code>到顶点<code>u</code>的距离（经过顶点<code>k</code>）比原来距离（不经过顶点k）短，则修改顶点u的距离值，修改后的距离值为顶点<code>k</code>的距离加上<code>&lt;k,u&gt;</code>边上的权。</p>
+</li>
+<li><p>重复步骤 <code>2</code> 和 <code>3</code> 直到所有顶点都包含在 <code>S</code> 中。</p>
+</li>
+</ol>
+<p><code>Tip</code>:<br>通常在编码过程中，以一个二维数组<code>map[][]</code>来表示整张图，以一个一维数组<code>dist[]</code>来表示源点到各个顶点的当前最短路径，以一个一维数组<code>set[]</code>来标识当前顶点是否已经被并入到集合<code>S</code>中，即当前顶点的最短路径已经求出。</p>
+<p><code>执行动画</code>:</p>
+<p><img src="/Users/guoxianzhuang/Desktop/dij.gif" alt="dijkstra_img"></p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>由上述讲解可以写出如下Dijkstra算法代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">// 图的存储在 MGraph  g.n为顶点数量 g.edges[][]为边的权值</span><br><span class="line">// v为源点</span><br><span class="line">// dist[] 保存源点到各个顶点的当前最短路径</span><br><span class="line">void Dijkstra(MGraph g, int v, int dist[]) &#123;</span><br><span class="line">    int set[maxSize];</span><br><span class="line">    int min,i,j,u;</span><br><span class="line">    // 初始化</span><br><span class="line">    for(i = 0;i&lt;g.n;i++) &#123;</span><br><span class="line">        dist[i] = g.edges[v][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    set[v] = 1;</span><br><span class="line">    </span><br><span class="line">    for(i = 0;i &lt; g.n; i++ ) &#123;</span><br><span class="line">        min = INF;</span><br><span class="line">        // 这个循环每次从剩余顶点中选出一个顶点，通往这个顶点的路径在通往所有剩余顶点的路径中是长度最短的</span><br><span class="line">        for (j = 0;j&lt; g.n;j++) &#123;</span><br><span class="line">            if(set[h] == 0 &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                u = j;</span><br><span class="line">                min = dist[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        // 以刚并入的顶点作为中间点，对所有通往剩余顶点的路径进行检测</span><br><span class="line">        for (j = 0;j &lt; g.n;j++) &#123;</span><br><span class="line">            if (set[j]==0&amp;&amp;dist[u]+g.edges[u][j]&lt;dist[j]) &#123;</span><br><span class="line">                dist[j] = dist[u]+g.edges[u][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><p>例如经典的题目<a href="http://acm.hdu.edu.cn/showproblem.php?pid=1874" target="_blank" rel="external">HDU1874</a>。</p>
+<p><code>问题描述</code>：            </p>
+<p>某省自从实行了很多年的畅通工程计划后，终于修建了很多路。不过路多了也不好，每次要从一个城镇到另一个城镇时，都有许多种道路方案可以选择，而某些方案要比另一些方案行走的距离要短很多。这让行人很困扰。<br>现在，已知起点和终点，请你计算出要从起点到终点，最短需要行走多少距离。</p>
+<p><code>Input</code>:    </p>
+<p>本题目包含多组数据，请处理到文件结束。<br>每组数据第一行包含两个正整数N和M(0&lt;N&lt;200,0&lt;M&lt;1000)，分别代表现有城镇的数目和已修建的道路的数目。城镇分别以0～N-1编号。<br>接下来是M行道路信息。每一行有三个整数A,B,X(0&lt;=A,B&lt;N,A!=B,0&lt;X&lt;10000),表示城镇A和城镇B之间有一条长度为X的双向道路。<br>再接下一行有两个整数S,T(0&lt;=S,T&lt;N)，分别代表起点和终点。            </p>
+<p><code>Output</code>:            </p>
+<p>对于每组数据，请在一行里输出最短需要行走的距离。如果不存在从S到T的路线，就输出-1.</p>
+<p><code>解析</code>：</p>
+<p>这是典型的求解最短路径的问题，可以把城镇转换成图中的点，道路转换成图中的有权边，然后根据构造出的这张图，求解源点到各个点的最短路径即可。</p>
+<p><code>代码</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;stdio.h&quot;</span><br><span class="line">#define MAX_INT 10000</span><br><span class="line">//</span><br><span class="line">int set[202];</span><br><span class="line">int map[202][202];</span><br><span class="line">int dis[202];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void Dijkstra(int start , int n) &#123;</span><br><span class="line">    </span><br><span class="line">    // 初始化</span><br><span class="line">    for (int i = 0; i&lt;n; i ++) &#123;</span><br><span class="line">        dis[i] = map[start][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    set[start] = 1;</span><br><span class="line">    </span><br><span class="line">    for (int j = 0 ; j &lt; n; j ++) &#123;</span><br><span class="line">        </span><br><span class="line">        // 找当前最短路径</span><br><span class="line">        int temp = MAX_INT;</span><br><span class="line">        int u = start;</span><br><span class="line">        for (int i = 0; i &lt; n; i ++) &#123;</span><br><span class="line">            if (set[i] == 0 &amp;&amp; dis[i] &lt; temp) &#123;</span><br><span class="line">                temp = dis[i];</span><br><span class="line">                u = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        </span><br><span class="line">        // 以u为中间点更新最短路径</span><br><span class="line">        for (int i = 0 ; i &lt; n; i ++) &#123;</span><br><span class="line">            if (set[i] == 0 &amp;&amp; dis[u] + map[u][i] &lt; dis[i]) &#123;</span><br><span class="line">                dis[i] = dis[u] + map[u][i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    int n,m;</span><br><span class="line">    int a,b,c;</span><br><span class="line">    while (scanf(&quot;%d %d&quot;,&amp;n,&amp;m) != EOF) &#123;</span><br><span class="line">        // 图的初始化</span><br><span class="line">        for (int i = 0; i &lt; n; i ++) &#123;</span><br><span class="line">            for (int j = 0; j &lt; n; j ++) &#123;</span><br><span class="line">                if (i == j) &#123;</span><br><span class="line">                    map[i][j] = 0;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    map[i][j] = MAX_INT;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        while (m--) &#123;</span><br><span class="line">            scanf(&quot;%d%d%d&quot;,&amp;a,&amp;b,&amp;c);</span><br><span class="line">            if (c &lt; map[a][b]) &#123;</span><br><span class="line">                map[a][b] = map[b][a] = c;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        int start , end;</span><br><span class="line">        scanf(&quot;%d%d&quot;,&amp;start,&amp;end);</span><br><span class="line">        Dijkstra(start, n);</span><br><span class="line">        if (dis[end] == MAX_INT) &#123;</span><br><span class="line">            printf(&quot;-1\n&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            printf(&quot;%d\n&quot;,dis[end]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>几个变形题目，可以当做练习：</p>
+<p><a href="http://acm.hdu.edu.cn/diy/contest_show.php?cid=34192" target="_blank" rel="external">练习题</a></p>
+<p>password:123</p>
+<h3 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h3><p>经过以上步骤，我们已经求出了源点到各个顶点的最短路径的值，如果此时需要知道该最短路径所上所经过的点，该如何解决呢？</p>
+<p>此时我们可以用一个一维数组<code>path[]</code>来保存最短路径上所经过的订单。<br>比如：<code>path[Vi]</code>中保存从源点到<code>Vi</code>的最短路径上<code>Vi</code>的前一个顶点，假设最短路径上的顶点序列为<code>V0,V1,V2,V3,...,Vi-1,Vi</code> 则<code>path[Vi]=Vi-1</code>。</p>
+<p><code>path[]</code>测初态为：假设<code>V0</code>为源点，如果<code>V0</code>到<code>Vi</code>有边，则<code>path[Vi]=V0</code>,否则<code>path[Vi]=-1</code>。<br>在上面的步骤中，每一次更新最短路径的值的时候，同时更新<code>path[]</code>的值，直到所有的顶点的最短路径更新完毕，<code>path[]</code>中也就保存了每个最短路径所经历的顶点，这是一个<code>树形结构</code>。</p>
+<h5 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h5><p>在上面的代码上做一些修改,增加了<code>path[]</code>数组：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 图的存储在 MGraph  g.n为顶点数量 g.edges[][]为边的权值</span><br><span class="line">// v为源点</span><br><span class="line">// dist[] 保存源点到各个顶点的当前最短路径</span><br><span class="line">// path[] 保存从源点到`Vi`的最短路径上`Vi`的前一个顶点</span><br><span class="line">void Dijkstra(MGraph g, int v, int dist[], int path[]) &#123;</span><br><span class="line">    int set[maxSize];</span><br><span class="line">    int min,i,j,u;</span><br><span class="line">    // 初始化</span><br><span class="line">    for(i = 0;i&lt;g.n;i++) &#123;</span><br><span class="line">        dist[i] = g.edges[v][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">        // path[] 初始化</span><br><span class="line">        if (g.edges[v][i] &lt; INF) &#123;</span><br><span class="line">        	path[i] = v;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">        	path[i] = -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    set[v] = 1;</span><br><span class="line">    path[v] = -1;</span><br><span class="line">    </span><br><span class="line">    for(i = 0;i &lt; g.n; i++ ) &#123;</span><br><span class="line">        min = INF;</span><br><span class="line">        // 这个循环每次从剩余顶点中选出一个顶点，通往这个顶点的路径在通往所有剩余顶点的路径中是长度最短的</span><br><span class="line">        for (j = 0;j&lt; g.n;j++) &#123;</span><br><span class="line">            if(set[h] == 0 &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                u = j;</span><br><span class="line">                min = dist[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        // 以刚并入的顶点作为中间点，对所有通往剩余顶点的路径进行检测</span><br><span class="line">        for (j = 0;j &lt; g.n;j++) &#123;</span><br><span class="line">            if (set[j]==0&amp;&amp;dist[u]+g.edges[u][j]&lt;dist[j]) &#123;</span><br><span class="line">                dist[j] = dist[u]+g.edges[u][j];</span><br><span class="line">                path[j] = u;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/ACM/">ACM</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2018/09/21/acm-dijkstra/" data-title="最短路径算法 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/06/06/iOS-hacking-lldb/"  title="iOS逆向之动态调试">
+ <strong>下一篇：</strong><br/> 
+ <span>iOS逆向之动态调试
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引入"><span class="toc-number">1.</span> <span class="toc-text">引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最短路径的解决算法"><span class="toc-number">2.</span> <span class="toc-text">最短路径的解决算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dijkstra算法"><span class="toc-number">3.</span> <span class="toc-text">Dijkstra算法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#定义概览"><span class="toc-number">3.0.0.1.</span> <span class="toc-text">定义概览</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#算法描述"><span class="toc-number">3.0.0.2.</span> <span class="toc-text">算法描述</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码"><span class="toc-number">3.0.1.</span> <span class="toc-text">代码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例题"><span class="toc-number">4.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#路径"><span class="toc-number">4.1.</span> <span class="toc-text">路径</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#代码-1"><span class="toc-number">4.1.0.1.</span> <span class="toc-text">代码</span></a></li></ol></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Trivial/" title="Trivial">Trivial<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/微信小程序/" title="微信小程序">微信小程序<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>26</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/资讯/" title="资讯">资讯<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/ACM/" style="font-size: 18px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 12px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 12px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 12px;">security</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 16px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a> <a href="/tags/逆向/" style="font-size: 14px;">逆向</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5970082832&verifier=2b92bb86&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方......
+ <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/corderguo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/6653679" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:guoxianzhuang@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+		<br>
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+
+
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    $('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'http-coderperson-com-1';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260049497'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1260049497' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

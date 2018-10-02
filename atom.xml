@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-25T04:29:03.772Z</updated>
+  <updated>2018-10-02T08:34:46.866Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,15 +16,13 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
-    <link href="http://yoursite.com/2018/09/24/acm-dijkstra/"/>
-    <id>http://yoursite.com/2018/09/24/acm-dijkstra/</id>
-    <published>2018-09-24T03:30:20.348Z</published>
-    <updated>2018-09-25T04:29:03.772Z</updated>
+    <title>最短路径算法</title>
+    <link href="http://yoursite.com/2018/09/21/acm-dijkstra/"/>
+    <id>http://yoursite.com/2018/09/21/acm-dijkstra/</id>
+    <published>2018-09-21T11:12:59.000Z</published>
+    <updated>2018-10-02T08:34:46.866Z</updated>
     
-    <content type="html"><![CDATA[<center>迪杰斯特拉算法</center>
-
-<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
+    <content type="html"><![CDATA[<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
 <p> 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。</p>
 <p>现实中很多抽象的例子都可以转化成类似这样的问题，这类问题统一称为求<code>最短路径</code>的问题。</p>
 <h2 id="最短路径的解决算法"><a href="#最短路径的解决算法" class="headerlink" title="最短路径的解决算法"></a>最短路径的解决算法</h2><ul>
@@ -65,22 +63,23 @@
 <p>几个变形题目，可以当做练习：</p>
 <p><a href="http://acm.hdu.edu.cn/diy/contest_show.php?cid=34192" target="_blank" rel="external">练习题</a></p>
 <p>password:123</p>
-<p>###路径<br>经过以上步骤，我们已经求出了源点到各个顶点的最短路径的值，如果此时需要知道该最短路径所上所经过的点，该如何解决呢？</p>
+<h3 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h3><p>经过以上步骤，我们已经求出了源点到各个顶点的最短路径的值，如果此时需要知道该最短路径所上所经过的点，该如何解决呢？</p>
 <p>此时我们可以用一个一维数组<code>path[]</code>来保存最短路径上所经过的订单。<br>比如：<code>path[Vi]</code>中保存从源点到<code>Vi</code>的最短路径上<code>Vi</code>的前一个顶点，假设最短路径上的顶点序列为<code>V0,V1,V2,V3,...,Vi-1,Vi</code> 则<code>path[Vi]=Vi-1</code>。</p>
 <p><code>path[]</code>测初态为：假设<code>V0</code>为源点，如果<code>V0</code>到<code>Vi</code>有边，则<code>path[Vi]=V0</code>,否则<code>path[Vi]=-1</code>。<br>在上面的步骤中，每一次更新最短路径的值的时候，同时更新<code>path[]</code>的值，直到所有的顶点的最短路径更新完毕，<code>path[]</code>中也就保存了每个最短路径所经历的顶点，这是一个<code>树形结构</code>。</p>
-<p>#####代码</p>
-<p>在上面的代码上做一些修改,增加了<code>path[]</code>数组：</p>
+<h5 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h5><p>在上面的代码上做一些修改,增加了<code>path[]</code>数组：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 图的存储在 MGraph  g.n为顶点数量 g.edges[][]为边的权值</span><br><span class="line">// v为源点</span><br><span class="line">// dist[] 保存源点到各个顶点的当前最短路径</span><br><span class="line">// path[] 保存从源点到`Vi`的最短路径上`Vi`的前一个顶点</span><br><span class="line">void Dijkstra(MGraph g, int v, int dist[], int path[]) &#123;</span><br><span class="line">    int set[maxSize];</span><br><span class="line">    int min,i,j,u;</span><br><span class="line">    // 初始化</span><br><span class="line">    for(i = 0;i&lt;g.n;i++) &#123;</span><br><span class="line">        dist[i] = g.edges[v][i];</span><br><span class="line">        set[i] = 0;</span><br><span class="line">        // path[] 初始化</span><br><span class="line">        if (g.edges[v][i] &lt; INF) &#123;</span><br><span class="line">        	path[i] = v;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">        	path[i] = -1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    set[v] = 1;</span><br><span class="line">    path[v] = -1;</span><br><span class="line">    </span><br><span class="line">    for(i = 0;i &lt; g.n; i++ ) &#123;</span><br><span class="line">        min = INF;</span><br><span class="line">        // 这个循环每次从剩余顶点中选出一个顶点，通往这个顶点的路径在通往所有剩余顶点的路径中是长度最短的</span><br><span class="line">        for (j = 0;j&lt; g.n;j++) &#123;</span><br><span class="line">            if(set[h] == 0 &amp;&amp; dist[j] &lt; min) &#123;</span><br><span class="line">                u = j;</span><br><span class="line">                min = dist[j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        set[u] = 1;</span><br><span class="line">        // 以刚并入的顶点作为中间点，对所有通往剩余顶点的路径进行检测</span><br><span class="line">        for (j = 0;j &lt; g.n;j++) &#123;</span><br><span class="line">            if (set[j]==0&amp;&amp;dist[u]+g.edges[u][j]&lt;dist[j]) &#123;</span><br><span class="line">                dist[j] = dist[u]+g.edges[u][j];</span><br><span class="line">                path[j] = u;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
     
     <summary type="html">
     
-      &lt;center&gt;迪杰斯特拉算法&lt;/center&gt;
-
-&lt;h2 id=&quot;引入&quot;&gt;&lt;a href=&quot;#引入&quot; class=&quot;headerlink&quot; title=&quot;引入&quot;&gt;&lt;/a&gt;引入&lt;/h2&gt;&lt;p&gt;假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标
+      &lt;h2 id=&quot;引入&quot;&gt;&lt;a href=&quot;#引入&quot; class=&quot;headerlink&quot; title=&quot;引入&quot;&gt;&lt;/a&gt;引入&lt;/h2&gt;&lt;p&gt;假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这
     
     </summary>
     
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+      <category term="ACM" scheme="http://yoursite.com/tags/ACM/"/>
     
   </entry>
   
