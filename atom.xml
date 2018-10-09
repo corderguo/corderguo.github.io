@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-02T09:29:40.678Z</updated>
+  <updated>2018-10-09T06:33:26.579Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,90 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>使用Fastlane实现自动化打包</title>
+    <link href="http://yoursite.com/2018/10/09/fastlane_study/"/>
+    <id>http://yoursite.com/2018/10/09/fastlane_study/</id>
+    <published>2018-10-09T05:59:20.000Z</published>
+    <updated>2018-10-09T06:33:26.579Z</updated>
+    
+    <content type="html"><![CDATA[<p>上一篇<a href="http://coderperson.com/2018/09/29/iOS-auto_packaging/" target="_blank" rel="external">文章</a>讲解了利用python封装脚本进行自动化打包，这两天又看了看github上很火的自动化打包工具<a href="https://github.com/fastlane/fastlane" target="_blank" rel="external">Fastlane</a>。</p>
+<p>Fastlane是一套使用Ruby写的自动化工具集，用于iOS和Android的自动化打包、发布等工作，可以节省大量的时间。 官方文档看<a href="https://docs.fastlane.tools/" target="_blank" rel="external">这里</a>。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><ul>
+<li>安装Xcode命令行工具:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看ruby版本，要求2.0及以上版本</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ruby -v</span><br><span class="line"></span><br><span class="line">ruby的镜像文件路径改为https://gems.ruby-china.org/</span><br><span class="line"></span><br><span class="line">gem sources --remove https://ruby.taobao.org/</span><br><span class="line"></span><br><span class="line">gem sources --add https://rubygems.org</span><br><span class="line"></span><br><span class="line">gem sources -l</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install fastlane</span><br></pre></td></tr></table></figure>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>切换项目目录到包含xxx.xcodeproj的项目目录下输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane init</span><br></pre></td></tr></table></figure>
+<p>输出：        </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[15:21:56]: What would you like to use fastlane for?</span><br><span class="line">1. 📸  Automate screenshots</span><br><span class="line">2. 👩‍✈️  Automate beta distribution to TestFlight</span><br><span class="line">3. 🚀  Automate App Store distribution</span><br><span class="line">4. 🛠  Manual setup - manually setup your project to automate your tasks</span><br><span class="line">?</span><br></pre></td></tr></table></figure>
+<p>这四个选项的意思是:        </p>
+<blockquote>
+<p>1.自动截屏。这个功能能帮我们自动截取APP中的截图，并添加手机边框（如果需要的话），我们这里不选择这个选项，因为我们的项目已经有图片了，不需要这里截屏。</p>
+<p>2.自动发布beta版本用于TestFlight，如果大家有对TestFlight不了解的，可以参考王巍写的这篇文章</p>
+<p>3.自动的App Store发布包。我们的目标是要提交审核到APP Store，按道理应该选这个，但这里我们先不选，因为选择了以后会需要输入用户名密码，以及下载meta信息，需要花费一定时间，这些数据我们可以后期进行配置。</p>
+<p>4.手动设置。</p>
+</blockquote>
+<p>选择第四个后一路回车即可（等待时间略长），结束后会看到生成了fastlane目录，该目录包含Appfile和Fastfile；同时还生成了两个文件Gemfile和Gemfile.lock，是和fastlane文件夹在同一个目录。</p>
+<h3 id="Appfile"><a href="#Appfile" class="headerlink" title="Appfile"></a>Appfile</h3><p>Appfile用来存放app_identifier，apple_id和team_id。文件生成的时候会定义好格式，按格式填写即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">app_identifier(&quot;[[xxxx]]&quot;) # The bundle identifier of your app</span><br><span class="line">apple_id(&quot;[[xxxx]]&quot;) # Your Apple email address</span><br></pre></td></tr></table></figure>
+<p>你也可以为每个lane提供不同的 app_identifier, apple_id 和 team_id，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for_lane :inhouse do</span><br><span class="line">  app_identifier &quot;xxxx&quot;</span><br><span class="line">  apple_id &quot;xxxx&quot;</span><br><span class="line">  team_id &quot;xxxx&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>这里就是为Fastfile中定义的inhouse这个lane设置单独的信息。</p>
+<h3 id="Fastfile"><a href="#Fastfile" class="headerlink" title="Fastfile"></a>Fastfile</h3><p>Fastfile管理你所创建的 lane 。</p>
+<blockquote>
+<ul>
+<li>scan 自动化测试工具，很好的封装了 Unit Test    </li>
+<li>sigh 针对于 iOS 项目开发证书和 Provision file 的下载工具    </li>
+<li>match 同步团队每个人的证书和 Provision file 的超赞工具    </li>
+<li>gym 针对于 iOS 编译打包生成 ipa 文件    </li>
+<li>deliver 用于上传应用的二进制代码，应用截屏和元数据到 App Store    </li>
+<li>snapshot 可以自动化iOS应用在每个设备上的本地化截屏过程    </li>
+</ul>
+</blockquote>
+<p>这里我们主要用<code>gym</code>来打包。</p>
+<p>Fastlane内部的工具不是新写的，而是调用mac本身的命令，只不过是实现了自动化而已。比如gym工具只是xcodebuild工具的一个封装，如果你会xcodebuild，那gym对你来说小菜一碟。xcodebuild的使用可以看<a href="http://coderperson.com/2018/09/29/iOS-auto_packaging/" target="_blank" rel="external">这篇文章</a>。</p>
+<p>找了一个比较全的格式，可以参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"># 指定 fastlane 最小版本</span><br><span class="line">fastlane_version &quot;2.20.0&quot;</span><br><span class="line"></span><br><span class="line"># 指定当前平台，可以设置为 ios 、android、mac</span><br><span class="line">default_platform :ios</span><br><span class="line"></span><br><span class="line">platform :ios do</span><br><span class="line"></span><br><span class="line"># 在执行每一个 lane 之前都先执行这个代码</span><br><span class="line">  before_all do</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line"># 定义一个创建测试包的 lane</span><br><span class="line"># 我们调用的命令就是调用 fastlane 的 lane</span><br><span class="line">  lane :buildDebugApp do |op|</span><br><span class="line">      # 根据输入的版本设置项目 version number （我们初始化 fastlane 的时候是在 .xcworkspace 目录下， 而我们的项目中 ，.xcworkspace 和 .xcodeproj 不在同一级目录，这里的“increment_version_number”需要检测 .xcodeproj 项目文件，所以需要指定该文件的目录）</span><br><span class="line">    increment_version_number(&#123;xcodeproj: &apos;./HomeMate2_Trunk/HomeMate.xcodeproj&apos;, version_number: op[:version]&#125;)</span><br><span class="line"></span><br><span class="line">    # 根据输入的版本设置项目 build number （同上，也是需要指定 .xcodeproj 的目录）</span><br><span class="line">    increment_build_number(&#123;xcodeproj: &apos;./HomeMate2_Trunk/HomeMate.xcodeproj&apos;, build_number: op[:version]&#125;)</span><br><span class="line"></span><br><span class="line">    # 最重要的打包命令</span><br><span class="line">    gym(</span><br><span class="line">              export_method: &apos;ad-hoc&apos;,        # 打包的方式，可设置为 appstore(默认)，enterprise</span><br><span class="line">                     scheme: &quot;HomeMate&quot;,    # 指定需要打那个 scheme 的包</span><br><span class="line">                  workspace: &quot;HMWorkSpac.xcworkspace&quot;,    # 指定打包的项目文件</span><br><span class="line">                output_name: &quot;HomeMate.ipa&quot;,      # 打包输出名称</span><br><span class="line">                     silent: true,    # 隐藏不必要信息</span><br><span class="line">                      clean: true,    # 打包前是否 clean 项目</span><br><span class="line">              configuration: &quot;Debug&quot;,    # 配置为 debug 版本</span><br><span class="line">              buildlog_path: &quot;./fastlanelog&quot;,    # 日志输出目录</span><br><span class="line">       codesigning_identity: &quot;iPhone Developer: Hailiang He (xxxxxxxxxx)&quot;,       # 代码签名证书</span><br><span class="line">           output_directory: &quot;/Users/xxx/Desktop&quot;     # ipa输出目录</span><br><span class="line">     )</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  # 在执行每一个 lane 之后执行该功能</span><br><span class="line">  after_all do |lane|</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  # 在执行每一个 lane 出错的时候执行该功能</span><br><span class="line">  error do |lane, exception|</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>上面的代码块包含了日常打包常用的功能，可以参考。</p>
+<p>我这边测试打包的时候，写了一个最简单版本的Appfile和Fastfile文件，理解了这个最简单版本，在这个基础上继续增加功能即可，<code>非常便于理解</code>。</p>
+<p>Appfile文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">app_identifier(&quot;[[xxx]]&quot;) # The bundle identifier of your app</span><br><span class="line">apple_id(&quot;[[xxx]]&quot;) # Your Apple email address</span><br></pre></td></tr></table></figure>
+<p>Fastfile文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">default_platform(:ios)</span><br><span class="line"></span><br><span class="line">platform :ios do</span><br><span class="line">  desc &quot;Description of what the lane does&quot;</span><br><span class="line">  lane :custom_lane do</span><br><span class="line">    # add actions here: https://docs.fastlane.tools/actions</span><br><span class="line">    gym(scheme: &quot;xxx&quot;,</span><br><span class="line">      export_method:&quot;ad-hoc&quot;,</span><br><span class="line">      output_directory:&quot;./build&quot;, # 打包后的 ipa 文件存放的目录</span><br><span class="line">      output_name:&quot;xxx.ipa&quot;  # ipa 文件名</span><br><span class="line">   )</span><br><span class="line">  end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>export_method对应的打包类型：app-store、ad-hoc、development、enterprise。</p>
+<p>编辑好以上内容，打开终端执行下面的命令，即可看到在当前目录下生成一个build文件夹，ipa包就在该文件夹中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane custom_lane</span><br></pre></td></tr></table></figure>
+<p>如果lane中设置了可以接收版本号,则可以执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane custom_lane version:1.1.0</span><br></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上一篇&lt;a href=&quot;http://coderperson.com/2018/09/29/iOS-auto_packaging/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;文章&lt;/a&gt;讲解了利用python封装脚本进行自动化打包，这两天又看了看git
+    
+    </summary>
+    
+      <category term="Ruby" scheme="http://yoursite.com/categories/Ruby/"/>
+    
+    
+      <category term="Ruby" scheme="http://yoursite.com/tags/Ruby/"/>
+    
+  </entry>
+  
+  <entry>
     <title>利用python实现自动化打包</title>
     <link href="http://yoursite.com/2018/09/29/iOS-auto_packaging/"/>
     <id>http://yoursite.com/2018/09/29/iOS-auto_packaging/</id>
     <published>2018-09-29T11:12:59.000Z</published>
-    <updated>2018-10-02T09:29:40.678Z</updated>
+    <updated>2018-10-09T06:32:52.769Z</updated>
     
     <content type="html"><![CDATA[<p>频繁的手动打包是一项耗时耗力的工程，而且是一项重复性的劳动，因此实现打包的自动化是非常必要的。通过自动化打包可以实现一键打包，并上传到fir或蒲公英等第三方平台。</p>
 <h2 id="xcodebuild"><a href="#xcodebuild" class="headerlink" title="xcodebuild"></a>xcodebuild</h2><p>当我们通过<code>Archive</code>手动打包的时候，<code>Xcode</code>本身是通过调用<code>xcodebuild</code>命令来实现打包的过程。</p>
@@ -118,10 +197,10 @@
     
     </summary>
     
-      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+      <category term="Python" scheme="http://yoursite.com/categories/Python/"/>
     
     
-      <category term="ACM" scheme="http://yoursite.com/tags/ACM/"/>
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
   </entry>
   
@@ -1105,53 +1184,6 @@ One of the two will be used. Which one is undefined.
     
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Swift实现导航栏头像大小渐变和导航栏颜色渐变</title>
-    <link href="http://yoursite.com/2016/04/12/iOS-ChangeNavImg/"/>
-    <id>http://yoursite.com/2016/04/12/iOS-ChangeNavImg/</id>
-    <published>2016-04-12T11:12:50.000Z</published>
-    <updated>2016-08-17T06:45:01.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>github地址: <a href="https://github.com/corderguo/ChangeNavTitleImage" target="_blank" rel="external">https://github.com/corderguo/ChangeNavTitleImage</a><br>本文地址: <a href="http://coderperson.com/2016/04/12/iOS-ChangeNavImg/" target="_blank" rel="external">http://coderperson.com/2016/04/12/iOS-ChangeNavImg/</a><br>欢迎转载，请注明出处，谢谢。</p>
-</blockquote>
-<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="http://img.blog.csdn.net/20160702190808768" alt=""></p>
-<h3 id="创建tableView"><a href="#创建tableView" class="headerlink" title="创建tableView"></a>创建tableView</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 我是以懒加载的形式创建</span><br><span class="line">private lazy var tableView: UITableView = &#123;</span><br><span class="line">        <span class="built_in">let</span> tableView = UITableView(frame: self.view.bounds)</span><br><span class="line">        tableView.dataSource = self</span><br><span class="line">        tableView.delegate   = self</span><br><span class="line">        <span class="built_in">return</span> tableView</span><br><span class="line">    &#125;()</span><br><span class="line">// 以extension的形式遵循代理 并在其中实现代理方法</span><br><span class="line">extension ViewController : UITableViewDataSource,UITableViewDelegate &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意:</p>
-<ul>
-<li>协议的写法，不需要写&lt;&gt;        </li>
-<li>刚遵循完协议的时候会报错，不用担心，那是因为还没实现代理方法</li>
-<li>Swift中的懒加载和OC中的懒加载区别还是挺大的</li>
-</ul>
-<p>这里要注意，我是在viewDidLoad方法中注册cell的</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tableView.registerClass(UITableViewCell.self, <span class="keyword">for</span>CellReuseIdentifier: ID)</span><br></pre></td></tr></table></figure>
-<h3 id="实现代理方法"><a href="#实现代理方法" class="headerlink" title="实现代理方法"></a>实现代理方法</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">return</span> 30</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&gt; UITableViewCell</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">let</span> cell = tableView.dequeueReusableCellWithIdentifier(ID, <span class="keyword">for</span>IndexPath: indexPath)</span><br><span class="line">        cell.textLabel?.text = <span class="string">"骚客--\(indexPath.row):http://coderperson.com"</span></span><br><span class="line">        <span class="built_in">return</span> cell</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>到此为止我们的基本界面搭建完成了，下面就是关键部分了。</p>
-<h3 id="自定义titleView"><a href="#自定义titleView" class="headerlink" title="自定义titleView"></a>自定义titleView</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 首先定义imageView的属性，用来操控图片的大小改变</span><br><span class="line">var imageV : UIImageView?</span><br><span class="line">// 创建</span><br><span class="line"><span class="built_in">let</span> titleV : UIView = UIView()</span><br><span class="line">navigationItem.titleView = titleV</span><br><span class="line">imageV = UIImageView(frame: CGRectMake(0, 0, 70, 70))</span><br><span class="line">imageV?.image = UIImage(named: <span class="string">"100.jpg"</span>)</span><br><span class="line">imageV?.layer.cornerRadius = 35</span><br><span class="line">imageV?.layer.masksToBounds = <span class="literal">true</span></span><br><span class="line">imageV?.center = CGPointMake(titleV.center.x, 0)</span><br><span class="line">titleV.addSubview(imageV!)</span><br></pre></td></tr></table></figure>
-<p>这里不要自己单独向navigationBar上添加子控件，只需要修改titleView即可</p>
-<h3 id="监听偏移量"><a href="#监听偏移量" class="headerlink" title="监听偏移量"></a>监听偏移量</h3><p>这里通过监听偏移量，实现的大小缩放动画<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">func scrollViewDidScroll(scrollView: UIScrollView) &#123;</span><br><span class="line">        </span><br><span class="line">        // 偏移量，相对于contentView，你也可以不加scrollView.contentInset.top，即相对scrollView，然后适当调整即可</span><br><span class="line">        <span class="built_in">let</span> offsetY = scrollView.contentOffset.y + scrollView.contentInset.top</span><br><span class="line">        var scale:CGFloat = 1.0</span><br><span class="line">        <span class="keyword">if</span> offsetY &lt; 0  // 下拉</span><br><span class="line">        &#123;</span><br><span class="line">            scale = min(1.5, 1.0 - offsetY / 300.0) // 300值可以自己调整</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> offsetY &gt; 0</span><br><span class="line">        &#123;</span><br><span class="line">            // 为了防止缩小过度，给一个最小值为0.45，其中0.45 = 31.5 / 70.0，表示</span><br><span class="line">            // 头像最小是31.5像素</span><br><span class="line">            scale = max(0.45, 1 - offsetY / 300);</span><br><span class="line">        &#125;</span><br><span class="line">        // 保证缩放后y的坐标不会改变</span><br><span class="line">        imageV?.transform = CGAffineTransformMakeScale(scale, scale)</span><br><span class="line">        var frame = imageV?.frame</span><br><span class="line">        frame?.origin.y = -(imageV?.layer.cornerRadius)! / 2.0</span><br><span class="line">        imageV?.frame = frame!</span><br><span class="line">        </span><br><span class="line">        // 导航栏颜色渐变</span><br><span class="line">        changeNavColor(offsetY)</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>单独抽出来的颜色渐变的方法<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private func changeNavColor(offsetY:CGFloat) &#123;</span><br><span class="line">       </span><br><span class="line">       <span class="keyword">if</span> offsetY &gt;= 0</span><br><span class="line">       &#123;</span><br><span class="line">           self.navigationController?.navigationBar.alpha = 1.0</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">else</span> <span class="keyword">if</span> offsetY &lt; 0</span><br><span class="line">       &#123;</span><br><span class="line">           self.navigationController?.navigationBar.alpha = 1.0 - -offsetY / 300.0</span><br><span class="line">       &#125;</span><br><span class="line">       </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<p>到此为止你已经可以看到自己想要的效果了。        </p>
-<p>Done！</p>
-<hr>
-<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：      </p>
-<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;github地址: &lt;a href=&quot;https://github.com/corderguo/ChangeNavTitleImage&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/corde
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="Swift" scheme="http://yoursite.com/tags/Swift/"/>
     
   </entry>
   

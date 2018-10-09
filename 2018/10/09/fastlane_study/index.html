@@ -1,0 +1,614 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用Fastlane实现自动化打包 | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="上一篇文章讲解了利用python封装脚本进行自动化打包，这两天又看了看github上很火的自动化打包工具Fastlane。
+Fastlane是一套使用Ruby写的自动化工具集，用于iOS和Android的自动化打包、发布等工作，可以节省大量的时间。 官方文档看这里。
+安装
+安装Xcode命令行工具:
+
+1xcode-select --install
+
+查看ruby版本，要求2.0及以上版本
+
+12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Fastlane实现自动化打包">
+<meta property="og:url" content="http://yoursite.com/2018/10/09/fastlane_study/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="上一篇文章讲解了利用python封装脚本进行自动化打包，这两天又看了看github上很火的自动化打包工具Fastlane。
+Fastlane是一套使用Ruby写的自动化工具集，用于iOS和Android的自动化打包、发布等工作，可以节省大量的时间。 官方文档看这里。
+安装
+安装Xcode命令行工具:
+
+1xcode-select --install
+
+查看ruby版本，要求2.0及以上版本
+
+12">
+<meta property="og:updated_time" content="2018-10-09T06:33:26.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Fastlane实现自动化打包">
+<meta name="twitter:description" content="上一篇文章讲解了利用python封装脚本进行自动化打包，这两天又看了看github上很火的自动化打包工具Fastlane。
+Fastlane是一套使用Ruby写的自动化工具集，用于iOS和Android的自动化打包、发布等工作，可以节省大量的时间。 官方文档看这里。
+安装
+安装Xcode命令行工具:
+
+1xcode-select --install
+
+查看ruby版本，要求2.0及以上版本
+
+12">
+
+    
+    <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/10/09/fastlane_study/" title="使用Fastlane实现自动化打包" itemprop="url">使用Fastlane实现自动化打包</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2018-10-09T05:59:20.000Z" itemprop="datePublished"> 发表于 2018-10-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化"><span class="toc-number">2.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appfile"><span class="toc-number">3.</span> <span class="toc-text">Appfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fastfile"><span class="toc-number">4.</span> <span class="toc-text">Fastfile</span></a></li></ol>
+		
+		</div>
+		
+		<p>上一篇<a href="http://coderperson.com/2018/09/29/iOS-auto_packaging/" target="_blank" rel="external">文章</a>讲解了利用python封装脚本进行自动化打包，这两天又看了看github上很火的自动化打包工具<a href="https://github.com/fastlane/fastlane" target="_blank" rel="external">Fastlane</a>。</p>
+<p>Fastlane是一套使用Ruby写的自动化工具集，用于iOS和Android的自动化打包、发布等工作，可以节省大量的时间。 官方文档看<a href="https://docs.fastlane.tools/" target="_blank" rel="external">这里</a>。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><ul>
+<li>安装Xcode命令行工具:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看ruby版本，要求2.0及以上版本</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ruby -v</span><br><span class="line"></span><br><span class="line">ruby的镜像文件路径改为https://gems.ruby-china.org/</span><br><span class="line"></span><br><span class="line">gem sources --remove https://ruby.taobao.org/</span><br><span class="line"></span><br><span class="line">gem sources --add https://rubygems.org</span><br><span class="line"></span><br><span class="line">gem sources -l</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install fastlane</span><br></pre></td></tr></table></figure>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>切换项目目录到包含xxx.xcodeproj的项目目录下输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane init</span><br></pre></td></tr></table></figure>
+<p>输出：        </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[15:21:56]: What would you like to use fastlane for?</span><br><span class="line">1. 📸  Automate screenshots</span><br><span class="line">2. 👩‍✈️  Automate beta distribution to TestFlight</span><br><span class="line">3. 🚀  Automate App Store distribution</span><br><span class="line">4. 🛠  Manual setup - manually setup your project to automate your tasks</span><br><span class="line">?</span><br></pre></td></tr></table></figure>
+<p>这四个选项的意思是:        </p>
+<blockquote>
+<p>1.自动截屏。这个功能能帮我们自动截取APP中的截图，并添加手机边框（如果需要的话），我们这里不选择这个选项，因为我们的项目已经有图片了，不需要这里截屏。</p>
+<p>2.自动发布beta版本用于TestFlight，如果大家有对TestFlight不了解的，可以参考王巍写的这篇文章</p>
+<p>3.自动的App Store发布包。我们的目标是要提交审核到APP Store，按道理应该选这个，但这里我们先不选，因为选择了以后会需要输入用户名密码，以及下载meta信息，需要花费一定时间，这些数据我们可以后期进行配置。</p>
+<p>4.手动设置。</p>
+</blockquote>
+<p>选择第四个后一路回车即可（等待时间略长），结束后会看到生成了fastlane目录，该目录包含Appfile和Fastfile；同时还生成了两个文件Gemfile和Gemfile.lock，是和fastlane文件夹在同一个目录。</p>
+<h3 id="Appfile"><a href="#Appfile" class="headerlink" title="Appfile"></a>Appfile</h3><p>Appfile用来存放app_identifier，apple_id和team_id。文件生成的时候会定义好格式，按格式填写即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">app_identifier(&quot;[[xxxx]]&quot;) # The bundle identifier of your app</span><br><span class="line">apple_id(&quot;[[xxxx]]&quot;) # Your Apple email address</span><br></pre></td></tr></table></figure>
+<p>你也可以为每个lane提供不同的 app_identifier, apple_id 和 team_id，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for_lane :inhouse do</span><br><span class="line">  app_identifier &quot;xxxx&quot;</span><br><span class="line">  apple_id &quot;xxxx&quot;</span><br><span class="line">  team_id &quot;xxxx&quot;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>这里就是为Fastfile中定义的inhouse这个lane设置单独的信息。</p>
+<h3 id="Fastfile"><a href="#Fastfile" class="headerlink" title="Fastfile"></a>Fastfile</h3><p>Fastfile管理你所创建的 lane 。</p>
+<blockquote>
+<ul>
+<li>scan 自动化测试工具，很好的封装了 Unit Test    </li>
+<li>sigh 针对于 iOS 项目开发证书和 Provision file 的下载工具    </li>
+<li>match 同步团队每个人的证书和 Provision file 的超赞工具    </li>
+<li>gym 针对于 iOS 编译打包生成 ipa 文件    </li>
+<li>deliver 用于上传应用的二进制代码，应用截屏和元数据到 App Store    </li>
+<li>snapshot 可以自动化iOS应用在每个设备上的本地化截屏过程    </li>
+</ul>
+</blockquote>
+<p>这里我们主要用<code>gym</code>来打包。</p>
+<p>Fastlane内部的工具不是新写的，而是调用mac本身的命令，只不过是实现了自动化而已。比如gym工具只是xcodebuild工具的一个封装，如果你会xcodebuild，那gym对你来说小菜一碟。xcodebuild的使用可以看<a href="http://coderperson.com/2018/09/29/iOS-auto_packaging/" target="_blank" rel="external">这篇文章</a>。</p>
+<p>找了一个比较全的格式，可以参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"># 指定 fastlane 最小版本</span><br><span class="line">fastlane_version &quot;2.20.0&quot;</span><br><span class="line"></span><br><span class="line"># 指定当前平台，可以设置为 ios 、android、mac</span><br><span class="line">default_platform :ios</span><br><span class="line"></span><br><span class="line">platform :ios do</span><br><span class="line"></span><br><span class="line"># 在执行每一个 lane 之前都先执行这个代码</span><br><span class="line">  before_all do</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line"># 定义一个创建测试包的 lane</span><br><span class="line"># 我们调用的命令就是调用 fastlane 的 lane</span><br><span class="line">  lane :buildDebugApp do |op|</span><br><span class="line">      # 根据输入的版本设置项目 version number （我们初始化 fastlane 的时候是在 .xcworkspace 目录下， 而我们的项目中 ，.xcworkspace 和 .xcodeproj 不在同一级目录，这里的“increment_version_number”需要检测 .xcodeproj 项目文件，所以需要指定该文件的目录）</span><br><span class="line">    increment_version_number(&#123;xcodeproj: &apos;./HomeMate2_Trunk/HomeMate.xcodeproj&apos;, version_number: op[:version]&#125;)</span><br><span class="line"></span><br><span class="line">    # 根据输入的版本设置项目 build number （同上，也是需要指定 .xcodeproj 的目录）</span><br><span class="line">    increment_build_number(&#123;xcodeproj: &apos;./HomeMate2_Trunk/HomeMate.xcodeproj&apos;, build_number: op[:version]&#125;)</span><br><span class="line"></span><br><span class="line">    # 最重要的打包命令</span><br><span class="line">    gym(</span><br><span class="line">              export_method: &apos;ad-hoc&apos;,        # 打包的方式，可设置为 appstore(默认)，enterprise</span><br><span class="line">                     scheme: &quot;HomeMate&quot;,    # 指定需要打那个 scheme 的包</span><br><span class="line">                  workspace: &quot;HMWorkSpac.xcworkspace&quot;,    # 指定打包的项目文件</span><br><span class="line">                output_name: &quot;HomeMate.ipa&quot;,      # 打包输出名称</span><br><span class="line">                     silent: true,    # 隐藏不必要信息</span><br><span class="line">                      clean: true,    # 打包前是否 clean 项目</span><br><span class="line">              configuration: &quot;Debug&quot;,    # 配置为 debug 版本</span><br><span class="line">              buildlog_path: &quot;./fastlanelog&quot;,    # 日志输出目录</span><br><span class="line">       codesigning_identity: &quot;iPhone Developer: Hailiang He (xxxxxxxxxx)&quot;,       # 代码签名证书</span><br><span class="line">           output_directory: &quot;/Users/xxx/Desktop&quot;     # ipa输出目录</span><br><span class="line">     )</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  # 在执行每一个 lane 之后执行该功能</span><br><span class="line">  after_all do |lane|</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  # 在执行每一个 lane 出错的时候执行该功能</span><br><span class="line">  error do |lane, exception|</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>上面的代码块包含了日常打包常用的功能，可以参考。</p>
+<p>我这边测试打包的时候，写了一个最简单版本的Appfile和Fastfile文件，理解了这个最简单版本，在这个基础上继续增加功能即可，<code>非常便于理解</code>。</p>
+<p>Appfile文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">app_identifier(&quot;[[xxx]]&quot;) # The bundle identifier of your app</span><br><span class="line">apple_id(&quot;[[xxx]]&quot;) # Your Apple email address</span><br></pre></td></tr></table></figure>
+<p>Fastfile文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">default_platform(:ios)</span><br><span class="line"></span><br><span class="line">platform :ios do</span><br><span class="line">  desc &quot;Description of what the lane does&quot;</span><br><span class="line">  lane :custom_lane do</span><br><span class="line">    # add actions here: https://docs.fastlane.tools/actions</span><br><span class="line">    gym(scheme: &quot;xxx&quot;,</span><br><span class="line">      export_method:&quot;ad-hoc&quot;,</span><br><span class="line">      output_directory:&quot;./build&quot;, # 打包后的 ipa 文件存放的目录</span><br><span class="line">      output_name:&quot;xxx.ipa&quot;  # ipa 文件名</span><br><span class="line">   )</span><br><span class="line">  end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>export_method对应的打包类型：app-store、ad-hoc、development、enterprise。</p>
+<p>编辑好以上内容，打开终端执行下面的命令，即可看到在当前目录下生成一个build文件夹，ipa包就在该文件夹中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane custom_lane</span><br></pre></td></tr></table></figure>
+<p>如果lane中设置了可以接收版本号,则可以执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastlane custom_lane version:1.1.0</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Ruby/">Ruby</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Ruby/">Ruby</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2018/10/09/fastlane_study/" data-title="使用Fastlane实现自动化打包 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/09/29/iOS-auto_packaging/"  title="利用python实现自动化打包">
+ <strong>下一篇：</strong><br/> 
+ <span>利用python实现自动化打包
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化"><span class="toc-number">2.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Appfile"><span class="toc-number">3.</span> <span class="toc-text">Appfile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fastfile"><span class="toc-number">4.</span> <span class="toc-text">Fastfile</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Ruby/" title="Ruby">Ruby<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Trivial/" title="Trivial">Trivial<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/微信小程序/" title="微信小程序">微信小程序<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>26</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/资讯/" title="资讯">资讯<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/ACM/" style="font-size: 18px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 12px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 12px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 12px;">security</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 10px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 16px;">情感</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a> <a href="/tags/逆向/" style="font-size: 14px;">逆向</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5970082832&verifier=2b92bb86&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方......
+ <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/corderguo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/6653679" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:guoxianzhuang@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+		<br>
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+
+
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    $('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'http-coderperson-com-1';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260049497'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1260049497' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
