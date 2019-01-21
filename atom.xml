@@ -644,11 +644,11 @@
     <link href="http://yoursite.com/2016/09/28/iOS-weChat/"/>
     <id>http://yoursite.com/2016/09/28/iOS-weChat/</id>
     <published>2016-09-28T13:52:50.000Z</published>
-    <updated>2018-03-07T05:54:08.000Z</updated>
+    <updated>2019-01-21T07:45:55.847Z</updated>
     
     <content type="html"><![CDATA[<p><code>XZ_WeChat</code>高仿微信聊天框架的搭建，工程地址：<a href="https://github.com/corderguo/XZ_WeChat" target="_blank" rel="external">https://github.com/corderguo/XZ_WeChat</a>        </p>
 <p>效果图展示：            </p>
-<p><img src="http://img.blog.csdn.net/20160928230616321" alt="1"><br><img src="http://img.blog.csdn.net/20160928230519993" alt="2">        </p>
+<p><img src="https://img-blog.csdn.net/20160928230616321" alt="1"><br><img src="https://img-blog.csdn.net/20160928230519993" alt="2">        </p>
 <p>做了两年IM相关工作了，去年是集成环信的SDK实现的IM功能，今年公司拥有自己的长连接服务器，于是从头自己定协议然后一步步实现了IM的整体功能，基本把微信IM有关的内容都实现了。最近开始整理过去的一些知识，于是先从聊天框架下手，整理出这个简易的聊天框架，方便大家学习交流。</p>
 <p>该框架摘除了本地缓存的功能（这部分内容太多了），预留好缓存的方法，使得该框架尽可能的简洁实用，方便大家学习，我也会逐渐把该框架完善起来。    </p>
 <p>由于作者的电脑环境被折腾坏了，不能安装cocoapods来管理一些用到的三方，所以直接导入进了该框架，这一点大家不要学习。</p>
