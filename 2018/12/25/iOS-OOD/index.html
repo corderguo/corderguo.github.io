@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://github.com/corderguo/gxz/blob/master/uml_shape.png?raw=true">
 <meta property="og:image" content="http://yoursite.com/Users/guoxianzhuang/Desktop/mammal.png">
 <meta property="og:image" content="https://github.com/corderguo/gxz/blob/master/yinxiang.jpg?raw=true">
-<meta property="og:updated_time" content="2019-01-21T08:10:27.701Z">
+<meta property="og:updated_time" content="2019-01-21T08:16:10.254Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面向对象设计">
 <meta name="twitter:description" content="最近要在团队内部分享一场面向对象的分享会，做了部分内容整理。      
@@ -168,7 +168,7 @@
 <p>例如：创建了一个出租车对象，有一个<em>载我去机场</em> 的接口比诸如<em>左转、右转、启动、停车</em> 等单独的接口更好用。</p>
 </blockquote>
 <p>对属性的访问加以控制，一旦出现问题，就不必操心去跟踪可能改变该属性的每一段代码，它只会在一个地方改变（即设置方法中）。从安全性的角度看，也不希望无控制的代码修改或获取敏感数据。</p>
-<p><strong>构造函数</strong>(如果一个方法与所在类同名，而且没有提供任何返回类型，则这个方法就是一个特殊的方法,<strong>这句不要</strong>，oc是以init开头)</p>
+<p><strong>构造函数</strong>(如果一个方法与所在类同名，而且没有提供任何返回类型，则这个方法就是一个特殊的方法。oc是以init开头)</p>
 <p>通常把构造函数作为类的入口点，构造函数非常适合完成初始化和准备工作。其中初始化属性是构造函数完成的一个常见功能，能确保应用处于一种稳定的状态。</p>
 <p>一般经验是，总是应该提供一个构造函数，即使你不打算在其中做任何事情。可以先提供一个构造函数，其中不包含任何内容，等以后补充。使用编译器提供的默认构造函数尽管从技术上没什么问题，但是最好清楚地知道你的代码到底是怎样的。比如一个属性默认初始化为0，当这个属性用作除法运算时，就会出现不稳定的情况。</p>
 <p><strong>类名</strong></p>
