@@ -4,55 +4,32 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>离屏渲染探究 | 骚客</title>
+    <title>2018年度总结 | 骚客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Mr.Guo">
     
 
     
-    <meta name="description" content="本文地址: http://coderperson.com/2015/11/28/iOS-offScreen/欢迎转载，请注明出处，谢谢。    
-
-概念学习OpenGL中，GPU屏幕渲染有以下两种方式：
-
-On-Screen Rendering    
-
-意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。
-
-Off-Screen Rendering        
-
-意">
+    <meta name="description" content="转眼2018年已经过去了，年龄越大时间过的越快。这一年是有趣的一年，平平淡淡的湖面下，活跃着自己一颗跳动的心。
+今年是深入投资的一年，虽然投资的结果比较惨淡，但是对应的给自己带来的收获却是千金难买的。
+之前一直在玩的基金今年也没玩了，于是就定投了部分，放在那里不看了，引起不了自己的兴趣。
+17年是比特币爆火的一年，自己涉足这块的时候已经是在山顶开始漫漫熊徒了。17年底只是轻仓试玩。18年年初已经开">
 <meta property="og:type" content="article">
-<meta property="og:title" content="离屏渲染探究">
-<meta property="og:url" content="http://yoursite.com/2015/11/28/iOS-offScreen/index.html">
+<meta property="og:title" content="2018年度总结">
+<meta property="og:url" content="http://yoursite.com/2018/01/10/life-2018/index.html">
 <meta property="og:site_name" content="骚客">
-<meta property="og:description" content="本文地址: http://coderperson.com/2015/11/28/iOS-offScreen/欢迎转载，请注明出处，谢谢。    
-
-概念学习OpenGL中，GPU屏幕渲染有以下两种方式：
-
-On-Screen Rendering    
-
-意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。
-
-Off-Screen Rendering        
-
-意">
-<meta property="og:image" content="http://img.blog.csdn.net/20160623095054012">
-<meta property="og:updated_time" content="2016-07-11T10:11:28.000Z">
+<meta property="og:description" content="转眼2018年已经过去了，年龄越大时间过的越快。这一年是有趣的一年，平平淡淡的湖面下，活跃着自己一颗跳动的心。
+今年是深入投资的一年，虽然投资的结果比较惨淡，但是对应的给自己带来的收获却是千金难买的。
+之前一直在玩的基金今年也没玩了，于是就定投了部分，放在那里不看了，引起不了自己的兴趣。
+17年是比特币爆火的一年，自己涉足这块的时候已经是在山顶开始漫漫熊徒了。17年底只是轻仓试玩。18年年初已经开">
+<meta property="og:updated_time" content="2019-01-25T11:44:01.922Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="离屏渲染探究">
-<meta name="twitter:description" content="本文地址: http://coderperson.com/2015/11/28/iOS-offScreen/欢迎转载，请注明出处，谢谢。    
-
-概念学习OpenGL中，GPU屏幕渲染有以下两种方式：
-
-On-Screen Rendering    
-
-意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。
-
-Off-Screen Rendering        
-
-意">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160623095054012">
+<meta name="twitter:title" content="2018年度总结">
+<meta name="twitter:description" content="转眼2018年已经过去了，年龄越大时间过的越快。这一年是有趣的一年，平平淡淡的湖面下，活跃着自己一颗跳动的心。
+今年是深入投资的一年，虽然投资的结果比较惨淡，但是对应的给自己带来的收获却是千金难买的。
+之前一直在玩的基金今年也没玩了，于是就定投了部分，放在那里不看了，引起不了自己的兴趣。
+17年是比特币爆火的一年，自己涉足这块的时候已经是在山顶开始漫漫熊徒了。17年底只是轻仓试玩。18年年初已经开">
 
     
     <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
@@ -105,14 +82,14 @@ Off-Screen Rendering
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/28/iOS-offScreen/" title="离屏渲染探究" itemprop="url">离屏渲染探究</a>
+      <a href="/2018/01/10/life-2018/" title="2018年度总结" itemprop="url">2018年度总结</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
 		
   <p class="article-time">
-    <time datetime="2015-11-28T02:02:04.000Z" itemprop="datePublished"> 发表于 2015-11-28</time>
+    <time datetime="2018-01-10T09:59:10.000Z" itemprop="datePublished"> 发表于 2018-01-10</time>
     
   </p>
 </header>
@@ -121,79 +98,32 @@ Off-Screen Rendering
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念学习"><span class="toc-number">1.</span> <span class="toc-text">概念学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#机制"><span class="toc-number">2.</span> <span class="toc-text">机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">3.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能优劣"><span class="toc-number">4.</span> <span class="toc-text">性能优劣</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#另一种特殊的“离屏渲染”"><span class="toc-number">5.</span> <span class="toc-text">另一种特殊的“离屏渲染”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#离屏渲染的触发机制"><span class="toc-number">6.</span> <span class="toc-text">离屏渲染的触发机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#官方优化"><span class="toc-number">7.</span> <span class="toc-text">官方优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">8.</span> <span class="toc-text">其它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何提高性能"><span class="toc-number">9.</span> <span class="toc-text">如何提高性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">10.</span> <span class="toc-text">总结</span></a></li></ol>
+			
 		
 		</div>
 		
-		<blockquote>
-<p>本文地址: <a href="http://coderperson.com/2015/11/28/iOS-offScreen/" target="_blank" rel="external">http://coderperson.com/2015/11/28/iOS-offScreen/</a><br>欢迎转载，请注明出处，谢谢。    </p>
-</blockquote>
-<h2 id="概念学习"><a href="#概念学习" class="headerlink" title="概念学习"></a>概念学习</h2><p>OpenGL中，GPU屏幕渲染有以下两种方式：</p>
-<ul>
-<li>On-Screen Rendering    </li>
-</ul>
-<p>意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。</p>
-<ul>
-<li>Off-Screen Rendering        </li>
-</ul>
-<p>意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。</p>
-<h2 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h2><p>GPU渲染机制：</p>
-<p>CPU 计算好显示内容提交到 GPU，GPU<br>渲染完成后将渲染结果放入帧缓冲区，随后视频控制器会按照 VSync<br>信号逐行读取帧缓冲区的数据，经过可能的数模转换传递给显示器显示。</p>
-<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>当使用圆角，阴影，遮罩的时候，图层属性的混合体被指定为在未预合成之前不能直接在屏幕中绘制，所以就需要屏幕外渲染被唤起。</p>
-<p>屏幕外渲染并不意味着软件绘制，但是它意味着图层必须在被显示之前在一个屏幕外上下文中被渲染（不论CPU还是GPU）。</p>
-<h2 id="性能优劣"><a href="#性能优劣" class="headerlink" title="性能优劣"></a>性能优劣</h2><p>相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：</p>
-<ul>
-<li><p>创建新缓冲区<br>要想进行离屏渲染，首先要创建一个新的缓冲区。</p>
-</li>
-<li><p>上下文切换<br>离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上又需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。</p>
-</li>
-</ul>
-<p>注意：触发离屏渲染后，上面两步会发生在每一帧，如果在界面的滚动过程中有大量的离屏渲染发生时会严重影响帧率。</p>
-<h2 id="另一种特殊的“离屏渲染”"><a href="#另一种特殊的“离屏渲染”" class="headerlink" title="另一种特殊的“离屏渲染”"></a>另一种特殊的“离屏渲染”</h2><p>按照之前的说法，如果将不在GPU的当前屏幕缓冲区中进行的渲染都称为离屏渲染，那么就还有另一种特殊的“离屏渲染”方式：CPU渲染。</p>
-<p>如果我们重写了drawRect方法，并且使用任何Core Graphics的技术进行了绘制操作，就涉及到了CPU渲染。整个渲染过程由CPU在App内同步地完成，渲染得到的bitmap最后再交由GPU用于显示。</p>
-<h2 id="离屏渲染的触发机制"><a href="#离屏渲染的触发机制" class="headerlink" title="离屏渲染的触发机制"></a>离屏渲染的触发机制</h2><ul>
-<li>shouldRasterize（光栅化）</li>
-<li>masks（遮罩）</li>
-<li>shadows（阴影）</li>
-<li>edge antialiasing（抗锯齿）</li>
-<li>group opacity（不透明）</li>
-<li>复杂形状设置圆角等</li>
-<li>渐变</li>
-</ul>
-<p>其中shouldRasterize（光栅化）是比较特别的一种：<br>光栅化概念：将图转化为一个个栅格组成的图象。<br>光栅化特点：每个元素对应帧缓冲区中的一像素。</p>
-<p>shouldRasterize = YES在其他属性触发离屏渲染的同时，会将光栅化后的内容缓存起来，如果对应的layer及其sublayers没有发生改变，在下一帧的时候可以直接复用。shouldRasterize = YES，这将隐式的创建一个位图，各种阴影遮罩等效果也会保存到位图中并缓存起来，从而减少渲染的频度（不是矢量图）。</p>
-<p>相当于光栅化是把GPU的操作转到CPU上了，生成位图缓存，直接读取复用。</p>
-<p>当你使用光栅化时，你可以开启“Color Hits Green and Misses Red”来检查该场景下光栅化操作是否是一个好的选择。绿色表示缓存被复用，红色表示缓存在被重复创建。</p>
-<p>如果光栅化的层变红得太频繁那么光栅化对优化可能没有多少用处。位图缓存从内存中删除又重新创建得太过频繁，红色表明缓存重建得太迟。可以针对性的选择某个较小而较深的层结构进行光栅化，来尝试减少渲染时间。</p>
-<blockquote>
-<p>注意：   </p>
-</blockquote>
-<p>对于经常变动的内容,这个时候不要开启,否则会造成性能的浪费</p>
-<p>例如我们日程经常打交道的TableViewCell,因为TableViewCell的重绘是很频繁的（因为Cell的复用）,如果Cell的内容不断变化,则Cell需要不断重绘,如果此时设置了cell.layer可光栅化。则会造成大量的离屏渲染,降低图形性能。</p>
-<h2 id="官方优化"><a href="#官方优化" class="headerlink" title="官方优化"></a>官方优化</h2><p>iOS 9.0 之前UIimageView跟UIButton设置圆角都会触发离屏渲染</p>
-<p>iOS 9.0 之后UIButton设置圆角会触发离屏渲染，而UIImageView里png图片设置圆角不会触发离屏渲染了，如果设置其他阴影效果之类的还是会触发离屏渲染的。</p>
-<p>这可能是苹果也意识到离屏渲染会产生性能问题，所以能不产生离屏渲染的地方苹果也就不用离屏渲染了。</p>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>UIImage加载图片方式一般有两种:</p>
-<p>A：imagedNamed初始化</p>
-<p>B：imageWithContentsOfFile初始化<br>二者不同之处在于,imageNamed默认加载图片成功后会内存中缓存图片,这个方法用一个指定的名字在系统缓存中查找并返回一个图片对象.如果缓存中没有找到相应的图片对象,则从指定地方加载图片然后缓存对象，并返回这个图片对象.</p>
-<p>而imageWithContentsOfFile则仅只加载图片,不缓存.</p>
-<p>大量使用imageNamed方式会在不需要缓存的地方额外增加开销CPU的时间来做这件事.当应用程序需要加载一张比较大的图片并且使用一次性，那么其实是没有必要去缓存这个图片的，用imageWithContentsOfFile是最为经济的方式,这样不会因为UIImage元素较多情况下，CPU会被逐个分散在不必要缓存上浪费过多时间.</p>
-<p>使用场景需要编程时，应该根据实际应用场景加以区分，UIimage虽小，但使用元素较多问题会有所凸显.</p>
-<h2 id="如何提高性能"><a href="#如何提高性能" class="headerlink" title="如何提高性能"></a>如何提高性能</h2><ol>
-<li>当我们需要圆角效果时，可以使用一张中间透明图片蒙上去</li>
-<li>使用ShadowPath指定layer阴影效果路径</li>
-<li>使用异步进行layer渲染（Facebook开源的异步绘制框架AsyncDisplayKit）</li>
-<li>设置layer的opaque值为YES，减少复杂图层合成</li>
-<li>尽量使用不包含透明（alpha）通道的图片资源</li>
-<li>尽量设置layer的大小值为整形值</li>
-<li>直接让美工把图片切成圆角进行显示，这是效率最高的一种方案</li>
-<li>很多情况下用户上传图片进行显示，可以让服务端处理圆角</li>
-<li>使用代码手动生成圆角Image设置到要显示的View上，利用UIBezierPath（CoreGraphics框架）画出来圆角图片</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当项目中需要离屏渲染的地方不多时，性能的影响并不是很大，基本也能保持在60fps左右，但<br>是一旦超过一定数目的圆角，滑动起来就会有明显的卡顿现象。所以，没必要为了不影响体验的情况下强行进行优化，这样做效果并不是很明显。只有当需要优化的时候采取一定的优化方案，才能得到最大的收益。            </p>
-<hr>
-<p>我们都是热爱移动开发的程序猿，加入我们，共同提高：              </p>
-<p><img src="http://img.blog.csdn.net/20160623095054012" alt=""></p>
+		<p>转眼2018年已经过去了，年龄越大时间过的越快。这一年是有趣的一年，平平淡淡的湖面下，活跃着自己一颗跳动的心。</p>
+<p>今年是深入投资的一年，虽然投资的结果比较惨淡，但是对应的给自己带来的收获却是千金难买的。</p>
+<p>之前一直在玩的基金今年也没玩了，于是就定投了部分，放在那里不看了，引起不了自己的兴趣。</p>
+<p>17年是比特币爆火的一年，自己涉足这块的时候已经是在山顶开始漫漫熊徒了。17年底只是轻仓试玩。18年年初已经开始重金杀入了。从波段到杠杠，以一个小菜鸟的身份玩的不亦乐乎。虚拟货币的暴涨暴跌也反应在了自己的心态上，完全没有自己的交易模式和交易理念。那个时候仿佛着魔了一般，走着路经常看着行情，被对象说了好多次，惭愧惭愧。</p>
+<p>对应的中国股市，2018也是一熊到底。那个时候学习网上很多人的价值投资，都是以巴菲特为例子，但是很多人都误解了价值投资的定义，在中国股市搞价值投资，无异于小时候玩过的挖地雷游戏，动不动就是一个雷。长生生物，乐视，中兴通讯，康得新等等等等，让“价值投资”的人轻轻松松倾家荡产。</p>
+<p>每种投资模式在不同的阶段和在不同性格的人身上都会发挥很重要的作用，只是这种方式目前还不适合我而已。</p>
+<p>从价值投资到投机到波段到潜伏到到超短，这一路下来磕磕绊绊，黑灯瞎火的摸索，短短几个字承载了自己太多的心血。</p>
+<p>悲伤，迷茫，痛苦，绝望，希望，喜悦，既然选择了这里，这里的一切都是对你的磨练。</p>
+<p>功夫不负有心人。这一年对交易对投资有了更深入的认识，也总算是找到了自己的交易模式和原则。</p>
+<p><strong>投资</strong>不仅仅是指交易，而是一种生活态度和看待问题的方式。这是我的一点拙见。</p>
+<p>有点扯远了~</p>
+<p>工作上，今年一直在做自己最喜欢的证券软件的开发，而且产品形式和特点非常有趣，非常棒。自己工作的内容刚好是自己特别爱好的事情，这是一件多么幸运的事情啊。感恩！</p>
+<p>而且工作中也遇到了很多非常厉害的同事，从他们身上也学到了很多。</p>
+<p>年中的时候学习了<code>python</code> ，后来耽搁了，已经快还回去了。接下来要好好学习学习。</p>
+<p>生活上，可能自己变懒了吧，参加朋友的聚会越来越少了。天气暖和的时候，晚上还和同事一块打打球，进入冬天后就没怎么运动了。重点是：女朋友把我从120斤的小伙养成了140来斤的中年大叔~~。</p>
+<p>和喜欢的人一起牵手迎接来了2018，又一起迎来了2019，这种感觉，真好。</p>
+<p>展望2019：</p>
+<p>要坚持锻炼身体。</p>
+<p>努力提高技术能力。</p>
+<p>规划两次远途旅游，读万卷书也要行万里路。</p>
+<p>2019，充满未知充满忐忑充满挑战充满希望的又一年又来了。</p>
+<p>恩，已经来了。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -201,13 +131,13 @@ Off-Screen Rendering
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/技术/">技术</a>
+  <a class="article-category-link" href="/categories/生活/">生活</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/iOS/">iOS</a>
+  <span></span> <a href="/tags/情感/">情感</a>
   </div>
 
 </div>
@@ -216,7 +146,7 @@ Off-Screen Rendering
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2015/11/28/iOS-offScreen/" data-title="离屏渲染探究 | 骚客" data-tsina="5970082832" class="share clearfix">
+	  <div data-url="http://yoursite.com/2018/01/10/life-2018/" data-title="2018年度总结 | 骚客" data-tsina="5970082832" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -230,18 +160,18 @@ Off-Screen Rendering
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/03/10/iOS-closure/" title="Swift中闭包详解">
+ <a href="/2018/06/04/iOS-hacking/" title="iOS逆向解密">
   <strong>上一篇：</strong><br/>
   <span>
-  Swift中闭包详解</span>
+  iOS逆向解密</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/09/04/iOS-interview/"  title="iOS零散知识点汇总">
+<a href="/2017/07/15/life-alone/"  title="半梦半醒之间">
  <strong>下一篇：</strong><br/> 
- <span>iOS零散知识点汇总
+ <span>半梦半醒之间
 </span>
 </a>
 </div>
@@ -262,7 +192,7 @@ Off-Screen Rendering
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概念学习"><span class="toc-number">1.</span> <span class="toc-text">概念学习</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#机制"><span class="toc-number">2.</span> <span class="toc-text">机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">3.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性能优劣"><span class="toc-number">4.</span> <span class="toc-text">性能优劣</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#另一种特殊的“离屏渲染”"><span class="toc-number">5.</span> <span class="toc-text">另一种特殊的“离屏渲染”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#离屏渲染的触发机制"><span class="toc-number">6.</span> <span class="toc-text">离屏渲染的触发机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#官方优化"><span class="toc-number">7.</span> <span class="toc-text">官方优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其它"><span class="toc-number">8.</span> <span class="toc-text">其它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何提高性能"><span class="toc-number">9.</span> <span class="toc-text">如何提高性能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">10.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
  
   </div>
 
