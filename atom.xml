@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-01-21T08:16:10.254Z</updated>
+  <updated>2019-01-25T11:36:56.679Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,58 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://yoursite.com/2019/01/25/life-2019/"/>
+    <id>http://yoursite.com/2019/01/25/life-2019/</id>
+    <published>2019-01-25T08:24:32.335Z</published>
+    <updated>2019-01-25T11:36:56.679Z</updated>
+    
+    <content type="html"><![CDATA[<p>-–</p>
+<p>title: 2018年度总结</p>
+<p>date: 2019-01-05 17:59:10</p>
+<p>categories: 生活</p>
+<p>tags: 情感</p>
+<p>-–</p>
+<p>转眼2018年已经过去了，年龄越大时间过的越快。这一年是有趣的一年，平平淡淡的湖面下，活跃着自己一颗跳动的心。</p>
+<p>今年是深入投资的一年，虽然投资的结果比较惨淡，但是对应的给自己带来的收获却是千金难买的。</p>
+<p>之前一直在玩的基金今年也没玩了，于是就定投了部分，放在那里不看了，引起不了自己的兴趣。</p>
+<p>17年是比特币爆火的一年，自己涉足这块的时候已经是在山顶开始漫漫熊徒了。17年底只是轻仓试玩。18年年初已经开始重金杀入了。从波段到杠杠，以一个小菜鸟的身份玩的不亦乐乎。虚拟货币的暴涨暴跌也反应在了自己的心态上，完全没有自己的交易模式和交易理念。那个时候仿佛着魔了一般，走着路经常看着行情，被对象说了好多次，惭愧惭愧。</p>
+<p>对应的中国股市，2018也是一熊到底。那个时候学习网上很多人的价值投资，都是以巴菲特为例子，但是很多人都误解了价值投资的定义，在中国股市搞价值投资，无异于小时候玩过的挖地雷游戏，动不动就是一个雷。长生生物，乐视，中兴通讯，康得新等等等等，让“价值投资”的人轻轻松松倾家荡产。</p>
+<p>每种投资模式在不同的阶段和在不同性格的人身上都会发挥很重要的作用，只是这种方式目前还不适合我而已。</p>
+<p>从价值投资到投机到波段到潜伏到到超短，这一路下来磕磕绊绊，黑灯瞎火的摸索，短短几个字承载了自己太多的心血。</p>
+<p>悲伤，迷茫，痛苦，绝望，希望，喜悦，既然选择了这里，这里的一切都是对你的磨练。</p>
+<p>功夫不负有心人。这一年对交易对投资有了更深入的认识，也总算是找到了自己的交易模式和原则。</p>
+<p><strong>投资</strong>不仅仅是指交易，而是一种生活态度和看待问题的方式。这是我的一点拙见。</p>
+<p>有点扯远了~</p>
+<p>工作上，今年一直在做自己最喜欢的证券软件的开发，而且产品形式和特点非常有趣，非常棒。自己工作的内容刚好是自己特别爱好的事情，这是一件多么幸运的事情啊。感恩！</p>
+<p>而且工作中也遇到了很多非常厉害的同事，从他们身上也学到了很多。</p>
+<p>年中的时候学习了<code>python</code> ，后来耽搁了，已经快还回去了。接下来要好好学习学习。</p>
+<p>生活上，可能自己变懒了吧，参加朋友的聚会越来越少了。天气暖和的时候，晚上还和同事一块打打球，进入冬天后就没怎么运动了。重点是：女朋友把我从120斤的小伙养成了140来斤的中年大叔~~。</p>
+<p>和喜欢的人一起牵手迎接来了2018，又一起迎来了2019，这种感觉，真好。</p>
+<p>展望2019：</p>
+<p>要坚持锻炼身体。</p>
+<p>努力提高技术能力。</p>
+<p>规划两次远途旅游，读万卷书也要行万里路。</p>
+<p>2019，充满未知充满忐忑充满挑战充满希望的又一年又来了。</p>
+<p>恩，已经来了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;-–&lt;/p&gt;
+&lt;p&gt;title: 2018年度总结&lt;/p&gt;
+&lt;p&gt;date: 2019-01-05 17:59:10&lt;/p&gt;
+&lt;p&gt;categories: 生活&lt;/p&gt;
+&lt;p&gt;tags: 情感&lt;/p&gt;
+&lt;p&gt;-–&lt;/p&gt;
+&lt;p&gt;转眼2018年已经过去了，年龄越大时间过的越快
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>面向对象设计</title>
@@ -1325,45 +1377,6 @@ One of the two will be used. Which one is undefined.
     
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS开发之HTTPS</title>
-    <link href="http://yoursite.com/2016/06/27/iOS-security-https/"/>
-    <id>http://yoursite.com/2016/06/27/iOS-security-https/</id>
-    <published>2016-06-27T01:42:55.000Z</published>
-    <updated>2016-09-20T16:34:27.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><hr>
-<p>在WWDC 2016开发者大会上，苹果宣布了一个最后期限：到2017年1月1日 App Store中的所有应用都必须启用 App Transport Security安全功能。App Transport Security（ATS）是苹果在iOS 9中引入的一项隐私保护功能，屏蔽明文HTTP资源加载，连接必须经过更安全的HTTPS。苹果目前允许开发者暂时关闭ATS，可以继续使用HTTP连接，但到年底所有官方商店的应用都必须强制性使用ATS。        </p>
-<h3 id="HTTPS和HTTP"><a href="#HTTPS和HTTP" class="headerlink" title="HTTPS和HTTP"></a>HTTPS和HTTP</h3><hr>
-<p>HTTPS（全称：Hyper Text Transfer Protocol over Secure Socket Layer），是以安全为目标的HTTP通道，简单讲是HTTP的安全版，HTTPS = HTTP + SSL/TLS。即在HTTP下加入了SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。HTTPS的主要思想是在不安全的网络上创建一安全信道，并可在使用适当的加密包和服务器证书可被验证且可被信任时，对窃听和中间人攻击提供合理的保护。HTTPS的信任基于预先安装在浏览器中的证书颁发机构（如VeriSign、Microsoft等）（意即“我信任证书颁发机构告诉我应该信任的”）,因此该网站的HTTPS连接可被信任，如果服务器搭建自己的https 也就是说采用自认证的方式来建立https信道，这样一般在客户端是不被信任的。所以我们一般在浏览器访问一些https站点的时候会有一个提示，问你是否继续。（苹果官网是强制安装证书的,不会询问用户）。</p>
-<blockquote>
-<p>HTTPS和HTTP的区别主要为以下四点：        </p>
-</blockquote>
-<p>一、https协议需要到ca申请证书，一般免费证书很少，需要交费。<br>二、http是超文本传输协议，信息是明文传输，https 则是具有安全性的ssl加密传输协议。<br>三、http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。<br>四、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。        </p>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><hr>
-<p>如果是自己使用NSURLSession来封装网络请求，涉及代码如下：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSURLSession</span> *session = [<span class="built_in">NSURLSession</span> sessionWithConfiguration:[<span class="built_in">NSURLSessionConfiguration</span> defaultSessionConfiguration] delegate:<span class="keyword">self</span> delegateQueue:[<span class="built_in">NSOperationQueue</span> mainQueue]];</span><br><span class="line">   <span class="built_in">NSURLSessionDataTask</span> *task =  [session dataTaskWithURL:[<span class="built_in">NSURL</span> URLWithString:<span class="string">@"https://www.apple.com"</span>] completionHandler:^(<span class="built_in">NSData</span> *data, <span class="built_in">NSURLResponse</span> *response, <span class="built_in">NSError</span> *error) &#123;</span><br><span class="line">       <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, [[<span class="built_in">NSString</span> alloc] initWithData:data encoding:<span class="built_in">NSUTF8StringEncoding</span>]);</span><br><span class="line">   &#125;];</span><br><span class="line">   [task resume];</span><br></pre></td></tr></table></figure></p>
-<p>下面我们实现代理方法，在代理方法中处理证书。如果你的请求是HTTP而不是HTTPS是不走该代理方法的：    </p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span><br><span class="line"> 我们需要在该方法中告诉系统, 是否信任服务器返回的证书</span><br><span class="line"> Challenge: 挑战 质问 (包含了受保护的区域)</span><br><span class="line"> protectionSpace : 受保护区域</span><br><span class="line"> NSURLAuthenticationMethodServerTrust : 证书的类型是 服务器信任</span><br><span class="line"> */</span></span><br><span class="line">- (<span class="keyword">void</span>)URLSession:(<span class="built_in">NSURLSession</span> *)session didReceiveChallenge:(<span class="built_in">NSURLAuthenticationChallenge</span> *)challenge completionHandler:(<span class="keyword">void</span> (^)(<span class="built_in">NSURLSessionAuthChallengeDisposition</span>, <span class="built_in">NSURLCredential</span> *))completionHandler</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 1.判断服务器返回的证书类型, 是否是服务器信任</span></span><br><span class="line">    <span class="keyword">if</span> ([challenge.protectionSpace.authenticationMethod isEqualToString:<span class="built_in">NSURLAuthenticationMethodServerTrust</span>]) &#123;</span><br><span class="line">        <span class="comment">/*</span><br><span class="line">         NSURLSessionAuthChallengeUseCredential = 0,                   使用证书</span><br><span class="line">         NSURLSessionAuthChallengePerformDefaultHandling = 1,          忽略证书(默认的处理方式)</span><br><span class="line">         NSURLSessionAuthChallengeCancelAuthenticationChallenge = 2,   忽略书证, 并取消这次请求</span><br><span class="line">         NSURLSessionAuthChallengeRejectProtectionSpace = 3,      拒绝当前这一次, 下一次再询问</span><br><span class="line">         */</span></span><br><span class="line">        <span class="built_in">NSURLCredential</span> *card = [[<span class="built_in">NSURLCredential</span> alloc]initWithTrust:challenge.protectionSpace.serverTrust];</span><br><span class="line">        completionHandler(<span class="built_in">NSURLSessionAuthChallengeUseCredential</span> , card);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果是使用<code>AFN</code>框架，那么我们不需要做任何额外的操作，AFN内部已经做了处理。但是对于对于自制证书的网站还需要进行一些设置：        </p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];</span><br><span class="line">manager.responseSerializer = [AFHTTPResponseSerializer serializer];</span><br><span class="line"><span class="comment">// allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO</span></span><br><span class="line"><span class="comment">// 如果是需要验证自建证书，需要设置为YES</span></span><br><span class="line">securityPolicy.allowInvalidCertificates = <span class="literal">YES</span>;</span><br><span class="line"><span class="comment">//validatesDomainName 是否需要验证域名，默认为YES；</span></span><br><span class="line"><span class="comment">// 假如证书的域名与你请求的域名不一致，需把该项设置为NO；如设成NO的话，即服务器使用其他可信任机构颁发的证书，也可以建立连接，这个非常危险，建议打开。</span></span><br><span class="line"><span class="comment">// 置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。</span></span><br><span class="line"><span class="comment">// 如置为NO，建议自己添加对应域名的校验逻辑。</span></span><br><span class="line">securityPolicy.validatesDomainName = <span class="literal">NO</span>;</span><br><span class="line"><span class="comment">// 如果就是CA证书，则不需要设置上面两项，正常使用AFN即可</span></span><br><span class="line">[manager GET:url parameters:<span class="literal">nil</span> progress:^(<span class="built_in">NSProgress</span> * _Nonnull downloadProgress) &#123;</span><br><span class="line">&#125; success:^(<span class="built_in">NSURLSessionDataTask</span> * _Nonnull task, <span class="keyword">id</span>  _Nullable responseObject) &#123;</span><br><span class="line">	 <span class="comment">// 请求成功</span></span><br><span class="line">&#125; failure:^(<span class="built_in">NSURLSessionDataTask</span> * _Nullable task, <span class="built_in">NSError</span> * _Nonnull error) &#123;</span><br><span class="line">      <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, error);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
-<p>虽然HTTPS相比于HTTP来说，会有一定的性能上的劣势，但对于网络飞速发展，移动设备的性能成倍增长的今天，安全才是我们更应该去考虑的。全网HTTPS并不是那么遥远。        </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;在WWDC 2016开发者大会上，苹果宣布了一个最后期限：到2017年1月1日 App Store中的所有应用都必须启用 App 
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="security" scheme="http://yoursite.com/tags/security/"/>
     
   </entry>
   
