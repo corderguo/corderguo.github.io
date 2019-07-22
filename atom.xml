@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-22T12:43:21.339Z</updated>
+  <updated>2019-07-22T13:03:15.599Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
-    <link href="http://yoursite.com/2019/07/21/stock_market/"/>
-    <id>http://yoursite.com/2019/07/21/stock_market/</id>
-    <published>2019-07-21T08:29:40.189Z</published>
-    <updated>2019-07-22T12:43:21.339Z</updated>
+    <title>股市风云录</title>
+    <link href="http://yoursite.com/2019/07/22/stock_market/"/>
+    <id>http://yoursite.com/2019/07/22/stock_market/</id>
+    <published>2019-07-22T13:00:08.000Z</published>
+    <updated>2019-07-22T13:03:15.599Z</updated>
     
     <content type="html"><![CDATA[<p>首先在投资中需要明确一点，股价的涨跌是有资金推动的，股价上涨是真金白银堆起来的，因此千万不要随意抄底一些在底部不动的股票。一定要相信你肉眼看到的，不要相信自己脑子YY的。这是很多人会犯的错误，因此开篇点出来。</p>
 <p>进入正题，那么我们如何根据日常生活中看到的听到的遇到的事情，发现投资机会呢？</p>
@@ -67,6 +67,10 @@
     
     </summary>
     
+      <category term="投资" scheme="http://yoursite.com/categories/%E6%8A%95%E8%B5%84/"/>
+    
+    
+      <category term="投资" scheme="http://yoursite.com/tags/%E6%8A%95%E8%B5%84/"/>
     
   </entry>
   
