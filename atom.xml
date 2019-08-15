@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-08-15T07:13:29.770Z</updated>
+  <updated>2019-08-15T08:12:38.284Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2019/08/15/ios_enum_detail/"/>
     <id>http://yoursite.com/2019/08/15/ios_enum_detail/</id>
     <published>2019-08-15T07:13:02.000Z</published>
-    <updated>2019-08-15T07:13:29.770Z</updated>
+    <updated>2019-08-15T08:12:38.284Z</updated>
     
     <content type="html"><![CDATA[<h4 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h4><p>打印枚举成员默认输出的是其本身。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">enum Direction &#123;</span><br><span class="line">    case north</span><br><span class="line">    case south</span><br><span class="line">    case east</span><br><span class="line">    case west</span><br><span class="line">&#125;</span><br><span class="line">var dir = Direction.west</span><br><span class="line">print(dir)  //输出为： west</span><br></pre></td></tr></table></figure>
