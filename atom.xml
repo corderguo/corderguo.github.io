@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-08-19T12:15:15.000Z</updated>
+  <updated>2019-08-23T12:00:05.623Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,86 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>创业说</title>
+    <link href="http://yoursite.com/2019/08/23/business/"/>
+    <id>http://yoursite.com/2019/08/23/business/</id>
+    <published>2019-08-23T11:54:08.000Z</published>
+    <updated>2019-08-23T12:00:05.623Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>这是一篇转载的文章，读完之后想到自己在创业公司的经历，非常理解作者在创业过程中的心酸和无奈。文中提到的问题基本是创业公司普遍存在的问题，每一个问题都有可能导致项目的难产。千军易得，一将难求，创业起步时人才真的太重要了。</p>
+<p>原文链接：<a href="https://www.jianshu.com/p/3cec5079e7b3" target="_blank" rel="external">这里</a> 。</p>
+</blockquote>
+<p>一个互联网产品从0到1，从创意到落地，需要经历的过程十分漫长、艰辛，按照“风险-收益模型”，互联网创业要么获得高额回报，要么可以收获极大的教训。</p>
+<p>在经历几个创业项目（千万级风投）的失败后，我果然收获了极大的教训。</p>
+<blockquote>
+<p>为了对项目内容进行保密，下文以 A、B、C 表示笔者参与过的三个互联网项目。</p>
+</blockquote>
+<h2 id="试错？"><a href="#试错？" class="headerlink" title="试错？"></a>试错？</h2><p>这几年，试错心理在互联网创业中普遍存在，也经常看到一些文章说，不要站着不动，去试，哪怕是错的，这种想法是十分有害的，在一个资金有限的创业团队里，一错可能就万劫不复。</p>
+<p>根据笔者的观察，大部分的试错行为，本质其实是<strong>产品没想透</strong>，一些团队做产品时十分着急，恨不得马上能出来，产品没有经过严谨的推理流程，最后发现产品存在严重不符合商业逻辑，功能满足的是自己的需求，而非用户，便推卸责任，美其名曰——试错。</p>
+<blockquote>
+<p>A项目的推进中，我们的产品没有经过很严谨地推理，产品来源于创始人的想法，产品经理火急火燎地出了原型，外包承接，就开始了，后来产品出来后，开始发现产品存在很多问题，开始改版，之前定下的推广计划基本上作废，团队浪费了几个月的时间。</p>
+</blockquote>
+<p>很多错，是不需要试的，放下浮躁，冷静、严谨地思考产品与方向才是王道，当团队开始有试错的想法，可能就已经错了。</p>
+<h2 id="不要打断研发"><a href="#不要打断研发" class="headerlink" title="不要打断研发"></a>不要打断研发</h2><p>产品诞生的前期，研发是主力，团队的重心应该80%放在研发团队上，通过严谨推理与讨论，确定下版本后，必须按着研发的计划走。</p>
+<p>在这个过程中，最常犯错的是CEO，尤其是有很强控制欲的CEO，经常会对研发“指手画脚”，运营在此阶段也经常会热心提出很多意见与新功能，这本是一个好事情，但是技术人员一般会对进度过于乐观，低估时间，胡乱答应功能，最终时间赶，隐藏Bug多，所以除非存在严重的事故或相当紧急的事情，否则，请暂时压制住你满腔的热情，留到下一个版本中，打乱研发节奏，损失的将是未来数个版本。</p>
+<blockquote>
+<p>A项目，产品着急地开始，在我加入团队前，产品就已经开始研发，中途发现很多功能没有想透，开始修改，修改后影响到了很多之前的产品逻辑，而因为修改，花费了大量时间，研发时间节点不肯推迟，那么最终这些影响并没有被很好的发现，后续版本为之十分头疼，而带着问题的版本发布出来，其实也只是给大众留下不好的第一印象与业界嘲笑罢了。</p>
+</blockquote>
+<p>一开始就能理解并克制自己是很难的，通常要经过好几次项目失败后，才能深刻理解这一点，就在于这笔学费团队能不能承受。</p>
+<p><strong>从一开始就充分讨论清楚业务，不要等中途再来做大量修改，充分给予研发团队时间，新发现的需求，应该交由专人整理归纳，筛选后与下一版本开发。</strong></p>
+<h2 id="团队毒瘤"><a href="#团队毒瘤" class="headerlink" title="团队毒瘤"></a>团队毒瘤</h2><p>很多创业团队在团队上想得过于简单，忽略了人这个不确定性因素，在打江山时期，只有靠谱的人，最终做出来的产品才会靠谱，大公司有管理体系压着，创业公司制度是不完善的，人有问题，说毒瘤并不为过，因为Ta对团队的伤害十分巨大。</p>
+<blockquote>
+<p>B项目时期，老板大方，团队也积极有活力，但是团队中存在若干团队毒瘤，最终导致一个估时不长的项目，花了接近一年才上线。</p>
+</blockquote>
+<p>这些团队毒瘤都有些什么特征呢？</p>
+<blockquote>
+<p><strong>自私</strong><br>方便我一个，其它我不理，如果听到这种言论的话，不用犹豫，请他离开团队，尤其是研发团队中，B项目的延误大部分就是因为存在这样的人。</p>
+<p><strong>负能量</strong><br>团队中，总会有那么一两个人，什么事情都要吐槽，遇到难题总想逃避，在项目没按自己的想法推进时，就一直散播这样下去会XXX的言论。在A项目中，后期大量人员离职就是因为这样的人，也因此，项目最终结束了。</p>
+<p><strong>求安稳</strong><br>有些人，上班只是为了安稳地生活，有些人，不要让Ta进入你的团队，因为创业团队没办法提供足够多的福利，并且比一般公司要辛苦得多，他们终将转化为自私者与负能量者。</p>
+<p><strong>能力弱</strong><br>能力弱与没经验是两个完全不同的概念，但在应届生身上很难区分，但是一旦发现能力存在问题，换人，能力与职位不匹配是最大的悲剧，对双方都有伤害，慈不掌兵。</p>
+</blockquote>
+<p><strong>在HR招聘的时候，就必须严格地进行把关，千军易得，一将难求！</strong></p>
+<h2 id="坚定方向"><a href="#坚定方向" class="headerlink" title="坚定方向"></a>坚定方向</h2><p>在三个项目中，我一直在思考一个问题，一个CEO应该做些什么，有人说是战略，有人说统筹，而最终我观察得到的结果却是：<strong>坚定团队的方向，并在成员动摇的时候，告诉他，没问题！</strong></p>
+<p>所以团队坚定方向是很重要的，然而，失败的团队经常会存在更换方向的事情，比如</p>
+<blockquote>
+<p><strong>场景一</strong><br>CEO：这个产品我觉得没搞头，我们换一个方向；</p>
+<p><strong>场景二</strong><br>CEO：我们帮其他公司做一个产品，这样我们可以获得XX资源；</p>
+<p><strong>场景三</strong><br>CEO：上线后研发应该也不忙了，我找一些外包项目来给你们做；</p>
+</blockquote>
+<p>一个团队，拼了命去做一个产品，都未必能做好，何况顾左右而言他？</p>
+<p><strong>没准备好不要开始，准备好了就专注地坚持下去</strong></p>
+<h2 id="打磨产品"><a href="#打磨产品" class="headerlink" title="打磨产品"></a>打磨产品</h2><p>在创业团队中，经常会有这样的一个声音：</p>
+<blockquote>
+<p>我们先做这几个功能做了，先上线嘛，功能可以慢慢完善</p>
+</blockquote>
+<p>如果你是用户，你第一次接触一个App时觉得它很简陋，功能缺胳膊少腿，你后续还会关注它吗？</p>
+<p>打磨产品这个最重要的事情总是被遗忘，当你面临这样一个选择时</p>
+<blockquote>
+<p>A、花1个月时间开发一个新功能<br>B、花1个月时间完善现有功能，改善用户体验</p>
+</blockquote>
+<p>你会选择哪一个？</p>
+<p>其实功能并不是越多越好，每个阶段的推广基本上只能围绕一个功能点，那是否把每个要推广的功能点的体验做好，流程做完善，功能做妥当，才是最重要的事情？</p>
+<p>End.</p>
+<hr>
+<center><br>扫描下面二维码关注公众号，干货大集合：<br><img src="https://corderguo.github.io/images/2.jpg" width="200" height="200" alt=" " align="center"><br></center>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这是一篇转载的文章，读完之后想到自己在创业公司的经历，非常理解作者在创业过程中的心酸和无奈。文中提到的问题基本是创业公司普遍存在的问题，每一个问题都有可能导致项目的难产。千军易得，一将难求，创业起步时人才真的太重要了。&lt;/p&gt;
+&lt;p&gt;原文链接：&lt;a
+    
+    </summary>
+    
+      <category term="人文" scheme="http://yoursite.com/categories/%E4%BA%BA%E6%96%87/"/>
+    
+    
+      <category term="人文" scheme="http://yoursite.com/tags/%E4%BA%BA%E6%96%87/"/>
+    
+  </entry>
   
   <entry>
     <title>Swift中枚举和可选项的细节</title>
@@ -1320,42 +1400,6 @@ One of the two will be used. Which one is undefined.
     
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS使用AVAudioPlayer遇到的奇葩问题</title>
-    <link href="http://yoursite.com/2016/08/10/bugs-AvAudioPlayer/"/>
-    <id>http://yoursite.com/2016/08/10/bugs-AvAudioPlayer/</id>
-    <published>2016-08-10T13:16:15.000Z</published>
-    <updated>2016-08-18T06:54:50.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工<br>具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    </p>
-</blockquote>
-<p>我开始播放音频的播放代码如下：    </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:recorderPath] error:nil];</span><br><span class="line">    self.player.numberOfLoops = 0;</span><br><span class="line">    [self.player prepareToPlay];</span><br><span class="line">    self.player.delegate = self;</span><br><span class="line">    [self.player play];</span><br></pre></td></tr></table></figure>
-<p>结果开始播放语音的时候，程序始终停在初始化这句：        </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:recorderPath] error:nil];</span><br></pre></td></tr></table></figure>
-<p>在这里你可以手动在Xcode上使程序强制运行过去，这样程序可以正常运行了，没有任何影响，这就奇了怪了。于是我在<font color="green">stackoverflow</font>上找到了一个解决方案:<br><img src="http://upload-images.jianshu.io/upload_images/1389022-a81ead68cba8f0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图片">    </p>
-<p>原来是我在XCode中设置了全局断点，导致audio无法播放，（但是我这里就有疑问了，同一个工具类为什么我播放IM中录音时没有问题，到这里就有问题了呢？）于是我把全局断点去掉后，程序果断正常运行了。        </p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
-<p>以后遇到异常终止的情况（<strong>注意</strong>不是出错，可以手动使程序继续正常运行），可以尝试移除全局断点的方法。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;最近在做IM中文件发送的功能，其中涉及到了发送音频格式的文件，于是我使用了我之前封装的播放音频的工具类，这个工&lt;br&gt;具类是用来播放IM的语音的，但是我在播放文件中的语言时却遇到了一个奇葩问题。    &lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;我
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="bugs" scheme="http://yoursite.com/tags/bugs/"/>
     
   </entry>
   
