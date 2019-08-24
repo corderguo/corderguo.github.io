@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://github.com/corderguo/corderguo.github.io/blob/master/images/mammal.png?raw=true">
 <meta property="og:image" content="https://github.com/corderguo/gxz/blob/master/yinxiang.jpg?raw=true">
 <meta property="og:image" content="https://corderguo.github.io/images/2.jpg">
-<meta property="og:updated_time" content="2019-08-24T07:11:40.730Z">
+<meta property="og:updated_time" content="2019-08-24T07:12:50.744Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面向对象设计(看这一篇就够了)">
 <meta name="twitter:description" content="最近在团队内部组织了一场面向对象的分享会，做了部分内容整理。      
@@ -249,7 +249,7 @@
 <p><strong>继承</strong></p>
 <p><strong>继承</strong> 是从其他类继承属性和行为。这种情况下，存在一种真正的父/子关系。（is-a）</p>
 <p>OO程序设计中很强大的一个特性是代码重用，继承不仅有利于代码重用，还可以实现更好的整体设计。OO程序设计中主要的设计问题之一就是抽取不同类的共性，而继承就会发挥很好的作用。</p>
-<center><br><img src="https://github.com/corderguo/corderguo.github.io/blob/master/images/mammal.png?raw=true" width="230" height="230" alt=" " align="center"><br></center>
+<center><br><img src="https://github.com/corderguo/corderguo.github.io/blob/master/images/mammal.png?raw=true" width="250" height="250" alt=" " align="center"><br></center>
 
 <p><code>Dog</code>和<code>Cat</code>的代码都包含表示眼睛颜色的属性，可以利用继承找出他们的共性，相同的特性上移到<code>Mammal</code>类中，这种情况下<code>Dog</code> 和 <code>Cat</code> 都继承自 <code>Mammal</code> 类。</p>
 <p>这样带来的显著的好处：我们编写 <code>Dog</code> 和 <code>Cat</code> 类时不需要重新编写父类已有的方法，假如要修改 <code>Mammal</code>  中的方法，就不需要再在 <code>Dog</code> 和 <code>Cat</code> 类中修改了。   而且 <code>Dog</code> 和 <code>Cat</code> 都是 <code>Mammal</code> 也符合我们的认知，并且以后扩展不同种的狗或猫都可以分别继承 <code>Dog</code> 和 <code>Cat</code> 。这样逐步向下建立继承树时对象会越来越具体。<em>继承的思想就是通过抽出共性实现从一般化到特殊化(具体化)</em> 。</p>
