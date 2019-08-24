@@ -27,9 +27,8 @@
 <meta property="og:image" content="https://github.com/corderguo/gxz/blob/master/uml_shape.png?raw=true">
 <meta property="og:image" content="http://yoursite.com/Users/guoxianzhuang/Desktop/mammal.png">
 <meta property="og:image" content="https://github.com/corderguo/gxz/blob/master/yinxiang.jpg?raw=true">
-<meta property="og:image" content="https://github.com/corderguo/gxz/blob/master/yinxiang.jpg?raw=true">
 <meta property="og:image" content="https://corderguo.github.io/images/2.jpg">
-<meta property="og:updated_time" content="2019-08-24T06:56:29.604Z">
+<meta property="og:updated_time" content="2019-08-24T07:03:26.099Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面向对象设计(看这一篇就够了)">
 <meta name="twitter:description" content="最近要在团队内部分享一场面向对象的分享会，做了部分内容整理。      
@@ -217,13 +216,15 @@
 <ul>
 <li><p>所有的对象都应当尽可能的自行负责自己的行为。举个例子：</p>
 <p>假如有个<code>Shape</code>类，有一个<code>print</code> 打印形状的接口，如果你想打印圆形该如何处理呢。这里可以利用多态把<code>Circle</code> 类归到 <code>Shape</code> 类中，<code>Shape</code> 知道应该如何自行打印。如果再扩展其它形状也就很好扩展。（多态是一种非常好的解耦合方式）</p>
-<p><img src="https://github.com/corderguo/gxz/blob/master/uml_shape.png?raw=true" alt=""></p>
 </li>
 </ul>
+<p><img src="https://github.com/corderguo/gxz/blob/master/uml_shape.png?raw=true" width="250" height="250" alt=" " align="center"></p>
 </li>
 </ol>
 </blockquote>
 </li>
+</ol>
+<ol>
 <li><p>设计时充分考虑可维护性</p>
 <blockquote>
 <p>设计类的过程要求你将代码组织到多个可管理的部分中。单独的代码段往往比更大的代码更可维护。为了提高可维护性，一定要减少相互依赖的代码，降低类的耦合度。</p>
@@ -248,7 +249,7 @@
 <p><strong>继承</strong></p>
 <p><strong>继承</strong> 是从其他类继承属性和行为。这种情况下，存在一种真正的父/子关系。（is-a）</p>
 <p>OO程序设计中很强大的一个特性是代码重用，继承不仅有利于代码重用，还可以实现更好的整体设计。OO程序设计中主要的设计问题之一就是抽取不同类的共性，而继承就会发挥很好的作用。</p>
-<p><img src="/Users/guoxianzhuang/Desktop/mammal.png" alt="uml1"></p>
+<p><img src="/Users/guoxianzhuang/Desktop/mammal.png" alt=""></p>
 <p><code>Dog</code>和<code>Cat</code>的代码都包含表示眼睛颜色的属性，可以利用继承找出他们的共性，相同的特性上移到<code>Mammal</code>类中，这种情况下<code>Dog</code> 和 <code>Cat</code> 都继承自 <code>Mammal</code> 类。</p>
 <p>这样带来的显著的好处：我们编写 <code>Dog</code> 和 <code>Cat</code> 类时不需要重新编写父类已有的方法，假如要修改 <code>Mammal</code>  中的方法，就不需要再在 <code>Dog</code> 和 <code>Cat</code> 类中修改了。   而且 <code>Dog</code> 和 <code>Cat</code> 都是 <code>Mammal</code> 也符合我们的认知，并且以后扩展不同种的狗或猫都可以分别继承 <code>Dog</code> 和 <code>Cat</code> 。这样逐步向下建立继承树时对象会越来越具体。<em>继承的思想就是通过抽出共性实现从一般化到特殊化(具体化)</em> 。</p>
 <p>在<em>EffectiveC C++</em> 中给出了一个例子，来说明使用继承完成设计时遭遇的一个难题。考虑为鸟建立一个类。鸟的突出特征就是鸟能飞，所以创建了一个包含 <code>fly</code> 方法的 <code>Bird</code> 类。这个时候应该发现问题，企鹅和鸵鸟怎么办，他们都是鸟，但是不能飞。可以局部覆盖这种行为，但是这个方法名仍然是 <code>fly</code> ,对于一个不会飞的鸟，有一个 <code>fly</code> 方法显然是不合理的。</p>
@@ -274,7 +275,6 @@
 </blockquote>
 <p>使用组合的另一个主要优点是系统和子系统可以独立构建，更重要的是，可以独立地测试和维护。当今的软件系统越来越复杂，要让大型软件系统正常地工作而且易于维护，它们必须分解为较小的、更可管理的部分。而组合则可以做到这些。</p>
 <p>而且使用组件的另一个好处是，你可以使用其他开发人员构建的组件，方便自己的开发。</p>
-<p><img src="https://github.com/corderguo/gxz/blob/master/yinxiang.jpg?raw=true" alt="yinxiang"></p>
 <center><br><img src="https://github.com/corderguo/gxz/blob/master/yinxiang.jpg?raw=true" width="230" height="250" alt=" " align="center"><br></center>
 
 <blockquote>
