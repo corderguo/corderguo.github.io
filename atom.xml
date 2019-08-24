@@ -403,7 +403,7 @@
     <link href="http://yoursite.com/2018/12/25/iOS-OOD/"/>
     <id>http://yoursite.com/2018/12/25/iOS-OOD/</id>
     <published>2018-12-25T13:52:50.000Z</published>
-    <updated>2019-08-23T12:49:21.076Z</updated>
+    <updated>2019-08-23T12:49:27.421Z</updated>
     
     <content type="html"><![CDATA[<p>最近要在团队内部分享一场面向对象的分享会，做了部分内容整理。      </p>
 <h3 id="面向对象和面向过程的区别"><a href="#面向对象和面向过程的区别" class="headerlink" title="面向对象和面向过程的区别"></a>面向对象和面向过程的区别</h3><p>1.在OO设计中，属性和行为都包含在一个对象中；而在过程式程序设计中，属性和行为是分开的，它把程序的内容分为数据和操作数据的操作两部分，这种编程方式的核心问题是数据结构和算法的开发和优化。</p>
