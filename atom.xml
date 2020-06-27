@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-08-23T12:42:06.135Z</updated>
+  <updated>2020-06-27T10:56:29.970Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>React|Redux技术点</title>
+    <link href="http://yoursite.com/2020/06/10/web-react_redux%E6%8A%80%E6%9C%AF%E7%82%B9/"/>
+    <id>http://yoursite.com/2020/06/10/web-react_redux技术点/</id>
+    <published>2020-06-10T12:14:10.000Z</published>
+    <updated>2020-06-27T10:56:29.970Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://github.com/corderguo/corderguo.github.io/blob/master/images/react%E6%8A%80%E6%9C%AF%E7%82%B9.jpg?raw=true" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://github.com/corderguo/corderguo.github.io/blob/master/images/react%E6%8A%80%E6%9C%AF%E7%82%B9.jpg?raw=true&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="web" scheme="http://yoursite.com/tags/web/"/>
+    
+  </entry>
   
   <entry>
     <title>创业说</title>
@@ -105,7 +129,7 @@
     <link href="http://yoursite.com/2019/08/15/ios_enum_detail/"/>
     <id>http://yoursite.com/2019/08/15/ios_enum_detail/</id>
     <published>2019-08-15T07:13:02.000Z</published>
-    <updated>2019-08-23T12:43:01.270Z</updated>
+    <updated>2019-08-23T12:43:01.271Z</updated>
     
     <content type="html"><![CDATA[<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><p>打印枚举成员默认输出的是其本身。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">enum Direction &#123;</span><br><span class="line">    case north</span><br><span class="line">    case south</span><br><span class="line">    case east</span><br><span class="line">    case west</span><br><span class="line">&#125;</span><br><span class="line">var dir = Direction.west</span><br><span class="line">print(dir)  //输出为： west</span><br></pre></td></tr></table></figure>
@@ -807,7 +831,7 @@
     <link href="http://yoursite.com/2018/09/21/acm-dijkstra/"/>
     <id>http://yoursite.com/2018/09/21/acm-dijkstra/</id>
     <published>2018-09-21T11:12:59.000Z</published>
-    <updated>2018-10-02T08:57:54.034Z</updated>
+    <updated>2018-10-02T08:57:54.035Z</updated>
     
     <content type="html"><![CDATA[<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>假设一个开车的人希望找出从新疆到北京的可能的最短路线。他有一张中国公路地图，该公路图上标出了每一对相邻的公路交叉之间的距离，他应该如何找出这一最短路线呢？</p>
 <p> 一种可能的方法就是枚举出所有从新疆到北京之间的路线，依然存在着数以百万计的行车路线，而其中绝大多数是不值得考虑的。</p>
@@ -941,7 +965,7 @@
     <link href="http://yoursite.com/2018/06/05/iOS-logify/"/>
     <id>http://yoursite.com/2018/06/05/iOS-logify/</id>
     <published>2018-06-05T04:02:04.000Z</published>
-    <updated>2018-06-08T03:04:38.653Z</updated>
+    <updated>2018-06-08T03:04:38.654Z</updated>
     
     <content type="html"><![CDATA[<p>根据上一篇文章的介绍，我们将App的头文件使用 <code>class-dump</code> 导出后，然后利用 <code>theos</code> 创建逆向的工程，编写 <code>hook</code> 的代码，从而达到修改某些功能的目的。但是有时候某些功能具体调用哪个方法我们不好定位，这时候就用到了 <code>logify</code> 来跟踪函数调用，从而定位到我们需要的函数。</p>
 <p><code>logify</code> 是 <code>theos</code> 的一个组件，<code>logify</code> 可以将一个头文件快速转换成已经包含打印信息的xm文件。当然如果某个类中的方法很少，你完全可以自己手动添加 <code>NSLog</code> 的打印信息，但是某个文件中的方法很多的时候，收到给每个方法添加日志信息，会浪费很多很多时间，<code>logify</code> 便是一个不错的工具。</p>
@@ -990,7 +1014,7 @@
     <link href="http://yoursite.com/2018/06/04/iOS-hacking/"/>
     <id>http://yoursite.com/2018/06/04/iOS-hacking/</id>
     <published>2018-06-04T04:02:04.000Z</published>
-    <updated>2018-06-06T06:31:58.350Z</updated>
+    <updated>2018-06-06T06:31:58.351Z</updated>
     
     <content type="html"><![CDATA[<p>学习和了解逆向工程，可以帮助我们分析竞品和自己喜欢的APP的开发架构和某些功能的大体实现思路，也可以自己手动对其它APP大刀阔斧进行二次加工，满足自己的需求。 学习iOS逆向一段时间了，这里简单做个总结，揭开iOS逆向的神秘面纱。</p>
 <h2 id="Mac远程登录iPhone"><a href="#Mac远程登录iPhone" class="headerlink" title="Mac远程登录iPhone"></a>Mac远程登录iPhone</h2><p>iOS和Mac OS X都是基于Darwin（苹果的一个基于Unix的开源系统内核），所以iOS中同样支持终端的命令行操作。    </p>
@@ -1090,7 +1114,7 @@
     <link href="http://yoursite.com/2017/07/15/life-alone/"/>
     <id>http://yoursite.com/2017/07/15/life-alone/</id>
     <published>2017-07-15T13:48:10.000Z</published>
-    <updated>2019-08-23T12:47:12.535Z</updated>
+    <updated>2019-08-23T12:47:12.536Z</updated>
     
     <content type="html"><![CDATA[<p>我大清早起，<br>站在人家屋角上哑哑的啼，<br>人家讨厌我，<br>说我不吉利，<br>我不能呢呢喃喃的讨人家欢喜。        </p>
 <pre><code>----胡适《乌鸦》
@@ -1416,45 +1440,6 @@ One of the two will be used. Which one is undefined.
     
     
       <category term="security" scheme="http://yoursite.com/tags/security/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>关于委托代理的优化</title>
-    <link href="http://yoursite.com/2016/08/20/iOS-delegate_optimized/"/>
-    <id>http://yoursite.com/2016/08/20/iOS-delegate_optimized/</id>
-    <published>2016-08-20T02:02:04.000Z</published>
-    <updated>2016-09-06T06:48:10.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="委托模式"><a href="#委托模式" class="headerlink" title="委托模式"></a>委托模式</h3><hr>
-<p>对象之间经常相互通信，而通信方式有很多。Object-C开发者广泛使用的一种名叫“委托模式”的编程设计模式来实现对象间的的通信，该模式的主旨是：定义一套接口，某对象若想接受另一个对象的委托，则需遵从此接口，以便成为其“委托对象”。而这“另一个对象”则可以给其委托对象回传一些信息，也可以发生相关事件时通知委托对象。</p>
-<p>通常delegate对象中的方法名也一定要起得恰当才行。方法名应该准确描述当前发生的事件以及delegate对象为何要获知此事件。在调用delegate对象中的方法时，总是应该把发起委托的实例也一并传入方法中，这样，delegate对象在实现相关方法时，就能根据传入的实例分别执行不同的代码了。若没有此信息，则委托对象在同一时间只能执行一套逻辑，这么做不太好。</p>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><hr>
-<p>在实现委托模式时，如果协议中的方法是可选得，那么就会写出一大批类似下面的代码来：    </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ([_delegate respondsToSelector:@selector(someClassDidSomething:)])</span><br><span class="line">&#123;</span><br><span class="line">	[_delegate someClassDidSomething];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很容易用代码查出某个委托对象是否能响应特定的选择子，可是如果频繁执行此操作的话，那么除了第一次检测的结果有用之外，后续的检测可能都是多余的。如果委托对象本身没变，那么不太可能会突然响应某个原来不能响应的选择子，也不太会突然无法响应某个原来可以响应的选择子。鉴于此，我们可以把委托对象能否响应某个协议方法这一信息缓存起来，以优化程序效率。</p>
-<p>将方法响应能力缓存起来的最佳途径是使用“位段”数据类型，我们可以把结构体中的字段占用的二进制位个数设为一个字节，从而用0和1表示方法是否被响应。</p>
-<p>下面举个例子：</p>
-<p>在“class-continuation分类”中新增实例变量，这个新增的实例变量是个结构体，用来缓存方法的响应与否。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct&#123;</span><br><span class="line">	unsigned int didReceiveData     : 1;</span><br><span class="line">	unsigned int didFailWithError   : 1;</span><br><span class="line">&#125; _delegateFlags;</span><br></pre></td></tr></table></figure>
-<p>这个结构体用来缓存委托对象是否能响应特定的选择子。实现缓存功能所用的代码可以写在delegate属性所对应的设置方法里：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-(void)<span class="built_in">set</span>Delegate:(id&lt;GXZNetWorkFetcher&gt;)delegate &#123;</span><br><span class="line">	_delegate = delegate;</span><br><span class="line">	_delegateFlags.didReceiveData   = </span><br><span class="line">		[delegate respondsToSelector:@selector(networkFetcher:didReceiveData:)];</span><br><span class="line">	_delegateFlags.didFailWithError = </span><br><span class="line">		[delegate respondsToSelector:@selector(networkFetcher:didFailWithError:)];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样的话，每次调用delegate的相关方法之前，就不用检测委托对象是否能响应给定的选择子了，而是直接查询结构体里的标志：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-(_delegateFlags.didReceiveData) &#123;</span><br><span class="line">	[_dlegate networkFetcher:self didReceiveData:data];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在相关方法要调用很多次时，值得进行这种优化。而是否需要优化，则应依照具体代码来定。这就需要分析代码性能，并找出瓶颈，若发现执行速度需要改进，则可使用此技巧。如果频繁的通过数据源协议从数据源中获取多份相互独立的数据，那么这项优化技术极有可能就会提高程序效率。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;委托模式&quot;&gt;&lt;a href=&quot;#委托模式&quot; class=&quot;headerlink&quot; title=&quot;委托模式&quot;&gt;&lt;/a&gt;委托模式&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;对象之间经常相互通信，而通信方式有很多。Object-C开发者广泛使用的一种名叫“委托模式”的编程设计模式来实现对
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
   </entry>
   
