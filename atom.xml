@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-06-27T11:09:58.966Z</updated>
+  <updated>2020-06-27T11:25:28.309Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,15 +20,14 @@
     <link href="http://yoursite.com/2020/06/10/web-react_redux%E6%8A%80%E6%9C%AF%E7%82%B9/"/>
     <id>http://yoursite.com/2020/06/10/web-react_redux技术点/</id>
     <published>2020-06-10T12:14:10.000Z</published>
-    <updated>2020-06-27T11:09:58.966Z</updated>
+    <updated>2020-06-27T11:25:28.309Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="../images/react技术点.jpg" alt="占坑图"></p>
+    <content type="html"><![CDATA[<p><img src="https://github.com/corderguo/corderguo.github.io/blob/master/images/react%E6%8A%80%E6%9C%AF%E7%82%B9.jpg?raw=true" alt="占坑图"></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;img src=&quot;../images/react技术点.jpg&quot; alt=&quot;占坑图&quot;&gt;&lt;/p&gt;
-
+      &lt;p&gt;&lt;img src=&quot;https://github.com/corderguo/corderguo.github.io/blob/master/images/react%E6%8A%80%E6%9C%AF%E7%82%B9.jpg?raw=true&quot; alt=&quot;占坑图&quot;&gt;&lt;/
     
     </summary>
     
