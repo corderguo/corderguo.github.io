@@ -1,0 +1,695 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>CSS常见选择器（看这一篇就够了） | 骚客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Mr.Guo">
+    
+
+    
+    <meta name="description" content="本篇主要是记录常用的CSS选择器和一些需要注意的细节，提升熟练度的同时方便查阅。
+标签选择器标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。
+1234567891011121314151617181920&amp;lt;head&amp;gt;    &amp;lt;title&amp;gt;基础选择器之标签选择器&amp;lt;/title&amp;gt;    &amp;lt;sty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS常见选择器（看这一篇就够了）">
+<meta property="og:url" content="http://yoursite.com/2020/06/27/web-css常见选择器/index.html">
+<meta property="og:site_name" content="骚客">
+<meta property="og:description" content="本篇主要是记录常用的CSS选择器和一些需要注意的细节，提升熟练度的同时方便查阅。
+标签选择器标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。
+1234567891011121314151617181920&amp;lt;head&amp;gt;    &amp;lt;title&amp;gt;基础选择器之标签选择器&amp;lt;/title&amp;gt;    &amp;lt;sty">
+<meta property="og:updated_time" content="2020-06-28T08:46:03.342Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS常见选择器（看这一篇就够了）">
+<meta name="twitter:description" content="本篇主要是记录常用的CSS选择器和一些需要注意的细节，提升熟练度的同时方便查阅。
+标签选择器标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。
+1234567891011121314151617181920&amp;lt;head&amp;gt;    &amp;lt;title&amp;gt;基础选择器之标签选择器&amp;lt;/title&amp;gt;    &amp;lt;sty">
+
+    
+    <link rel="alternative" href="/atom.xml" title="骚客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="骚客">骚客</a></h1>
+				<h2 class="blog-motto">菩提本无树，明镜亦非台。本来无一物，何处惹尘埃！</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/06/27/web-css常见选择器/" title="CSS常见选择器（看这一篇就够了）" itemprop="url">CSS常见选择器（看这一篇就够了）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Mr.Guo" target="_blank" itemprop="author">Mr.Guo</a>
+		
+  <p class="article-time">
+    <time datetime="2020-06-27T08:14:10.000Z" itemprop="datePublished"> 发表于 2020-06-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#标签选择器"><span class="toc-number">1.</span> <span class="toc-text">标签选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#类选择器"><span class="toc-number">2.</span> <span class="toc-text">类选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#id选择器"><span class="toc-number">3.</span> <span class="toc-text">id选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通配符选择器"><span class="toc-number">4.</span> <span class="toc-text">通配符选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后代选择器"><span class="toc-number">5.</span> <span class="toc-text">后代选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子元素选择器-亲儿子选择器"><span class="toc-number">6.</span> <span class="toc-text">子元素选择器(亲儿子选择器)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并集选择器"><span class="toc-number">7.</span> <span class="toc-text">并集选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#伪类选择器"><span class="toc-number">8.</span> <span class="toc-text">伪类选择器</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#链接伪类选择器"><span class="toc-number">8.0.1.</span> <span class="toc-text">链接伪类选择器</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#focus伪类选择器"><span class="toc-number">8.0.2.</span> <span class="toc-text">focus伪类选择器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#属性选择器"><span class="toc-number">9.</span> <span class="toc-text">属性选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#结构伪类选择器-E-nth-child-n"><span class="toc-number">10.</span> <span class="toc-text">结构伪类选择器 E:nth-child(n)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#伪元素选择器"><span class="toc-number">11.</span> <span class="toc-text">伪元素选择器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#总结"><span class="toc-number">11.1.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>本篇主要是记录常用的CSS选择器和一些需要注意的细节，提升熟练度的同时方便查阅。</p>
+<h4 id="标签选择器"><a href="#标签选择器" class="headerlink" title="标签选择器"></a>标签选择器</h4><p>标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;基础选择器之标签选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">    /* 标签选择器 : 写上标签名 */</span><br><span class="line">    p &#123;</span><br><span class="line">        color: green;</span><br><span class="line">    &#125;</span><br><span class="line">    div &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;p&gt;男生&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;男生&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;男生&lt;/p&gt;</span><br><span class="line">    &lt;div&gt;女生&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;女生&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;女生&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="类选择器"><a href="#类选择器" class="headerlink" title="类选择器"></a>类选择器</h4><p>如果想要差异化选择不同的标签，单独选一个或者几个标签，可以使用类选择器。</p>
+<p>类选择器在HTML中以class属性表示，在CSS中，类选择器以一个点  <code>.</code> 号来显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;title&gt;基础选择器之类选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* 类选择器口诀: 样式点定义  结构类(class)调用  一个或多个 开发最常用*/</span><br><span class="line">      .red &#123;</span><br><span class="line">          color: red;</span><br><span class="line">      &#125;</span><br><span class="line">      .star-sing &#123;</span><br><span class="line">        color: green;</span><br><span class="line">      &#125;</span><br><span class="line">      .memeda &#123;  </span><br><span class="line">         color: pink;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li class=&quot;red&quot;&gt;冰雨&lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;red&quot;&gt;来生缘&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;李香兰&lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;memeda&quot;&gt;生僻字&lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;star-sing&quot;&gt;江南style&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;div class=&quot;red&quot;&gt;我也想变红色&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>实际开发中，类选择器是应用最广泛的。同时，类选择器的 <code>多类名</code> 也会频繁使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;多类名的使用方式&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        .red &#123;</span><br><span class="line">            color:  red;</span><br><span class="line">        &#125;</span><br><span class="line">        .font35 &#123;</span><br><span class="line">            font-size: 35px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;red font35&quot;&gt;刘德华&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>如果一个标签拥有多个类名，表明这个标签分别拥有这多个类的特性。</p>
+<p>各个类名中间用空格隔开。在布局复杂的情况下，还是比较常用的。</p>
+<h4 id="id选择器"><a href="#id选择器" class="headerlink" title="id选择器"></a>id选择器</h4><p>id选择器可以为标有特定id的HTML元素指定特定的样式。</p>
+<p>HTML元素以 <code>id属性</code> 来设置id选择器，CSS中id选择器以 <code>#</code> 来定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;基础选择器之id选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* id选择器的口诀: 样式#定义, 结构id调用, 只能调用一次, 别人切勿使用 */</span><br><span class="line">      #pink &#123;</span><br><span class="line">          color: pink;</span><br><span class="line">      &#125;</span><br><span class="line">    </span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=&quot;pink&quot;&gt;迈克尔·杰克逊&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;pink++&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>id选择器和类选择器的区别</strong></p>
+<ul>
+<li>类选择器（class）好比人的名字，一个人(标签)可以有多个名字，同时一个名字也可以被多个人使用。</li>
+<li>id 选择器好比人的身份证号码，全中国唯一的，不得重复。也就是说，一个标签使用了id为<code>pink</code>的选择器，那么其它标签不能再使用名为<code>pink</code>的id选择器了。</li>
+<li>两者最大的不同在于使用次数上。</li>
+<li>类选择器在修改样式中用的最多，id选择器一般用于页面唯一性的元素上，经常和javaScript搭配使用。</li>
+</ul>
+<h4 id="通配符选择器"><a href="#通配符选择器" class="headerlink" title="通配符选择器"></a>通配符选择器</h4><p>在CSS中，通配符选择器使用 <code>*</code> 定义，它表示选择页面中所有元素（标签）。通配符选择器不需要调用，自动就给所有元素使用样式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* &#123;</span><br><span class="line">	margin: 0;</span><br><span class="line">	padding: 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> —————————————-上面的是基础选择器，下面的为复合选择器 —————————————-</p>
+<h4 id="后代选择器"><a href="#后代选择器" class="headerlink" title="后代选择器"></a>后代选择器</h4><p>后代选择器又称为包含选择器，可以选择父元素里面的子元素，其写法就是把外层标签写在前面，内层标签写在后面，中间用空格分隔。</p>
+<p>语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">元素1 元素2 &#123; 样式声明 &#125;</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ul li &#123;样式声明&#125;   // 选择ul里面所有的li标签元素。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>元素1是父级，元素2是子级，最终选择的是元素2。</li>
+<li>元素1和元素2可以是任意的基础选择器。</li>
+<li><strong>后代选择器的意思是选中ul后代中所有的li，不管是孩子还是孙子还是孙孙子。</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> &lt;title&gt;复合选择器之后代选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* 我想要把ol里面的小li选出来改为pink */</span><br><span class="line">        ol li &#123;</span><br><span class="line">            color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        ol li a &#123;</span><br><span class="line">            color: red;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        .nav li a &#123;</span><br><span class="line">            color: yellow;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">    &lt;ol&gt;</span><br><span class="line">        变态写法</span><br><span class="line">        &lt;li&gt;我是ol 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ol 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ol 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;我是孙子&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &lt;/ol&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;ul class=&quot;nav&quot;&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>上面的例子中 <code>.nav li a</code> 表示选中的为：类选择器为nav的后代li的后代a。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">   .nav a &#123;</span><br><span class="line">       color: red;</span><br><span class="line">   &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;nav&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;#&quot;&gt;我是儿子&lt;/a&gt;</span><br><span class="line">        &lt;p&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;我是孙子&lt;/a&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>这个例子中所有的 <code>a标签</code> 的color都会变成red，因为一个a是儿子，一个a是孙子，都是 <code>.nav</code> 的后代。</p>
+<h4 id="子元素选择器-亲儿子选择器"><a href="#子元素选择器-亲儿子选择器" class="headerlink" title="子元素选择器(亲儿子选择器)"></a>子元素选择器(亲儿子选择器)</h4><p>子元素选择器（子选择器）只能选择作为某元素的最近一级子元素，也就是选亲儿子元素。</p>
+<p>语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">元素1 &gt; 元素2 &#123;样式声明&#125;</span><br></pre></td></tr></table></figure>
+<p>上面语法表示<strong>选择元素1里面的所有直接后代元素2</strong>。</p>
+<p>元素2必须是亲儿子，其孙子、重孙子都不包括在内。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .nav&gt;a &#123;</span><br><span class="line">        color: red;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;nav&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;#&quot;&gt;我是儿子&lt;/a&gt;</span><br><span class="line">        &lt;p&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;我是孙子&lt;/a&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>同样是上面后代选择器的例子，这里只有<code>儿子a</code>会被选择，<code>孙子a</code> 不会被选择。</p>
+<h4 id="并集选择器"><a href="#并集选择器" class="headerlink" title="并集选择器"></a>并集选择器</h4><p>并集选择器可以选择多组标签，同时为他们定义相同的样式。通常用于集体声明。</p>
+<p>语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">元素1,元素2 &#123;样式声明&#125;</span><br></pre></td></tr></table></figure>
+<p>注意是用<code>英文逗号</code>连接。上述语法表示选择元素1<strong>和</strong>元素2。逗号表示<code>和</code>的意思。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    /* 要求1: 请把熊大和熊二改为粉色 */</span><br><span class="line">    /* div,</span><br><span class="line">    p &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125; */</span><br><span class="line"></span><br><span class="line">    /* 要求2: 请把熊大和熊二改为粉色 还有 小猪一家改为粉色 */</span><br><span class="line">    div,</span><br><span class="line">    p,</span><br><span class="line">    .pig li &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* 约定的语法规范,我们并集选择器喜欢竖着写 */</span><br><span class="line">    /* 一定要注意,最后一个选择器 不需要加逗号 */</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;熊大&lt;/div&gt;</span><br><span class="line">    &lt;p&gt;熊二&lt;/p&gt;</span><br><span class="line">    &lt;span&gt;光头强&lt;/span&gt;</span><br><span class="line">    &lt;ul class=&quot;pig&quot;&gt;</span><br><span class="line">        &lt;li&gt;小猪佩奇&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;猪爸爸&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;猪妈妈&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>例子中 <code>div,p,.pig li</code> 表示 <code>div 和 p 和 pig的后代li</code>被选择。<code>.pig li</code> 就是上面讲过的后代选择器。</p>
+<h4 id="伪类选择器"><a href="#伪类选择器" class="headerlink" title="伪类选择器"></a>伪类选择器</h4><p>伪类选择器用于向某些选择器添加特殊的效果，比如给链接添加特殊效果，或选择第1个，第n个元素。</p>
+<p>伪类选择器书写最大的特点是<code>用冒号(:)</code>表示，比如 :hover 、 :first-child 。</p>
+<p>冒号前后不要空格。</p>
+<h6 id="链接伪类选择器"><a href="#链接伪类选择器" class="headerlink" title="链接伪类选择器"></a>链接伪类选择器</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a:link    // 选择所有未被访问过的链接</span><br><span class="line">a:visited  // 选择所有已被访问过的链接</span><br><span class="line">a:hover    // 选择鼠标指针位于其上的链接</span><br><span class="line">a:active   // 选择活动链接(鼠标按下未弹起的链接)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;复合选择器之链接伪类选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* 1.未访问的链接 a:link  把没有点击过的(访问过的)链接选出来 */</span><br><span class="line">        a:link &#123;</span><br><span class="line">            color: #333;</span><br><span class="line">            text-decoration: none;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /*2. a:visited 选择点击过的(访问过的)链接 */</span><br><span class="line">        a:visited &#123;</span><br><span class="line">            color: orange;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /*3. a:hover 选择鼠标经过的那个链接 */</span><br><span class="line">        a:hover &#123;</span><br><span class="line">            color: skyblue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /* 4. a:active 选择的是我们鼠标正在按下还没有弹起鼠标的那个链接 */</span><br><span class="line">        a:active &#123;</span><br><span class="line">            color: green;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;a href=&quot;#&quot;&gt;小猪佩奇&lt;/a&gt;</span><br><span class="line">    &lt;a href=&quot;http://www.xxxxxxxx.com&quot;&gt;未知的网站&lt;/a&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>链接伪类选择器注意事项：</p>
+<ul>
+<li>为了确保生效，请按照LVHA的顺序声明。即 :link  :visited  :hover  :active 。</li>
+</ul>
+<p>链接伪类在实际开发中经常的写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// a标签选择器 所有标签</span><br><span class="line">a &#123;</span><br><span class="line">	color: gray;</span><br><span class="line">&#125;</span><br><span class="line">// :hover 鼠标经过时的状态设置</span><br><span class="line">a:hover &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="focus伪类选择器"><a href="#focus伪类选择器" class="headerlink" title="focus伪类选择器"></a>focus伪类选择器</h6><p>:focus 伪类选择器用于选取获得焦点(光标)的表单元素。</p>
+<p>焦点就是光标，一般情况下<code>&lt;input&gt;</code>类表单元素才能获取，因此这个选择器也主要针对表单元素来说。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 当input获取到光标的时候就改变背景色。</span><br><span class="line">input:focus &#123;</span><br><span class="line">    background-color: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p> —————————————-下面的为CSS3新增的选择器 —————————————-</p>
+<h4 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h4><p>属性选择器可以根据元素特定属性来选择元素，这样就可以不用借助于类或者id选择器了。</p>
+<p>可以看看w3cschool总结的<a href="https://www.w3school.com.cn/css/css_syntax_attribute_selector.asp" target="_blank" rel="external">参考手册</a> 。</p>
+<p>主要通过例子来理解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    /* 必须是input 但是同时具有 value这个属性 选择这个元素  [] */</span><br><span class="line">    /* input[value] &#123;</span><br><span class="line">        color:pink;</span><br><span class="line">    &#125; */</span><br><span class="line">    /* 只选择 type =text 文本框的input 选取出来 */</span><br><span class="line">    input[type=text] &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    /* 选择首先是div 然后 具有class属性 并且属性值 必须是 icon开头的这些元素 */</span><br><span class="line">    div[class^=icon] &#123;</span><br><span class="line">        color: red;</span><br><span class="line">    &#125;</span><br><span class="line">    section[class$=data] &#123;</span><br><span class="line">        color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">    div.icon1 &#123;</span><br><span class="line">        color: skyblue;</span><br><span class="line">    &#125;</span><br><span class="line">    /* 类选择器和属性选择器 伪类选择器 权重都是 10 */</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;!-- 1. 利用属性选择器就可以不用借助于类或者id选择器 --&gt;</span><br><span class="line">    &lt;!-- &lt;input type=&quot;text&quot; value=&quot;请输入用户名&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt; --&gt;</span><br><span class="line">    &lt;!-- 2. 属性选择器还可以选择属性=值的某些元素 重点务必掌握的 --&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; name=&quot;&quot; id=&quot;&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; name=&quot;&quot; id=&quot;&quot;&gt;</span><br><span class="line">    &lt;!-- 3. 属性选择器可以选择属性值开头的某些元素 --&gt;</span><br><span class="line">    &lt;div class=&quot;icon1&quot;&gt;小图标1&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;icon2&quot;&gt;小图标2&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;icon3&quot;&gt;小图标3&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;icon4&quot;&gt;小图标4&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;我是打酱油的&lt;/div&gt;</span><br><span class="line">    &lt;!-- 4. 属性选择器可以选择属性值结尾的某些元素 --&gt;</span><br><span class="line">    &lt;section class=&quot;icon1-data&quot;&gt;我是安其拉&lt;/section&gt;</span><br><span class="line">    &lt;section class=&quot;icon2-data&quot;&gt;我是哥斯拉&lt;/section&gt;</span><br><span class="line">    &lt;section class=&quot;icon3-ico&quot;&gt;哪我是谁&lt;/section&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="结构伪类选择器-E-nth-child-n"><a href="#结构伪类选择器-E-nth-child-n" class="headerlink" title="结构伪类选择器 E:nth-child(n)"></a>结构伪类选择器 E:nth-child(n)</h4><table>
+<thead>
+<tr>
+<th>选择符</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E:first-child</td>
+<td>匹配父元素中的第一个子元素E</td>
+</tr>
+<tr>
+<td>E:last-child</td>
+<td>匹配父元素中最后一个E元素</td>
+</tr>
+<tr>
+<td>E:nth-child(n)</td>
+<td>匹配父元素中第n个子元素E</td>
+</tr>
+<tr>
+<td>E:first-of-type</td>
+<td>指定类型E的第一个</td>
+</tr>
+<tr>
+<td>E:last-of-type</td>
+<td>指定类型E的最后一个</td>
+</tr>
+<tr>
+<td>E:nth-of-type(n)</td>
+<td>指定类型E的第n个</td>
+</tr>
+</tbody>
+</table>
+<p>通过例子来理解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    /* 1.把所有的偶数 even的孩子选出来 */</span><br><span class="line">    ul li:nth-child(even) &#123;</span><br><span class="line">        background-color: #ccc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* 2.把所有的奇数 odd的孩子选出来 */</span><br><span class="line">    ul li:nth-child(odd) &#123;</span><br><span class="line">        background-color: gray;</span><br><span class="line">    &#125;</span><br><span class="line">    /* 3.nth-child(n) 从0开始 每次加1 往后面计算  这里面必须是n 不能是其他的字母 选择了所有的孩子*/</span><br><span class="line">    /* ol li:nth-child(n) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125; */</span><br><span class="line">    /* 4.nth-child(2n) 选择了所有的偶数孩子 等价于 even*/</span><br><span class="line">    /* ol li:nth-child(2n) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">   	// 选择了所有的基数孩子</span><br><span class="line">    ol li:nth-child(2n+1) &#123;</span><br><span class="line">        background-color: skyblue;</span><br><span class="line">    &#125; */</span><br><span class="line">    // 选择了从第三个开始(包含第三个)(这里是从1开始的) 的孩子</span><br><span class="line">    /* ol li:nth-child(n+3) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125; */</span><br><span class="line">    // 选择了前三个孩子</span><br><span class="line">    ol li:nth-child(-n+3) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;我是第1个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第2个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第3个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第4个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第5个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第6个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第7个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第8个孩子&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;ol&gt;</span><br><span class="line">        &lt;li&gt;我是第1个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第2个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第3个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第4个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第5个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第6个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第7个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第8个孩子&lt;/li&gt;</span><br><span class="line">    &lt;/ol&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>nth-child 和 nth-of-type 的区别</strong></p>
+<blockquote>
+<p>nth-child 对父元素里面所有孩子排序选择(序号是固定的),先找到第n个孩子，然后看看是否和E匹配。</p>
+<p>nth-of-type 对父元素里面指定的子元素进行排序选择。先去匹配E，然后再根据E 找到第n个孩子。</p>
+</blockquote>
+<p>来看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    ul li:first-of-type &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    ul li:last-of-type &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    ul li:nth-of-type(even) &#123;</span><br><span class="line">        background-color: skyblue;</span><br><span class="line">    &#125;</span><br><span class="line">    /* nth-child 会把所有的盒子都排列序号 */</span><br><span class="line">    /* 执行的时候首先看  :nth-child(1) 之后回去看 前面 div */</span><br><span class="line"></span><br><span class="line">    section div:nth-child(1) &#123;</span><br><span class="line">        background-color: red;</span><br><span class="line">    &#125;</span><br><span class="line">     /* nth-of-type 会把指定元素的盒子排列序号 */</span><br><span class="line">    /* 执行的时候首先看  div指定的元素  之后回去看 :nth-of-type(1) 第几个孩子 */</span><br><span class="line">    section div:nth-of-type(1) &#123;</span><br><span class="line">        background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">    &lt;li&gt;我是第1个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第2个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第3个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第4个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第5个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第6个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第7个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第8个孩子&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;section&gt;</span><br><span class="line">    &lt;p&gt;光头强&lt;/p&gt;</span><br><span class="line">    &lt;div&gt;熊大&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;熊二&lt;/div&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>类选择器、属性选择器、伪类选择器  权重都为10</strong>  。</p>
+<h4 id="伪元素选择器"><a href="#伪元素选择器" class="headerlink" title="伪元素选择器"></a>伪元素选择器</h4><p>伪元素选择器可以帮助我们利用CSS创建新标签元素，而不需要HTML标签，从而简化HTML结构。</p>
+<p>新创建的这个元素，在文档树中是找不到的，所以我们称为<strong>伪元素</strong>。</p>
+<p>语法：</p>
+<table>
+<thead>
+<tr>
+<th>选择符</th>
+<th style="text-align:left">简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>::before</td>
+<td style="text-align:left">在元素内部的前面插入内容</td>
+</tr>
+<tr>
+<td>::after</td>
+<td style="text-align:left">在元素内部的后面插入内容</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>before 和 after 创建一个元素，但是属于行内元素。</li>
+</ul>
+<p>看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    div &#123;</span><br><span class="line">        width: 200px;</span><br><span class="line">        height: 200px;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    /* div::before 权重是2 */</span><br><span class="line">    div::before &#123;</span><br><span class="line">        /* 这个content是必须要写的 */</span><br><span class="line">        /* display: inline-block; */</span><br><span class="line">        content: &apos;我&apos;;</span><br><span class="line">        /* width: 30px;</span><br><span class="line">        height: 40px;</span><br><span class="line">        background-color: purple; */</span><br><span class="line">    &#125;</span><br><span class="line">    div::after &#123;</span><br><span class="line">        content: &apos;小猪佩奇&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div&gt;</span><br><span class="line">    是</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>该选择器在实际开发中主要是用来创建一些小图标元素。content的内容是图标对应的编码即可。</p>
+</blockquote>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>本来以为很快就会总结完这些常用选择器，没想到花费了多半天的时间。工欲善其事必先利其器，学习路上切记走马观花，要一步一个脚印才能有所收获和积累。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/web/">web</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2020/06/27/web-css常见选择器/" data-title="CSS常见选择器（看这一篇就够了） | 骚客" data-tsina="5970082832" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2020/06/10/web-react_redux技术点/"  title="React|Redux技术点（占坑）">
+ <strong>下一篇：</strong><br/> 
+ <span>React|Redux技术点（占坑）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#标签选择器"><span class="toc-number">1.</span> <span class="toc-text">标签选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#类选择器"><span class="toc-number">2.</span> <span class="toc-text">类选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#id选择器"><span class="toc-number">3.</span> <span class="toc-text">id选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通配符选择器"><span class="toc-number">4.</span> <span class="toc-text">通配符选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#后代选择器"><span class="toc-number">5.</span> <span class="toc-text">后代选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子元素选择器-亲儿子选择器"><span class="toc-number">6.</span> <span class="toc-text">子元素选择器(亲儿子选择器)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并集选择器"><span class="toc-number">7.</span> <span class="toc-text">并集选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#伪类选择器"><span class="toc-number">8.</span> <span class="toc-text">伪类选择器</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#链接伪类选择器"><span class="toc-number">8.0.1.</span> <span class="toc-text">链接伪类选择器</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#focus伪类选择器"><span class="toc-number">8.0.2.</span> <span class="toc-text">focus伪类选择器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#属性选择器"><span class="toc-number">9.</span> <span class="toc-text">属性选择器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#结构伪类选择器-E-nth-child-n"><span class="toc-number">10.</span> <span class="toc-text">结构伪类选择器 E:nth-child(n)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#伪元素选择器"><span class="toc-number">11.</span> <span class="toc-text">伪元素选择器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#总结"><span class="toc-number">11.1.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/ReactNative/" title="ReactNative">ReactNative<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Ruby/" title="Ruby">Ruby<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Swift/" title="Swift">Swift<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Trivial/" title="Trivial">Trivial<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Web/" title="Web">Web<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/iOS/" title="iOS">iOS<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/人文/" title="人文">人文<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/微信小程序/" title="微信小程序">微信小程序<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/技术/" title="技术">技术<sup>29</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/投资/" title="投资">投资<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/生活/" title="生活">生活<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/读书笔记/" title="读书笔记">读书笔记<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/资讯/" title="资讯">资讯<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/ACM/" style="font-size: 17.5px;">ACM</a> <a href="/tags/CSS/" style="font-size: 10px;">CSS</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/RN/" style="font-size: 10px;">RN</a> <a href="/tags/Ruby/" style="font-size: 10px;">Ruby</a> <a href="/tags/Swift/" style="font-size: 12.5px;">Swift</a> <a href="/tags/WeChat/" style="font-size: 10px;">WeChat</a> <a href="/tags/block/" style="font-size: 10px;">block</a> <a href="/tags/bugs/" style="font-size: 12.5px;">bugs</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/image/" style="font-size: 10px;">image</a> <a href="/tags/interview/" style="font-size: 10px;">interview</a> <a href="/tags/media/" style="font-size: 10px;">media</a> <a href="/tags/regex/" style="font-size: 12.5px;">regex</a> <a href="/tags/runtime/" style="font-size: 10px;">runtime</a> <a href="/tags/security/" style="font-size: 12.5px;">security</a> <a href="/tags/web/" style="font-size: 12.5px;">web</a> <a href="/tags/wx/" style="font-size: 10px;">wx</a> <a href="/tags/人文/" style="font-size: 12.5px;">人文</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/情感/" style="font-size: 17.5px;">情感</a> <a href="/tags/投资/" style="font-size: 12.5px;">投资</a> <a href="/tags/网络/" style="font-size: 10px;">网络</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a> <a href="/tags/逆向/" style="font-size: 15px;">逆向</a>
+    </div>
+  </div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://www.google.com.hk/" target="_blank" title="谷歌">谷歌</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://corderguo.github.io/" target="_blank" title="老郭">老郭</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=5970082832&verifier=2b92bb86&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 生活不只是眼前的苟且，还有诗和远方......
+ <br/>
+			当你的才华还撑不起你的野心时，你就应该静下心来学习。</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5970082832" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/corderguo" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		<a href="http://stackoverflow.com/users/6653679" target="_blank" class="icon-stack-overflow" title="stackoverflow"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:guoxianzhuang@foxmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次
+		<br>
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Mr.Guo">Mr.Guo</a>
+		
+
+
+		</p>
+</div>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    $('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'http-coderperson-com-1';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260049497'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1260049497' type='text/javascript'%3E%3C/script%3E"));</script>
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

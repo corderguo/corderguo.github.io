@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-06-27T11:30:11.377Z</updated>
+  <updated>2020-06-28T08:46:03.342Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,172 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CSS常见选择器（看这一篇就够了）</title>
+    <link href="http://yoursite.com/2020/06/27/web-css%E5%B8%B8%E8%A7%81%E9%80%89%E6%8B%A9%E5%99%A8/"/>
+    <id>http://yoursite.com/2020/06/27/web-css常见选择器/</id>
+    <published>2020-06-27T08:14:10.000Z</published>
+    <updated>2020-06-28T08:46:03.342Z</updated>
+    
+    <content type="html"><![CDATA[<p>本篇主要是记录常用的CSS选择器和一些需要注意的细节，提升熟练度的同时方便查阅。</p>
+<h4 id="标签选择器"><a href="#标签选择器" class="headerlink" title="标签选择器"></a>标签选择器</h4><p>标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;基础选择器之标签选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">    /* 标签选择器 : 写上标签名 */</span><br><span class="line">    p &#123;</span><br><span class="line">        color: green;</span><br><span class="line">    &#125;</span><br><span class="line">    div &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;p&gt;男生&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;男生&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;男生&lt;/p&gt;</span><br><span class="line">    &lt;div&gt;女生&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;女生&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;女生&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="类选择器"><a href="#类选择器" class="headerlink" title="类选择器"></a>类选择器</h4><p>如果想要差异化选择不同的标签，单独选一个或者几个标签，可以使用类选择器。</p>
+<p>类选择器在HTML中以class属性表示，在CSS中，类选择器以一个点  <code>.</code> 号来显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;title&gt;基础选择器之类选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* 类选择器口诀: 样式点定义  结构类(class)调用  一个或多个 开发最常用*/</span><br><span class="line">      .red &#123;</span><br><span class="line">          color: red;</span><br><span class="line">      &#125;</span><br><span class="line">      .star-sing &#123;</span><br><span class="line">        color: green;</span><br><span class="line">      &#125;</span><br><span class="line">      .memeda &#123;  </span><br><span class="line">         color: pink;</span><br><span class="line">      &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li class=&quot;red&quot;&gt;冰雨&lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;red&quot;&gt;来生缘&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;李香兰&lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;memeda&quot;&gt;生僻字&lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;star-sing&quot;&gt;江南style&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;div class=&quot;red&quot;&gt;我也想变红色&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>实际开发中，类选择器是应用最广泛的。同时，类选择器的 <code>多类名</code> 也会频繁使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;多类名的使用方式&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        .red &#123;</span><br><span class="line">            color:  red;</span><br><span class="line">        &#125;</span><br><span class="line">        .font35 &#123;</span><br><span class="line">            font-size: 35px;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;red font35&quot;&gt;刘德华&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>如果一个标签拥有多个类名，表明这个标签分别拥有这多个类的特性。</p>
+<p>各个类名中间用空格隔开。在布局复杂的情况下，还是比较常用的。</p>
+<h4 id="id选择器"><a href="#id选择器" class="headerlink" title="id选择器"></a>id选择器</h4><p>id选择器可以为标有特定id的HTML元素指定特定的样式。</p>
+<p>HTML元素以 <code>id属性</code> 来设置id选择器，CSS中id选择器以 <code>#</code> 来定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;基础选择器之id选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* id选择器的口诀: 样式#定义, 结构id调用, 只能调用一次, 别人切勿使用 */</span><br><span class="line">      #pink &#123;</span><br><span class="line">          color: pink;</span><br><span class="line">      &#125;</span><br><span class="line">    </span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=&quot;pink&quot;&gt;迈克尔·杰克逊&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;pink++&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>id选择器和类选择器的区别</strong></p>
+<ul>
+<li>类选择器（class）好比人的名字，一个人(标签)可以有多个名字，同时一个名字也可以被多个人使用。</li>
+<li>id 选择器好比人的身份证号码，全中国唯一的，不得重复。也就是说，一个标签使用了id为<code>pink</code>的选择器，那么其它标签不能再使用名为<code>pink</code>的id选择器了。</li>
+<li>两者最大的不同在于使用次数上。</li>
+<li>类选择器在修改样式中用的最多，id选择器一般用于页面唯一性的元素上，经常和javaScript搭配使用。</li>
+</ul>
+<h4 id="通配符选择器"><a href="#通配符选择器" class="headerlink" title="通配符选择器"></a>通配符选择器</h4><p>在CSS中，通配符选择器使用 <code>*</code> 定义，它表示选择页面中所有元素（标签）。通配符选择器不需要调用，自动就给所有元素使用样式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* &#123;</span><br><span class="line">	margin: 0;</span><br><span class="line">	padding: 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> —————————————-上面的是基础选择器，下面的为复合选择器 —————————————-</p>
+<h4 id="后代选择器"><a href="#后代选择器" class="headerlink" title="后代选择器"></a>后代选择器</h4><p>后代选择器又称为包含选择器，可以选择父元素里面的子元素，其写法就是把外层标签写在前面，内层标签写在后面，中间用空格分隔。</p>
+<p>语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">元素1 元素2 &#123; 样式声明 &#125;</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ul li &#123;样式声明&#125;   // 选择ul里面所有的li标签元素。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>元素1是父级，元素2是子级，最终选择的是元素2。</li>
+<li>元素1和元素2可以是任意的基础选择器。</li>
+<li><strong>后代选择器的意思是选中ul后代中所有的li，不管是孩子还是孙子还是孙孙子。</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> &lt;title&gt;复合选择器之后代选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* 我想要把ol里面的小li选出来改为pink */</span><br><span class="line">        ol li &#123;</span><br><span class="line">            color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        ol li a &#123;</span><br><span class="line">            color: red;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        .nav li a &#123;</span><br><span class="line">            color: yellow;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">    &lt;ol&gt;</span><br><span class="line">        变态写法</span><br><span class="line">        &lt;li&gt;我是ol 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ol 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ol 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;我是孙子&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &lt;/ol&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;ul class=&quot;nav&quot;&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是ul 的孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;不会变化的&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>上面的例子中 <code>.nav li a</code> 表示选中的为：类选择器为nav的后代li的后代a。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">   .nav a &#123;</span><br><span class="line">       color: red;</span><br><span class="line">   &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;nav&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;#&quot;&gt;我是儿子&lt;/a&gt;</span><br><span class="line">        &lt;p&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;我是孙子&lt;/a&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>这个例子中所有的 <code>a标签</code> 的color都会变成red，因为一个a是儿子，一个a是孙子，都是 <code>.nav</code> 的后代。</p>
+<h4 id="子元素选择器-亲儿子选择器"><a href="#子元素选择器-亲儿子选择器" class="headerlink" title="子元素选择器(亲儿子选择器)"></a>子元素选择器(亲儿子选择器)</h4><p>子元素选择器（子选择器）只能选择作为某元素的最近一级子元素，也就是选亲儿子元素。</p>
+<p>语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">元素1 &gt; 元素2 &#123;样式声明&#125;</span><br></pre></td></tr></table></figure>
+<p>上面语法表示<strong>选择元素1里面的所有直接后代元素2</strong>。</p>
+<p>元素2必须是亲儿子，其孙子、重孙子都不包括在内。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    .nav&gt;a &#123;</span><br><span class="line">        color: red;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;nav&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;#&quot;&gt;我是儿子&lt;/a&gt;</span><br><span class="line">        &lt;p&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;我是孙子&lt;/a&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>同样是上面后代选择器的例子，这里只有<code>儿子a</code>会被选择，<code>孙子a</code> 不会被选择。</p>
+<h4 id="并集选择器"><a href="#并集选择器" class="headerlink" title="并集选择器"></a>并集选择器</h4><p>并集选择器可以选择多组标签，同时为他们定义相同的样式。通常用于集体声明。</p>
+<p>语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">元素1,元素2 &#123;样式声明&#125;</span><br></pre></td></tr></table></figure>
+<p>注意是用<code>英文逗号</code>连接。上述语法表示选择元素1<strong>和</strong>元素2。逗号表示<code>和</code>的意思。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    /* 要求1: 请把熊大和熊二改为粉色 */</span><br><span class="line">    /* div,</span><br><span class="line">    p &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125; */</span><br><span class="line"></span><br><span class="line">    /* 要求2: 请把熊大和熊二改为粉色 还有 小猪一家改为粉色 */</span><br><span class="line">    div,</span><br><span class="line">    p,</span><br><span class="line">    .pig li &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* 约定的语法规范,我们并集选择器喜欢竖着写 */</span><br><span class="line">    /* 一定要注意,最后一个选择器 不需要加逗号 */</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;熊大&lt;/div&gt;</span><br><span class="line">    &lt;p&gt;熊二&lt;/p&gt;</span><br><span class="line">    &lt;span&gt;光头强&lt;/span&gt;</span><br><span class="line">    &lt;ul class=&quot;pig&quot;&gt;</span><br><span class="line">        &lt;li&gt;小猪佩奇&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;猪爸爸&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;猪妈妈&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>例子中 <code>div,p,.pig li</code> 表示 <code>div 和 p 和 pig的后代li</code>被选择。<code>.pig li</code> 就是上面讲过的后代选择器。</p>
+<h4 id="伪类选择器"><a href="#伪类选择器" class="headerlink" title="伪类选择器"></a>伪类选择器</h4><p>伪类选择器用于向某些选择器添加特殊的效果，比如给链接添加特殊效果，或选择第1个，第n个元素。</p>
+<p>伪类选择器书写最大的特点是<code>用冒号(:)</code>表示，比如 :hover 、 :first-child 。</p>
+<p>冒号前后不要空格。</p>
+<h6 id="链接伪类选择器"><a href="#链接伪类选择器" class="headerlink" title="链接伪类选择器"></a>链接伪类选择器</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a:link    // 选择所有未被访问过的链接</span><br><span class="line">a:visited  // 选择所有已被访问过的链接</span><br><span class="line">a:hover    // 选择鼠标指针位于其上的链接</span><br><span class="line">a:active   // 选择活动链接(鼠标按下未弹起的链接)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;复合选择器之链接伪类选择器&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        /* 1.未访问的链接 a:link  把没有点击过的(访问过的)链接选出来 */</span><br><span class="line">        a:link &#123;</span><br><span class="line">            color: #333;</span><br><span class="line">            text-decoration: none;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /*2. a:visited 选择点击过的(访问过的)链接 */</span><br><span class="line">        a:visited &#123;</span><br><span class="line">            color: orange;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /*3. a:hover 选择鼠标经过的那个链接 */</span><br><span class="line">        a:hover &#123;</span><br><span class="line">            color: skyblue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /* 4. a:active 选择的是我们鼠标正在按下还没有弹起鼠标的那个链接 */</span><br><span class="line">        a:active &#123;</span><br><span class="line">            color: green;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;a href=&quot;#&quot;&gt;小猪佩奇&lt;/a&gt;</span><br><span class="line">    &lt;a href=&quot;http://www.xxxxxxxx.com&quot;&gt;未知的网站&lt;/a&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p>链接伪类选择器注意事项：</p>
+<ul>
+<li>为了确保生效，请按照LVHA的顺序声明。即 :link  :visited  :hover  :active 。</li>
+</ul>
+<p>链接伪类在实际开发中经常的写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// a标签选择器 所有标签</span><br><span class="line">a &#123;</span><br><span class="line">	color: gray;</span><br><span class="line">&#125;</span><br><span class="line">// :hover 鼠标经过时的状态设置</span><br><span class="line">a:hover &#123;</span><br><span class="line">    color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="focus伪类选择器"><a href="#focus伪类选择器" class="headerlink" title="focus伪类选择器"></a>focus伪类选择器</h6><p>:focus 伪类选择器用于选取获得焦点(光标)的表单元素。</p>
+<p>焦点就是光标，一般情况下<code>&lt;input&gt;</code>类表单元素才能获取，因此这个选择器也主要针对表单元素来说。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 当input获取到光标的时候就改变背景色。</span><br><span class="line">input:focus &#123;</span><br><span class="line">    background-color: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p> —————————————-下面的为CSS3新增的选择器 —————————————-</p>
+<h4 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h4><p>属性选择器可以根据元素特定属性来选择元素，这样就可以不用借助于类或者id选择器了。</p>
+<p>可以看看w3cschool总结的<a href="https://www.w3school.com.cn/css/css_syntax_attribute_selector.asp" target="_blank" rel="external">参考手册</a> 。</p>
+<p>主要通过例子来理解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    /* 必须是input 但是同时具有 value这个属性 选择这个元素  [] */</span><br><span class="line">    /* input[value] &#123;</span><br><span class="line">        color:pink;</span><br><span class="line">    &#125; */</span><br><span class="line">    /* 只选择 type =text 文本框的input 选取出来 */</span><br><span class="line">    input[type=text] &#123;</span><br><span class="line">        color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    /* 选择首先是div 然后 具有class属性 并且属性值 必须是 icon开头的这些元素 */</span><br><span class="line">    div[class^=icon] &#123;</span><br><span class="line">        color: red;</span><br><span class="line">    &#125;</span><br><span class="line">    section[class$=data] &#123;</span><br><span class="line">        color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">    div.icon1 &#123;</span><br><span class="line">        color: skyblue;</span><br><span class="line">    &#125;</span><br><span class="line">    /* 类选择器和属性选择器 伪类选择器 权重都是 10 */</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;!-- 1. 利用属性选择器就可以不用借助于类或者id选择器 --&gt;</span><br><span class="line">    &lt;!-- &lt;input type=&quot;text&quot; value=&quot;请输入用户名&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt; --&gt;</span><br><span class="line">    &lt;!-- 2. 属性选择器还可以选择属性=值的某些元素 重点务必掌握的 --&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot; name=&quot;&quot; id=&quot;&quot;&gt;</span><br><span class="line">    &lt;input type=&quot;password&quot; name=&quot;&quot; id=&quot;&quot;&gt;</span><br><span class="line">    &lt;!-- 3. 属性选择器可以选择属性值开头的某些元素 --&gt;</span><br><span class="line">    &lt;div class=&quot;icon1&quot;&gt;小图标1&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;icon2&quot;&gt;小图标2&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;icon3&quot;&gt;小图标3&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;icon4&quot;&gt;小图标4&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;我是打酱油的&lt;/div&gt;</span><br><span class="line">    &lt;!-- 4. 属性选择器可以选择属性值结尾的某些元素 --&gt;</span><br><span class="line">    &lt;section class=&quot;icon1-data&quot;&gt;我是安其拉&lt;/section&gt;</span><br><span class="line">    &lt;section class=&quot;icon2-data&quot;&gt;我是哥斯拉&lt;/section&gt;</span><br><span class="line">    &lt;section class=&quot;icon3-ico&quot;&gt;哪我是谁&lt;/section&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="结构伪类选择器-E-nth-child-n"><a href="#结构伪类选择器-E-nth-child-n" class="headerlink" title="结构伪类选择器 E:nth-child(n)"></a>结构伪类选择器 E:nth-child(n)</h4><table>
+<thead>
+<tr>
+<th>选择符</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E:first-child</td>
+<td>匹配父元素中的第一个子元素E</td>
+</tr>
+<tr>
+<td>E:last-child</td>
+<td>匹配父元素中最后一个E元素</td>
+</tr>
+<tr>
+<td>E:nth-child(n)</td>
+<td>匹配父元素中第n个子元素E</td>
+</tr>
+<tr>
+<td>E:first-of-type</td>
+<td>指定类型E的第一个</td>
+</tr>
+<tr>
+<td>E:last-of-type</td>
+<td>指定类型E的最后一个</td>
+</tr>
+<tr>
+<td>E:nth-of-type(n)</td>
+<td>指定类型E的第n个</td>
+</tr>
+</tbody>
+</table>
+<p>通过例子来理解：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    /* 1.把所有的偶数 even的孩子选出来 */</span><br><span class="line">    ul li:nth-child(even) &#123;</span><br><span class="line">        background-color: #ccc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* 2.把所有的奇数 odd的孩子选出来 */</span><br><span class="line">    ul li:nth-child(odd) &#123;</span><br><span class="line">        background-color: gray;</span><br><span class="line">    &#125;</span><br><span class="line">    /* 3.nth-child(n) 从0开始 每次加1 往后面计算  这里面必须是n 不能是其他的字母 选择了所有的孩子*/</span><br><span class="line">    /* ol li:nth-child(n) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125; */</span><br><span class="line">    /* 4.nth-child(2n) 选择了所有的偶数孩子 等价于 even*/</span><br><span class="line">    /* ol li:nth-child(2n) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">   	// 选择了所有的基数孩子</span><br><span class="line">    ol li:nth-child(2n+1) &#123;</span><br><span class="line">        background-color: skyblue;</span><br><span class="line">    &#125; */</span><br><span class="line">    // 选择了从第三个开始(包含第三个)(这里是从1开始的) 的孩子</span><br><span class="line">    /* ol li:nth-child(n+3) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125; */</span><br><span class="line">    // 选择了前三个孩子</span><br><span class="line">    ol li:nth-child(-n+3) &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;我是第1个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第2个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第3个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第4个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第5个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第6个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第7个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第8个孩子&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;ol&gt;</span><br><span class="line">        &lt;li&gt;我是第1个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第2个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第3个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第4个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第5个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第6个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第7个孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我是第8个孩子&lt;/li&gt;</span><br><span class="line">    &lt;/ol&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>nth-child 和 nth-of-type 的区别</strong></p>
+<blockquote>
+<p>nth-child 对父元素里面所有孩子排序选择(序号是固定的),先找到第n个孩子，然后看看是否和E匹配。</p>
+<p>nth-of-type 对父元素里面指定的子元素进行排序选择。先去匹配E，然后再根据E 找到第n个孩子。</p>
+</blockquote>
+<p>来看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    ul li:first-of-type &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    ul li:last-of-type &#123;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    ul li:nth-of-type(even) &#123;</span><br><span class="line">        background-color: skyblue;</span><br><span class="line">    &#125;</span><br><span class="line">    /* nth-child 会把所有的盒子都排列序号 */</span><br><span class="line">    /* 执行的时候首先看  :nth-child(1) 之后回去看 前面 div */</span><br><span class="line"></span><br><span class="line">    section div:nth-child(1) &#123;</span><br><span class="line">        background-color: red;</span><br><span class="line">    &#125;</span><br><span class="line">     /* nth-of-type 会把指定元素的盒子排列序号 */</span><br><span class="line">    /* 执行的时候首先看  div指定的元素  之后回去看 :nth-of-type(1) 第几个孩子 */</span><br><span class="line">    section div:nth-of-type(1) &#123;</span><br><span class="line">        background-color: blue;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">    &lt;li&gt;我是第1个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第2个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第3个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第4个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第5个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第6个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第7个孩子&lt;/li&gt;</span><br><span class="line">    &lt;li&gt;我是第8个孩子&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;section&gt;</span><br><span class="line">    &lt;p&gt;光头强&lt;/p&gt;</span><br><span class="line">    &lt;div&gt;熊大&lt;/div&gt;</span><br><span class="line">    &lt;div&gt;熊二&lt;/div&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>类选择器、属性选择器、伪类选择器  权重都为10</strong>  。</p>
+<h4 id="伪元素选择器"><a href="#伪元素选择器" class="headerlink" title="伪元素选择器"></a>伪元素选择器</h4><p>伪元素选择器可以帮助我们利用CSS创建新标签元素，而不需要HTML标签，从而简化HTML结构。</p>
+<p>新创建的这个元素，在文档树中是找不到的，所以我们称为<strong>伪元素</strong>。</p>
+<p>语法：</p>
+<table>
+<thead>
+<tr>
+<th>选择符</th>
+<th style="text-align:left">简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>::before</td>
+<td style="text-align:left">在元素内部的前面插入内容</td>
+</tr>
+<tr>
+<td>::after</td>
+<td style="text-align:left">在元素内部的后面插入内容</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>before 和 after 创建一个元素，但是属于行内元素。</li>
+</ul>
+<p>看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">    div &#123;</span><br><span class="line">        width: 200px;</span><br><span class="line">        height: 200px;</span><br><span class="line">        background-color: pink;</span><br><span class="line">    &#125;</span><br><span class="line">    /* div::before 权重是2 */</span><br><span class="line">    div::before &#123;</span><br><span class="line">        /* 这个content是必须要写的 */</span><br><span class="line">        /* display: inline-block; */</span><br><span class="line">        content: &apos;我&apos;;</span><br><span class="line">        /* width: 30px;</span><br><span class="line">        height: 40px;</span><br><span class="line">        background-color: purple; */</span><br><span class="line">    &#125;</span><br><span class="line">    div::after &#123;</span><br><span class="line">        content: &apos;小猪佩奇&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div&gt;</span><br><span class="line">    是</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>该选择器在实际开发中主要是用来创建一些小图标元素。content的内容是图标对应的编码即可。</p>
+</blockquote>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>本来以为很快就会总结完这些常用选择器，没想到花费了多半天的时间。工欲善其事必先利其器，学习路上切记走马观花，要一步一个脚印才能有所收获和积累。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本篇主要是记录常用的CSS选择器和一些需要注意的细节，提升熟练度的同时方便查阅。&lt;/p&gt;
+&lt;h4 id=&quot;标签选择器&quot;&gt;&lt;a href=&quot;#标签选择器&quot; class=&quot;headerlink&quot; title=&quot;标签选择器&quot;&gt;&lt;/a&gt;标签选择器&lt;/h4&gt;&lt;p&gt;标签选择器（元素选择
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="web" scheme="http://yoursite.com/tags/web/"/>
+    
+  </entry>
   
   <entry>
     <title>React|Redux技术点（占坑）</title>
@@ -1340,107 +1506,6 @@ One of the two will be used. Which one is undefined.
     
     
       <category term="WeChat" scheme="http://yoursite.com/tags/WeChat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>iOS之安全加密</title>
-    <link href="http://yoursite.com/2016/09/02/iOS-security-encrypt/"/>
-    <id>http://yoursite.com/2016/09/02/iOS-security-encrypt/</id>
-    <published>2016-09-02T02:12:15.000Z</published>
-    <updated>2016-09-20T08:42:24.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="数据安全"><a href="#数据安全" class="headerlink" title="数据安全"></a>数据安全</h3><hr>
-<p>在项目中当我们提交用户的隐私数据时，比如:登陆密码、银行账号等，一定要使用<code>POST</code>请求提交用户的这些隐私数据。因为<code>GET</code>请求的所有参数都直接暴露在<code>URL</code>中。同时请求的<code>URL</code>一般会记录在服务器的访问日志中，服务器的访问日志是黑客攻击的重点对象之一。</p>
-<p>仅仅用<code>POST</code>请求提交用户的隐私数据，还是不能完全解决数据安全的问题，我们可以利用软件（比如Charles）设置代理服务器，拦截查看手机的请求数据。因此：提交用户的隐私数据时，一定不要明文提交，要加密处理后再提交。</p>
-<p>另外，我们也不应该在本地保存用户的隐私数据的<code>明文</code>。</p>
-<h3 id="加密方法"><a href="#加密方法" class="headerlink" title="加密方法"></a>加密方法</h3><hr>
-<p>常见的加密算法:MD5 \ SHA \ DES \ 3DES \ RC2和RC4 \ RSA \ IDEA \ DSA \ AES。</p>
-<p>针对上述加密算法，我把目前流行的几种加密方式做下分类：</p>
-<ul>
-<li><p>哈希（散列）函数</p>
-<ul>
-<li>MD5（Message Digest Algorithm 5，译为“消息摘要算法第5版”）</li>
-<li>SHA1</li>
-<li>SHA256            </li>
-</ul>
-</li>
-<li><p>对称加密算法</p>
-<ul>
-<li>DES</li>
-<li>3DES</li>
-<li>AES(高级密码标准，美国国家安全局使用的)</li>
-</ul>
-</li>
-<li><p>非对称加密算法</p>
-<ul>
-<li>RSA</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>重点说一下散列函数的特点：    </p>
-</blockquote>
-<ul>
-<li>算法是公开的;</li>
-<li>对相同的数据加密，得到的结果是一样的;</li>
-<li>对不同的数据加密，得到的结果是定长的。例如:MD5对不同的数据进行加密，得到的结果都是32个字符长度的字符串;</li>
-<li>信息摘要，信息”指纹”，是用来做数据识别的！比如:搜索;</li>
-<li>不能反算的,即是不可逆的。</li>
-</ul>
-<p>利用这些特点，我们在项目中的应用:    </p>
-<p><code>加密密码</code>：服务器并不需要知道用户真实的密码！        </p>
-<p><code>搜索</code>：比如你要搜索“张老师 杨老师 苍老师”和“苍老师 张老师 杨老师”，其实这两个要搜索的内容所表达的意思是一样的，但是我们应该如何判断呢。我们可以对搜索的每个关键字进行散列，得到三个相对应的结果，按位相加结果如果是一样的，那搜索的内容就是一样的！<br>张老师            1bdf605991920db11cbdf8508204c4eb<br>杨老师             2d97fbce49977313c2aae15ea77fec0f<br>苍老师             692e92669c0ca340eff4fdcef32896ee</p>
-<p><code>版权</code>: 版权保护，文件识别。例如可以对文件内容进行MD5，然后可以根据该MD5串判断文件内容是否被修改过。我以前做IM的文件上传功能就是这样判断的，如果文件内容的MD5相同，表示该文件已经在服务器存在了，就不用再次上传了。</p>
-<p>由于<code>MD5</code>加密算法具有较好的安全性，而且免费，因此该加密算法被广泛使用。不过遗憾的是该加密算法已经被暴力破解了,<a href="http://www.cmd5.com" target="_blank" rel="external">http://www.cmd5.com</a>该网站记录超过24万亿条，共占用160T硬盘 的密码数据，通过对海量数据的搜索得到的结果！    </p>
-<p>不过我们可以通过提升MD5加密的安全性，加大被破解的难度。    </p>
-<p><code>1</code>. 加“盐”（佐料）。<br><code>2</code>. HMAC：给定一个”秘钥”，对明文进行加密，并且做”两次散列”！-&gt; 得到的结果，还是 32 个字符。</p>
-<h3 id="RSA加密算法"><a href="#RSA加密算法" class="headerlink" title="RSA加密算法"></a>RSA加密算法</h3><hr>
-<p>RSA算法中，每个通信主体都有两个钥匙，一个公钥一个私钥。就是有2把钥匙：使用publicKey可以对数据进行加密，使用Key才能对数据进行解密。    </p>
-<p>特点：单方向传输<br>用公钥加密的数据，只有私钥能解开（可用于加密）；<br>同时，使用私钥加密的数据，只有公钥能解开（签名）。但是速度很慢（比私钥加密慢100到1000倍）；</p>
-<p>公钥与私钥：            </p>
-<p>1.权威数字认证机构（CA）给所有通信主体（个人或组织）颁发公钥和私钥，彼此配对，分别唯一。<br>2.私钥好比数字指纹，同时具有解密和加密功能。个人保管，不公开。<br>3.公钥好比安全性极高的挂号信箱地址，公开。        </p>
-<p>举例：若甲有一份需保密的数字商业合同发给乙签署。经过如下步骤：        </p>
-<ol>
-<li>甲用乙的公钥对合同加密。        </li>
-<li>密文从甲发送到乙。        </li>
-<li>乙收到密文，并用自己的私钥对其解密。        </li>
-<li>解密正确，经阅读，乙用自己的私钥对合同进行签署。        </li>
-<li>乙用甲的公钥对已经签署的合同进行加密。            </li>
-<li>乙将密文发给甲。        </li>
-<li>甲用自己的私钥将已签署合同解密。        </li>
-<li>解密正确，确认签署。        </li>
-</ol>
-<p>从以上步骤，我们知道：            </p>
-<ol>
-<li>用公钥加密的密文能且只能用与其唯一配对的私钥才能解开。        </li>
-<li>如果某份密文被解开，那么肯定是密文的目标信息主体解开的。        </li>
-<li>私钥因其唯一标识所有者的属性，被用于数字签名，具有法律效力。        </li>
-</ol>
-<h3 id="Base64补充"><a href="#Base64补充" class="headerlink" title="Base64补充"></a>Base64补充</h3><hr>
-<p>1.Base64简单说明：<br>描述：Base64可以成为密码学的基石，非常重要。<br>特点：可以将任意的二进制数据进行Base64编码<br>结果：所有的数据都能被编码为并只用65个字符就能表示的文本文件。<br>65字符：A~Z a~z 0~9 + / =<br>对文件进行base64编码后文件数据的变化：编码后的数据~=编码前数据的4/3，会大1/3左右。        </p>
-<p>2.命令行进行Base64编码和解码：<br>编码：base64 123.png -o 123.txt<br>解码：base64 123.txt -o test.png -D        </p>
-<p>3.Base64编码原理：<br>1)将所有字符转化为<code>ASCII</code>码；<br>2)将ASCII码转化为<code>8</code>位二进制；<br>3)将二进制<code>3</code>个归成一组(不足<code>3</code>个在后边补<code>0</code>)共<code>24</code>位，再拆分成<code>4</code>组，每组<code>6</code>位；<br>4)统一在<code>6</code>位二进制前补两个<code>0</code>凑足<code>8</code>位；<br>5)将补<code>0</code>后的二进制转为十进制；<br>6)从Base64编码表获取十进制对应的Base64编码；    </p>
-<p>处理过程说明：<br>    a.转换的时候，将三个byte的数据，先后放入一个<code>24bit</code>的缓冲区中，先来的byte占高位。<br>    b.数据不足<code>3byte</code>的话，于缓冲区中剩下的bit用0补足。然后，每次取出<code>6</code>个bit，按照其值选择查表选择对应的字符作为编码后的输出。<br>    c.不断进行，直到全部输入数据转换完成。<br>    d.如果最后剩下两个输入数据，在编码结果后加<code>1</code>个“=”；<br>    e.如果最后剩下一个输入数据，编码结果后加<code>2</code>个“=”；<br>    f.如果没有剩下任何数据，就什么都不要加，这样才可以保证资料还原的正确性。        </p>
-<p> 4.在项目中的应用：        </p>
-<p>1）从iOS7.0 开始，苹果就提供了base64的编码和解码支持<br>2)如果是老项目，则还能看到base64编码和解码的第三方框架，如果当前不再支持iOS7.0以下版本，则建议替换。</p>
-<p>代码实现：    </p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//给定一个字符串，对该字符串进行Base64编码，然后返回编码后的结果</span></span><br><span class="line">    -(<span class="built_in">NSString</span> *)base64EncodeString:(<span class="built_in">NSString</span> *)string</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//1.先把字符串转换为二进制数据</span></span><br><span class="line">        <span class="built_in">NSData</span> *data = [string dataUsingEncoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line">        <span class="comment">//2.对二进制数据进行base64编码，返回编码后的字符串</span></span><br><span class="line">        <span class="keyword">return</span> [data base64EncodedStringWithOptions:<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//对base64编码后的字符串进行解码</span></span><br><span class="line">    -(<span class="built_in">NSString</span> *)base64DecodeString:(<span class="built_in">NSString</span> *)string</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//1.将base64编码后的字符串『解码』为二进制数据</span></span><br><span class="line">        <span class="built_in">NSData</span> *data = [[<span class="built_in">NSData</span> alloc]initWithBase64EncodedString:string options:<span class="number">0</span>];</span><br><span class="line">        <span class="comment">//2.把二进制数据转换为字符串返回</span></span><br><span class="line">        <span class="keyword">return</span> [[<span class="built_in">NSString</span> alloc]initWithData:data encoding:<span class="built_in">NSUTF8StringEncoding</span>];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>终端测试命令：            </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> -n A | base64			</span><br><span class="line">$ <span class="built_in">echo</span> -n QQ== |base64 -D</span><br></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;数据安全&quot;&gt;&lt;a href=&quot;#数据安全&quot; class=&quot;headerlink&quot; title=&quot;数据安全&quot;&gt;&lt;/a&gt;数据安全&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;在项目中当我们提交用户的隐私数据时，比如:登陆密码、银行账号等，一定要使用&lt;code&gt;POST&lt;/code&gt;请求提
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="security" scheme="http://yoursite.com/tags/security/"/>
     
   </entry>
   
