@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-06-28T08:46:03.342Z</updated>
+  <updated>2020-06-28T08:57:43.524Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2020/06/27/web-css%E5%B8%B8%E8%A7%81%E9%80%89%E6%8B%A9%E5%99%A8/"/>
     <id>http://yoursite.com/2020/06/27/web-css常见选择器/</id>
     <published>2020-06-27T08:14:10.000Z</published>
-    <updated>2020-06-28T08:46:03.342Z</updated>
+    <updated>2020-06-28T08:57:43.524Z</updated>
     
     <content type="html"><![CDATA[<p>本篇主要是记录常用的CSS选择器和一些需要注意的细节，提升熟练度的同时方便查阅。</p>
 <h4 id="标签选择器"><a href="#标签选择器" class="headerlink" title="标签选择器"></a>标签选择器</h4><p>标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。</p>
