@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-06-28T09:18:25.655Z</updated>
+  <updated>2020-08-02T08:25:00.876Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,155 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>React Hooks解析（看这一篇就够了）</title>
+    <link href="http://yoursite.com/2020/08/02/React%20Hooks%20%E8%A7%A3%E6%9E%90/"/>
+    <id>http://yoursite.com/2020/08/02/React Hooks 解析/</id>
+    <published>2020-08-02T08:24:10.000Z</published>
+    <updated>2020-08-02T08:25:00.876Z</updated>
+    
+    <content type="html"><![CDATA[<p>React Hooks 是 React v16.8版本引入的全新API，这个 API 是 React 的未来，有必要深入理解。</p>
+<h3 id="类组件和函数组件"><a href="#类组件和函数组件" class="headerlink" title="类组件和函数组件"></a>类组件和函数组件</h3><p>Hooks之前我们写组件方式，主要包括两种：类组件和函数组件。</p>
+<p>一个React App 由多个类按照层级，一层层构成，复杂度成倍增长。再加入 Redux，就变得更复杂。</p>
+<p>组件类有一下几个缺点：</p>
+<blockquote>
+<p>大型组件很难拆分和重构，也很难测试。</p>
+<p>业务逻辑分散在组件的各个方法之中，导致重复逻辑或关联逻辑。</p>
+<p>组件类引入了复杂的编程模式，比如 render props 和高阶组件。</p>
+</blockquote>
+<p>React 团队希望，组件不要变成复杂的容器，最好只是数据流的管道。开发者根据需要，组合管道即可。 <strong>组件的最佳写法应该是函数，而不是类。</strong></p>
+<p>但是，这种写法有重大限制，必须是纯函数，不能包含状态，也不支持生命周期方法，因此无法取代类。</p>
+<p><strong>React Hooks 的设计目的，就是加强版函数组件，完全不使用”类”，就能写出一个全功能的组件。</strong></p>
+<h3 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h3><p>Hook 这个单词的意思是”钩子”。</p>
+<p><strong>React Hooks 的意思是，组件尽量写成纯函数，如果需要外部功能和副作用，就用钩子把外部代码”钩”进来。</strong> React Hooks 就是那些钩子。</p>
+<p>你需要什么功能，就使用什么钩子。React 默认提供了一些常用钩子，你也可以封装自己的钩子。</p>
+<p>所有的钩子都是为函数引入外部功能，所以 React 约定，钩子一律使用<code>use</code>前缀命名，便于识别。你要使用 xxx 功能，钩子就命名为 usexxx。</p>
+<h4 id="useState"><a href="#useState" class="headerlink" title="useState()"></a>useState()</h4><p>状态钩子 <code>useState()</code> 用于为函数组件引入状态（state）。纯函数不能有状态，所以把状态放在钩子里面。</p>
+<p>这个钩子函数比较简单，看一下例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useState &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">export default function Home() &#123;</span><br><span class="line"></span><br><span class="line">  const [age, setAge] = useState(0);</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h2&gt;当前年龄: &#123;age&#125;&lt;/h2&gt;</span><br><span class="line">      &lt;button onClick=&#123;e =&gt; setAge(age + 1)&#125;&gt;age+1&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>userState()的参数是状态的初始值。</p>
+<p><code>setAge</code> 时会触发整个组件的重新渲染。</p>
+<p>需要注意的是，<strong>React Hooks不能出现在条件判断语句中</strong>。</p>
+<p>提倡的做法是每个状态都单独维护，而不是把所有的状态都维护到一个状态对象中。如果维护到状态对象中，这样再修改状态时就必须要小心翼翼，哪些修改哪些不修改都要注意。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 假如state对象中包含了所以需要的状态</span><br><span class="line">const [state, setState] = useState(&#123;&#125;);</span><br><span class="line">// 那么修改的时候时候就比较麻烦了，这是不提倡的做法</span><br><span class="line">setState(&#123;</span><br><span class="line">	...state,</span><br><span class="line">	num:num+1</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h4><p>副作用函数 <code>useEffect</code> 用来代替常用的生命周期函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useState , useEffect &#125; from &apos;react&apos;;</span><br><span class="line">function Example()&#123;</span><br><span class="line">    const [ count , setCount ] = useState(0);</span><br><span class="line">    </span><br><span class="line">    useEffect(()=&gt;&#123;</span><br><span class="line">        console.log(`useEffect=&gt;You clicked $&#123;count&#125; times`)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;p&gt;You clicked &#123;count&#125; times&lt;/p&gt;</span><br><span class="line">            &lt;button onClick=&#123;()=&gt;&#123;setCount(count+1)&#125;&#125;&gt;click me&lt;/button&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line">export default Example;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过useEffect的Hook，可以告诉React需要在渲染后执行某些操作；</li>
+<li><p>useEffect要求我们传入一个<code>回调函数</code>，在React执行完更新DOM操作之后，就<code>会回调这个函数</code>；</p>
+</li>
+<li><p>默认情况下，无论是第一次渲染之后，还是每次更新之后，都会执行这个 <code>回调函数</code>；</p>
+</li>
+</ul>
+<p>如果要要实现类似 <code>componentDidMonut</code> 的功能，第二个参数可以传一个空数组，代表不添加任何依赖。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 这样只会在页面第一次渲染后调用一次，之后不会再调用。</span><br><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">    console.log(`useEffect=&gt;You clicked $&#123;count&#125; times`)</span><br><span class="line">&#125;,[])</span><br></pre></td></tr></table></figure>
+<p>假如需要有两个状态，当其中一个状态改变时才更新组件，而另一个状态更新时，不更新组件，这个时候就需要第二个参数依赖了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const [ count , setCount ] = useState(0);</span><br><span class="line">const [ num , setNum ] = useState(0);</span><br><span class="line"></span><br><span class="line">// 只有当count状态改变时，才会更新组件。num改变时，不会更新组件。</span><br><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">    console.log(`useEffect=&gt;You clicked $&#123;count&#125; times`)</span><br><span class="line">&#125;,[count])</span><br></pre></td></tr></table></figure>
+<p>useEffect中定义的函数的执行不会阻碍浏览器更新视图，也就是说这些函数是异步执行的，而<code>componentDidMonut</code>和<code>componentDidUpdate</code>中的代码都是同步执行的。</p>
+<p>如何实现类似 <code>componentWillUnmount</code> 的功能，在其中做一些解绑或清除的操作呢。</p>
+<p>useEffect传入的<code>回调函数A本身</code>可以有一个返回值，这个返回值是<code>另外一个回调函数B</code>。</p>
+<p>还是用上面的代码例子中的userEffect：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">    console.log(`useEffect=&gt;You clicked $&#123;count&#125; times`)</span><br><span class="line">    return ()=&gt; &#123;</span><br><span class="line">    	console.log(&quot;effect清除机制&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>React 会在组件更新和卸载的时候执行清除操作。除了组件第一次渲染的时候不会调用清除操作，之后页面的每一次重新更新渲染都会触发这个操作。</p>
+<p>我们可以使用多个userEffect来区分开不同的操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  console.log(&quot;操作1&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  console.log(&quot;操作2&quot;);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  console.log(&quot;操作3&quot;);</span><br><span class="line"></span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    console.log(&quot;清除操作3&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>useEffect()的第二个参数，决定该userEffect的哪些state变化时，才重新执行渲染。当没有写第二个参数时候，默认支持所有的状态。</p>
+<p>在实际验证中注意一下执行顺序的问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">    console.log(&quot;操作&quot;);</span><br><span class="line">    return ()=&gt; &#123;</span><br><span class="line">    	console.log(&quot;effect清除机制&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">// 打印的结果:</span><br><span class="line">effect清除机制</span><br><span class="line">操作</span><br></pre></td></tr></table></figure>
+<p>在看一个有意思的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const [count,setCount] = useState(0)</span><br><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">	setCount(count+1)</span><br><span class="line">&#125;,[])</span><br></pre></td></tr></table></figure>
+<p>想一下，最后count是几呢，会累加吗？</p>
+<p>答案是1，不会一直累加。</p>
+<p>因为当页面组件第一次加载渲染后，useEffect()会调用，执行到 <code>setCount(count+1)</code> 会重新触发页面组价的渲染，组件渲染后本来又该执行useEffect()的，但是该useEffect()没有添加任何依赖，因count状态改变引起的组件更新，不会触发该useEffect(),所以不会执行。</p>
+<h4 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h4><p>useRef返回一个ref对象，返回的ref对象在组件的整个生命周期保持不变。</p>
+<p>最常用的ref是两种用法：</p>
+<ul>
+<li>用法一：引入DOM（或者组件，但是需要是class组件）元素；</li>
+<li>用法二：保存一个数据，这个对象在整个生命周期中可以保存不变；</li>
+</ul>
+<h6 id="获取Dom元素"><a href="#获取Dom元素" class="headerlink" title="获取Dom元素"></a>获取Dom元素</h6><p>这个比较简单，直接看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useRef &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">export default function RefHookDemo() &#123;</span><br><span class="line">  const inputRef = useRef();</span><br><span class="line">  const titleRef = useRef();</span><br><span class="line"></span><br><span class="line">  const handleOperating = () =&gt; &#123;</span><br><span class="line">    titleRef.current.innerHTML = &quot;我是coderperson&quot;;</span><br><span class="line">    inputRef.current.focus();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;input type=&quot;text&quot; ref=&#123;inputRef&#125;/&gt;</span><br><span class="line">      &lt;h2 ref=&#123;titleRef&#125;&gt;默认内容&lt;/h2&gt;</span><br><span class="line">      &lt;button onClick=&#123;e =&gt; handleOperating()&#125;&gt;操作&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以利用该特性，获取到DOM后，给DOM绑定事件。</p>
+<h6 id="保存普通变量"><a href="#保存普通变量" class="headerlink" title="保存普通变量"></a>保存普通变量</h6><ul>
+<li>useRef可以想象成在ref对象中保存了一个.current的可变盒子；</li>
+<li>useRef在组件重新渲染时，返回的依然是之前的ref对象，但是current是可以修改的；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useState, useEffect, useRef &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">let preValue = 0;</span><br><span class="line"></span><br><span class="line">export default function RefHookDemo02() &#123;</span><br><span class="line">  const [count, setCount] = useState(0);</span><br><span class="line">  const countRef = useRef(count);</span><br><span class="line"></span><br><span class="line">  useEffect(() =&gt; &#123;</span><br><span class="line">    countRef.current = count;</span><br><span class="line">  &#125;, [count]);</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h2&gt;前一次的值: &#123;countRef.current&#125;&lt;/h2&gt;</span><br><span class="line">      &lt;h2&gt;这一次的值: &#123;count&#125;&lt;/h2&gt;</span><br><span class="line">      &lt;button onClick=&#123;e =&gt; setCount(count + 1)&#125;&gt;+1&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="useMemo-amp-momo"><a href="#useMemo-amp-momo" class="headerlink" title="useMemo &amp;  momo"></a>useMemo &amp;  momo</h4><p>useMemo实际的目的也是为了进行性能的优化。（在使用上和useEffect类似，也是两个参数，第二个参数控制依赖）。</p>
+<p>如何进行性能的优化呢？</p>
+<ul>
+<li>useMemo返回的也是一个 memoized（记忆的） 值；</li>
+<li>在依赖不变的情况下，多次定义的时候，返回的值是相同的；</li>
+</ul>
+<p>通常用在当父组件更新时，如果子组件没有变化，使用useMemo控制子组件不用更新。类似于 <code>shouldCompnentUpdate</code> .</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useState, useMemo &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">// 计算操作</span><br><span class="line">function calcNum(count) &#123;</span><br><span class="line">  let total = 0;</span><br><span class="line">  for (let i = 0; i &lt; count; i++) &#123;</span><br><span class="line">    total += i;</span><br><span class="line">  &#125;</span><br><span class="line">  console.log(&quot;计算一遍&quot;);</span><br><span class="line">  return total</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default function MemoHookDemo() &#123;</span><br><span class="line">  const [count, setCount] = useState(10);</span><br><span class="line">  const [isLogin, setIsLogin] = useState(true);</span><br><span class="line"></span><br><span class="line">  // 如果不使用useMemo 当点击切换按钮时也会执行计算操作。现在只有当count改变时才会执行操作。</span><br><span class="line">  const total = useMemo(() =&gt; &#123;</span><br><span class="line">    return calcNum(count);</span><br><span class="line">  &#125;, [count]);</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h2&gt;数字和: &#123;total&#125;&lt;/h2&gt;</span><br><span class="line">      &lt;button onClick=&#123;e =&gt; setCount(count + 1)&#125;&gt;+1&lt;/button&gt;</span><br><span class="line">      &#123;isLogin &amp;&amp; &lt;h2&gt;Coderwhy&lt;/h2&gt;&#125;</span><br><span class="line">      &lt;button onClick=&#123;e =&gt; setIsLogin(!isLogin)&#125;&gt;切换&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外说一下React的<strong>memo</strong>。React的memo是一个高阶函数，内部会自动判断props的preprops和nextprops是否相同，如果相同则不更新组件，不过不相同才更新组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const Child = memo(()=&gt;&#123;</span><br><span class="line">	return (</span><br><span class="line">		&lt;div&gt;</span><br><span class="line">			444</span><br><span class="line">		&lt;/div&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>如果想自己控制条件的判断，可以使用memo的第二个参数，该参数是一个函数的形式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const Child = memo(()=&gt;&#123;</span><br><span class="line">	return (</span><br><span class="line">		&lt;div&gt;</span><br><span class="line">			444</span><br><span class="line">		&lt;/div&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;,(prev,next)=&gt; &#123;</span><br><span class="line">  // 如果props中的count前后相等则不更新，否则更新。</span><br><span class="line">	return prev.count === next.count </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a>useCallback</h4><p>useCallback实际的目的是为了进行性能的优化。</p>
+<p>如何进行性能的优化呢？</p>
+<ul>
+<li>useCallback会返回一个函数的 memoized（记忆的） 值；</li>
+<li>在依赖不变的情况下，多次定义的时候，返回的值是相同的；</li>
+</ul>
+<p>对比和useMemo的区别：</p>
+<blockquote>
+<p>useMemo缓存的是值</p>
+<p>useCallback缓存的是函数</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const memoizedCallback = useCallback(</span><br><span class="line">  () =&gt; &#123;</span><br><span class="line">    doSomething(a, b);</span><br><span class="line">  &#125;,</span><br><span class="line">  [a, b]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>（使用方法和useMemo、useEffect一样，第一个参数是函数，第二个参数是依赖对象）。</p>
+<p>同样也是常用来控制子组件是否更新的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 使用useCallback生成的increment1传递给Child子组件，当父组件更新时，子组件实现不更新。</span><br><span class="line">const increment1 = useCallback(function increment() &#123;</span><br><span class="line">    setCount(count + 1);</span><br><span class="line">  &#125;, []);</span><br><span class="line">  </span><br><span class="line"> return (</span><br><span class="line"> 	&lt;div&gt;</span><br><span class="line"> 		&lt;Child increment=&#123;increment1&#125;/&gt;</span><br><span class="line"> 	&lt;/div&gt;</span><br><span class="line"> )</span><br></pre></td></tr></table></figure>
+<h4 id="useReducer"><a href="#useReducer" class="headerlink" title="useReducer"></a>useReducer</h4><p>reducer源于redux的兴起和广泛使用，本身是一个函数。</p>
+<p>看一个简单的reducer的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function countReducer(state, action) &#123;</span><br><span class="line">    switch(action.type) &#123;</span><br><span class="line">        case &apos;add&apos;:</span><br><span class="line">            return state + 1;</span><br><span class="line">        case &apos;sub&apos;:</span><br><span class="line">            return state - 1;</span><br><span class="line">        default: </span><br><span class="line">            return state;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你只需要理解的就是这种形式和两个参数的作用，一个参数是状态，一个参数是如何控制状态。</p>
+<p><code>useReducer</code> 它也是React hooks提供的函数，来实现reducer的功能。</p>
+<p>利用上面的的reducer例子，在useReducer中使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useReducer &#125; from &apos;react&apos;</span><br><span class="line">import &#123; countReducer &#125; from &apos;../reducer/counter&apos;</span><br><span class="line">export default function Home() &#123;</span><br><span class="line">  const [state, dispatch] = useReducer(countReducer, &#123;counter: 100&#125;);</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h2&gt;当前计数: &#123;state.counter&#125;&lt;/h2&gt;</span><br><span class="line">      &lt;button onClick=&#123;e =&gt; dispatch(&#123;type: &quot;add&quot;&#125;)&#125;&gt;+1&lt;/button&gt;</span><br><span class="line">      &lt;button onClick=&#123;e =&gt; dispatch(&#123;type: &quot;sub&quot;&#125;)&#125;&gt;-1&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>useReducer有两个参数，第一个参数是控制状态的reducer函数，第二个参数是初始值。返回值是一个数组，第一个元素是state状态，第二个元素是 <code>dispatch</code> ,用来分发type， 实现state状态的改变。</p>
+<p>看起来是不是和 <code>useState</code> 有点像，其实 <code>useState</code> 就是基于 <code>useReducer</code> 实现的。</p>
+<p>下面利用 <code>useReducer</code> 来简单模拟一下 <code>useState</code> 的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">useState = (initState)=&gt; &#123;</span><br><span class="line">	const [state,dispatch] = useReducer((state,action)=&gt;(state||initState),initState)</span><br><span class="line">	return [state,dispatch]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a>useContext</h4><p><code>Context</code> 的作用就是对它所包含的组件树提供全局共享数据的一种技术。</p>
+<p>useContext可以实现父子组件之间的传值。</p>
+<p>下面直接看代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 创建Context</span><br><span class="line">export const UserContext = createContext();</span><br><span class="line">export const ThemeContext = createContext();</span><br><span class="line">export default function App() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;UserContext.Provider value=&#123;&#123;name: &quot;why&quot;, age: 18&#125;&#125;&gt;</span><br><span class="line">        &lt;ThemeContext.Provider value=&#123;&#123;color: &quot;red&quot;, fontSize: &quot;20px&quot;&#125;&#125;&gt;</span><br><span class="line">          &lt;ContextHook/&gt;</span><br><span class="line">        &lt;/ThemeContext.Provider&gt;</span><br><span class="line">      &lt;/UserContext.Provider&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在函数组件 <code>ContextHook</code> 中使用 <code>useContext</code> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">export default function ContextHook() &#123;</span><br><span class="line">  const user = useContext(UserContext);</span><br><span class="line">  const theme = useContext(ThemeContext);</span><br><span class="line">  console.log(user);</span><br><span class="line">  console.log(theme);</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      ContextHook</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>通常 <code>useReducer</code>  和  <code>useContext</code> 一起结合来使用 。</strong></p>
+<p>还是用 <code>useReducer</code> 例子中计数器的reducer，搭配使用上 <code>useContext</code> 实现父子组件之间值的同步传递。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">const Ctx = createContext();</span><br><span class="line">// APP组件：</span><br><span class="line">const [count,dispatch] = useReducer(reducer,10)</span><br><span class="line">return (</span><br><span class="line">	&lt;Ctx.Provider value=&#123;[count,dispatch]&#125;&gt;</span><br><span class="line">		&lt;div&gt;</span><br><span class="line">			&lt;Parent /&gt;</span><br><span class="line">		&lt;/div&gt;</span><br><span class="line">	&lt;/Ctx.Provider&gt;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">// Parent</span><br><span class="line">const [count] = useContext(Ctx)</span><br><span class="line">return (</span><br><span class="line">	&lt;div&gt;</span><br><span class="line">		count:&#123;count&#125;</span><br><span class="line">		&lt;Child /&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">// Child</span><br><span class="line">const [count,dispatch] = useContext(Ctx)</span><br><span class="line">return (</span><br><span class="line">	&lt;div&gt;</span><br><span class="line">		count:&#123;count&#125;</span><br><span class="line">		&#123;/* 实现count的加减 */&#125;</span><br><span class="line">		&lt;button onClick=&#123;()=&gt;dispatch(&#123;type:&apos;add&apos;&#125;)&#125;&gt;+1&lt;/buttton&gt;</span><br><span class="line">		&lt;button onClick=&#123;()=&gt;dispatch(&#123;type:&apos;sub&apos;&#125;)&#125;&gt;-1&lt;/buttton&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>你会发现，在Child中实现count的加减，Parent中的count也跟着改变了，实现了数据的共享。</p>
+<h4 id="自定义Hooks"><a href="#自定义Hooks" class="headerlink" title="自定义Hooks"></a>自定义Hooks</h4><p>自定义Hook本质上是一种函数代码逻辑的封装。它可以做到之前类组件做不到或比较难实现的功能逻辑的抽取封装。</p>
+<p>自定义Hook函数偏向于功能，而组件偏向于界面和业务逻辑。</p>
+<p>自定义Hook，函数必须以 <code>use</code> 开头，类似 <code>useXxx</code> .</p>
+<p>比如如果要实现实时监听屏幕的宽高的功能，如果在类组件中，需要在 <code>componentDidMount</code> 中添加监听，然后在其它函数中获取 width 和 height，最后在 <code>componentWillUnMount</code>  中移除监听。流程处理分散在各个角落，不便于封装处理。</p>
+<p>而自定义Hook，可以很好的实现该功能的封装。看一下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">function useWinSize()&#123;</span><br><span class="line">    const [ size , setSize] = useState(&#123;</span><br><span class="line">        width:document.documentElement.clientWidth,</span><br><span class="line">        height:document.documentElement.clientHeight</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    const onResize = useCallback(()=&gt;&#123;</span><br><span class="line">        setSize(&#123;</span><br><span class="line">            width: document.documentElement.clientWidth,</span><br><span class="line">            height: document.documentElement.clientHeight</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;,[]) </span><br><span class="line">    useEffect(()=&gt;&#123;</span><br><span class="line">        window.addEventListener(&apos;resize&apos;,onResize)</span><br><span class="line">        return ()=&gt;&#123;</span><br><span class="line">            window.removeEventListener(&apos;resize&apos;,onResize)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,[])</span><br><span class="line"></span><br><span class="line">    return size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后在其它组件中引入使用即可。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>React Hooks 是以后的发展趋势，学好这一块还是很有必要的。写这篇文章花了我将近一天的时间，之后在公司还要做一个Hooks方面的技术分享，也算是一个技术铺垫吧。</p>
+<p>Hooks虽然实现了生命周期的所有功能，但是对我而言 <code>componentDidMount</code>  <code>componentxxx</code> 这种生命周期的流程形式，还是比较容易理解，也更容易被人所接受。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://zh-hans.reactjs.org/tutorial/tutorial.html" target="_blank" rel="external">官网</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2019/09/react-hooks.html" target="_blank" rel="external">阮一峰的网络日志</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;React Hooks 是 React v16.8版本引入的全新API，这个 API 是 React 的未来，有必要深入理解。&lt;/p&gt;
+&lt;h3 id=&quot;类组件和函数组件&quot;&gt;&lt;a href=&quot;#类组件和函数组件&quot; class=&quot;headerlink&quot; title=&quot;类组件和函
+    
+    </summary>
+    
+      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="web" scheme="http://yoursite.com/tags/web/"/>
+    
+  </entry>
   
   <entry>
     <title>CSS常见选择器（看这一篇就够了）</title>
@@ -1434,78 +1583,6 @@
     
     
       <category term="wx" scheme="http://yoursite.com/tags/wx/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>微信聊天框架的搭建</title>
-    <link href="http://yoursite.com/2016/09/28/iOS-weChat/"/>
-    <id>http://yoursite.com/2016/09/28/iOS-weChat/</id>
-    <published>2016-09-28T13:52:50.000Z</published>
-    <updated>2019-01-21T07:45:55.847Z</updated>
-    
-    <content type="html"><![CDATA[<p><code>XZ_WeChat</code>高仿微信聊天框架的搭建，工程地址：<a href="https://github.com/corderguo/XZ_WeChat" target="_blank" rel="external">https://github.com/corderguo/XZ_WeChat</a>        </p>
-<p>效果图展示：            </p>
-<p><img src="https://img-blog.csdn.net/20160928230616321" alt="1"><br><img src="https://img-blog.csdn.net/20160928230519993" alt="2">        </p>
-<p>做了两年IM相关工作了，去年是集成环信的SDK实现的IM功能，今年公司拥有自己的长连接服务器，于是从头自己定协议然后一步步实现了IM的整体功能，基本把微信IM有关的内容都实现了。最近开始整理过去的一些知识，于是先从聊天框架下手，整理出这个简易的聊天框架，方便大家学习交流。</p>
-<p>该框架摘除了本地缓存的功能（这部分内容太多了），预留好缓存的方法，使得该框架尽可能的简洁实用，方便大家学习，我也会逐渐把该框架完善起来。    </p>
-<p>由于作者的电脑环境被折腾坏了，不能安装cocoapods来管理一些用到的三方，所以直接导入进了该框架，这一点大家不要学习。</p>
-<p>该框架目前支持的消息类型：文本消息（包含表情），图片消息，语音消息，视频消息，文件消息(pdf,word,excel,ppt,png,html等格式)。</p>
-<p>如果你想展示文件消息，你需要把文件拷贝到沙盒的<code>/Library/Caches/Chat/File</code>目录下,由于我以前是从PC端发送文件到手机端进行的展示，所以目前只能你手动拷贝了。</p>
-<p>项目中展示的视频已经转成了<code>mp4</code>类型，而且也经过了压缩，语音也转换成了<code>amr</code>格式，节省流量的同时，可以和安卓端兼容。</p>
-<p>你能从该框架学习到什么：        </p>
-<ul>
-<li>聊天框架的搭建</li>
-<li>表情键盘的实现</li>
-<li>语音相关的知识</li>
-<li>视频相关的知识</li>
-<li>文件相关的功能</li>
-<li>转场动画相关的知识</li>
-<li>数据模型和尺寸模型分离</li>
-<li>你能清楚的了解到在实战项目中IM的实现    </li>
-</ul>
-<p>目前该框架这是初步，我还有好多功能没有加入进去，后续会慢慢加入，包括：        </p>
-<ul>
-<li>消息的转发、拷贝、撤回</li>
-<li>文章的分享</li>
-<li>订阅号的功能</li>
-<li>红包的功能</li>
-<li>本地缓存的功能(其实很多功能都要基于数据库的，我把数据库去除掉后，很多功能就一块去除了)</li>
-<li>草稿箱的功能</li>
-<li>等等等还有好多好多</li>
-</ul>
-<hr>
-<p><strong>更新日志</strong>：            </p>
-<p>10月8日：添加了消息的拷贝、删除、撤回功能，由于转发功能需要用到数据库所以我只添加了转发的UI,等添加了数据库后再完善。<code>注意</code>这里的只有自己的消息并且是发送成功的消息才可以撤回，我这里限制的是<code>5分钟</code>内的消息可以撤回,超过规定时间不允许撤回。            </p>
-<p>10月12日：添加了系统消息，当消息撤回的时候聊天界面上提示一条<code>你撤回了一条消息</code>的提示。当多人聊天的时候，如果一方撤回了一条消息，系统应该给你发送一条指令，根据这条指令你识别出是哪一条消息被撤回了，然后删除这条消息，并且插入一条<code>谁谁撤回了一条消息</code>。</p>
-<p>10月12日：适配xcode8.0，解决bug，如果用xcode8.0的模拟器访问相册时崩溃，则换成真机即可，我也是在升级到xcode8.0后遇到的问题，问题如下：            </p>
-<pre><code class="objc">objc[<span class="number">6777</span>]: Class PLBuildVersion is implemented 
-<span class="keyword">in</span> both /Applications/Xcode.        
-app/Contents/Developer/Platforms/iPhoneSimulator.            
-platform/Developer/SDKs/iPhoneSimulator.            
-sdk/System/Library/PrivateFrameworks/AssetsLibraryServices.
-framework/AssetsLibraryServices (<span class="number">0x1227c3910</span>) and        
-/Applications/Xcode.app/Contents/Developer/Platforms
-/iPhoneSimulator.platform/Developer/SDKs
-/iPhoneSimulator.    
-sdk/System/Library/PrivateFrameworks/PhotoLibraryServices.
-framework/PhotoLibraryServices (<span class="number">0x1225ed210</span>).                 
-One of the two will be used. Which one is undefined.
-</code></pre>
-<p>奇怪的是我原项目中没有遇到该问题，而抽出来的这个聊天框架却遇到了问题，我猜想是我项目中使用了cocoapods来管理三方，而该聊天框架中我是直接导入的，稍后我会集成cocoapods，尝试问题的解决。大家若有解决方法可以给我留言，大家共同提高。</p>
-<p>如果你在学习过程中有什么问题可以和我留言，大家共同提高。如果该框架能帮助到你，欢迎star，你的关注是我最大的动力，谢谢！</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;code&gt;XZ_WeChat&lt;/code&gt;高仿微信聊天框架的搭建，工程地址：&lt;a href=&quot;https://github.com/corderguo/XZ_WeChat&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com
-    
-    </summary>
-    
-      <category term="技术" scheme="http://yoursite.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="WeChat" scheme="http://yoursite.com/tags/WeChat/"/>
     
   </entry>
   
